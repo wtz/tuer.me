@@ -24,7 +24,7 @@ var index = function(req,res,next){
                 year = now.getFullYear(),
                 month = now.getMonth(),
                 Day = now.getDate(),
-                head = '<tr><th colspan="7">'+year + '-' + (month + 1) + '-' + Day + ' '+config.countDownTime+'</th></tr>',
+                head = '<tr><th colspan="7">'+year + '-' + (month + 1) + '-' + Day + ' '+config.countDownTime()+'</th></tr>',
                 monthHTML = util.monthHTML(year,month,Day,'cur',head);
 
             res.render('index',{
