@@ -359,7 +359,7 @@ var rss = function(req, res) {
 
 		diaries.forEach(function(item) {
 			feed.item({
-				title: item.title,
+				title: item.title || item.bookname,
 				description: item.content,
 				url: 'http://www.tuer.me/profile/' + uid + '/diary/' + item._id,
 				author: user.nick,
