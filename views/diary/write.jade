@@ -40,13 +40,13 @@ block content
       div(class='control-group')
           textarea(class='input-xlarge',style='width:90%;',id='content',name='content',rows='15') #{diary.content}
       div(class='control-group')
-          label(class="inline") #{item.value}
+          label(class="inline") 
             if(diary.privacy == 1)
               input(name='privacy',type='checkbox',value='1',checked='true') 
             else
               input(name='privacy',type='checkbox',value='1') 
             &nbsp;只有自己可见
-          label(class="inline") #{item.value}
+          label(class="inline")
             if(diary.forbid == 1)
               input(name='forbid',type='checkbox',value='1',checked='true') 
             else
