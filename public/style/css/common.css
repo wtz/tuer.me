@@ -72,6 +72,7 @@ form.indexLogin .controls{
 }
 .comment .controls textarea{
     width:500px;
+    resize:vertical;
 }
 .comment-item{
     margin-bottom:30px;
@@ -86,6 +87,12 @@ form.indexLogin .controls{
 }
 .delete-comment{
     display:inline;
+}
+
+/* comment reply */
+form.reply textarea.input {
+    width:100%;
+    resize:vertical;
 }
 
 /* profile */
@@ -248,6 +255,10 @@ ol li small{
 .inline{
     display:inline;
     margin-right:5px;
+}
+
+.inline input[type="radio"], .inline input[type="checkbox"]{
+    margin:0;
 }
 
 /*docs*/
