@@ -474,8 +474,9 @@ var update = function(req, res) {
 	weather = req.body.weather,
 	diaryid = req.body.id,
 	privacy = req.body.privacy || 0,
-	forbid = req.body.forbid || 0,
-	uploadPic = req.files.uploadPic,
+	forbid = req.body.forbid || 0;
+    if(req.files.hasOwnProperty('uploadPic')){
+	var uploadPic = req.files.uploadPic,
 	temp_path = uploadPic.path,
 	type = function() {
 		var _type;
@@ -488,7 +489,8 @@ var update = function(req, res) {
 	} (),
 	filename = path.basename(temp_path),
 	picname = filename + type,
-	target_path = rootdir + '/public/images/' + picname,
+	target_path = rootdir + '/public/images/' + picname;
+    }
 	updateNote = function(removeTemp, pic_path, diary) {
 
 		if (req.session.userdata._id.toString() != diary.userid) {
@@ -532,21 +534,21 @@ var update = function(req, res) {
 
 	if ((!bookid || ! content) || ((privacy !== 0 && privacy != 1) || (forbid !== 0 && forbid != 1))) {
 		req.flash('error', '非法操作');
-		util.remove_temp(proxy, 'removeTemp', temp_path);
+		if(temp_path) util.remove_temp(proxy, 'removeTemp', temp_path);
 		res.redirect('back');
 		return;
 	}
 
 	if (location.trim().length > 10) {
 		req.flash('error', '地点最多10个字');
-		util.remove_temp(proxy, 'removeTemp', temp_path);
+		if(temp_path) util.remove_temp(proxy, 'removeTemp', temp_path);
 		res.redirect('back');
 		return;
 	}
 
 	if (content.trim().length > 2200) {
 		req.flash('error', '日记字数最多2200字');
-		util.remove_temp(proxy, 'removeTemp', temp_path);
+		if(temp_path) util.remove_temp(proxy, 'removeTemp', temp_path);
 		res.redirect('back');
 		return;
 	}
@@ -582,7 +584,7 @@ var update = function(req, res) {
 				}
 			});
 		} else {
-			util.remove_temp(proxy, 'removeTemp', temp_path);
+		    if(temp_path) util.remove_temp(proxy, 'removeTemp', temp_path);
 			proxy.trigger('pic_path', false);
 		}
 	} else {

@@ -352,8 +352,8 @@ var rss = function(req, res) {
 		var feed = new Rss({
 			title: user.nick + '\'s diaries',
 			description: user.nick + '\'s diaries in the tuer web site',
-			feed_url: 'http://www.tuer.me/rss/diary/' + uid,
-			site_url: 'http://www.tuer.me/profile/' + uid,
+			feed_url: 'http://www.tuer.me/user/rss/' + uid,
+			site_url: 'http://www.tuer.me/user/profile/' + uid,
 			author: user.nick
 		});
 
@@ -361,9 +361,9 @@ var rss = function(req, res) {
 			feed.item({
 				title: item.title || item.bookname,
 				description: item.content,
-				url: 'http://www.tuer.me/profile/' + uid + '/diary/' + item._id,
+				url: 'http://www.tuer.me/diary/' + item._id,
 				author: user.nick,
-				data: item.created_at
+				date: item.created_at
 			});
 		});
 		res.header('Content-Type', 'text/xml');

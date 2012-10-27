@@ -6,10 +6,6 @@ block content
     form(enctype='multipart/form-data',class='form-horizontal',id='J_write',action='#{action}',method='post')
       if(action=='/diary/update')
         input(type='hidden',name='id',value='#{diary._id}')
-      if(diary.musicUrl)
-        input(type="hidden",name="music_url",id="J_musicUrl",value="#{diary.musicUrl}")
-      else 
-        input(type="hidden",name="music_url",id="J_musicUrl")
       if(session.error.length)
         div(class='control-group error')
           span(class='help-inline') #{session.error}
@@ -65,3 +61,7 @@ block content
       div(class='control-group')
           button(type='submit',class='btn btn-primary') #{session.title}
     include ../common/footer
+    script
+      $("#J_changePic").click(function(){
+         $("#J_files").html('<input type="file" name="uploadPic" class="J_files">'); 
+      });
