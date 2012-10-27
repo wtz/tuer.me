@@ -40,16 +40,18 @@ block content
       div(class='control-group')
           textarea(class='input-xlarge',style='width:90%;',id='content',name='content',rows='15') #{diary.content}
       div(class='control-group')
-          if(diary.privacy == 1)
-            input(name='privacy',type='checkbox',value='1',checked='true') 
-          else
-            input(name='privacy',type='checkbox',value='1') 
-          &nbsp;只有自己可见
-          if(diary.forbid == 1)
-            input(name='forbid',type='checkbox',value='1',checked='true') 
-          else
-            input(name='forbid',type='checkbox',value='1') 
-          &nbsp;不允许被回复 
+          label(class="inline") #{item.value}
+            if(diary.privacy == 1)
+              input(name='privacy',type='checkbox',value='1',checked='true') 
+            else
+              input(name='privacy',type='checkbox',value='1') 
+            &nbsp;只有自己可见
+          label(class="inline") #{item.value}
+            if(diary.forbid == 1)
+              input(name='forbid',type='checkbox',value='1',checked='true') 
+            else
+              input(name='forbid',type='checkbox',value='1') 
+            &nbsp;不允许被回复 
       div(class='control-group',id="J_files")
         if(diary.img)
           img(src='#{diary.img}')
