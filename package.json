@@ -18,7 +18,7 @@
     , "xml2js":"0.2.0"
     , "punycode":"1.2.0"
   }
-  ,"contributors":[ "xiaojue" ]
+  ,"contributors":[ "xiaojue" ,"JokerQyou"]
   ,"homepage":"http://www.tuer.me"
   ,"description":"tuer.me,a diary web site"
   ,"main":"app.js"
