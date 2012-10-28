@@ -16,6 +16,7 @@
     , "calendar":"0.1.0"
     , "nodemailer":"0.3.12"
     , "xml2js":"0.2.0"
+    , "ga":"0.0.2"
     , "punycode":"1.2.0"
   }
   ,"contributors":[ "xiaojue" ,"JokerQyou"]

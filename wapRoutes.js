@@ -6,6 +6,9 @@ register = require('./routes/wap/register'),
 comment = require('./routes/wap/comment'),
 error = require('./routes/wap/error'),
 user = require('./routes/wap/user'),
+GoogleAnalytics = require('ga'),
+UA = "UA-33569930-1",
+Host = "m.tuer.me",
 login = require('./routes/wap/login');
 
 module.exports = function(app) {
@@ -14,7 +17,10 @@ module.exports = function(app) {
     app.redirect('404','/404');
     app.redirect('500','/500');
 
+    var ga = new GoogleAnalytics(UA,Host);
+
     app.get('*',function(req,res,next){
+        ga.trackPage(req.url);
         if(!req.accepts("html") && req.accepts("application/xhtml+xml")){
             res.charset = 'UTF-8';
             res.header('Content-Type', 'application/xhtml+xml');
