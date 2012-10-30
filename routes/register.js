@@ -123,6 +123,7 @@ var active = function(req, res, next) {
 						profile: 'nothing yet',
 						firends: [],
 						notebook: 0,
+                        todocount:0,
 						pageurl: ''
 					},
 					'users', function(err, data) {

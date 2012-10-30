@@ -41,19 +41,25 @@ tuerBase.prototype.findBySlice = function(selector, collection, start, end, call
 	});
 };
 
-tuerBase.prototype.findBy = function(selector, collection, limit, callback) {
+tuerBase.prototype.findBySortSlice = function(selector,sort,collection,start,end,callback){
 	var self = this;
 	this.getCollection(collection, function(err, db) {
 		if (err) callback(err);
 		else {
-			db.find(selector).limit(limit).sort({
-				_id: - 1
-			}).toArray(function(err, data) {
+			db.find(selector).skip(start).limit(end - start).sort(sort).toArray(function(err, data) {
 				if (err) callback(err);
 				else callback(null, data);
 			});
 		}
 	});
+};
+
+tuerBase.prototype.findBySort = function(selector,sort ,collection, limit, callback) {
+    this.findBySortSlice(selector,sort,collection,0,limit,callback);
+};
+
+tuerBase.prototype.findBy = function(selector, collection, limit, callback) {
+    this.findBySort(selector,{_id:-1},collection,limit,callback);
 };
 
 tuerBase.prototype.findAll = function(collection, limit, callback) {

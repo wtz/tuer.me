@@ -96,8 +96,8 @@ var profile = function(req, res) {
 	var uid = req.params.id;
 
 	tuerBase.findUser(uid, function(err, user) {
-		if (err) {
-			res.redirect('500');
+		if (err || !user) {
+			res.redirect('404');
 		} else {
 			proxy.trigger('User', user);
 			var uid = user._id.toString(),

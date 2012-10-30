@@ -29,6 +29,7 @@ form.indexLogin .controls{
 }
 .User-muen li{
     margin-right:5px;
+    display:inline;
 }
 .User-muen a{
     padding:3px;
@@ -302,4 +303,22 @@ ol li small{
 }
 section{
     padding-top:40px!important;
+}
+.todo-edit-list{
+    margin-bottom:10px;
+}
+.todo-edit-list input,.todo-edit-list button,.todo-edit-list span,.todo-edit-list del{
+    margin-right:10px;
+}
+.todo-edit-list .finished,.todo-edit-list .unfinished{
+    font-size:14px;
+}
+.todo-edit-list .finished{
+    color:#ccc;
+}
+.todo-edit-list .unfinished{
+    color:green;
+}
+.todo-edit-list ol li{
+    margin-bottom:10px;
 }

@@ -1,0 +1,43 @@
+extends ../common/layout
+block content
+  div(class='container')
+    h2 #{session.title} 
+    hr
+    if(session.error.length)
+        div(class="control-group error")
+            span(class="help-inline") #{session.error}
+    if(session.success.length)
+        div(class="control-group success")
+            span(class="help-inline") #{session.success}
+    form(class="form-horizontal",method="post",action="/todo/save")
+        h4 新增条目
+        div(class="todo-edit-list")
+          p
+            input(class="input-xlarge",name="content",type="text",placeholder="TODO内容")
+            input(name="important",type="text",style="width:50px;",placeholder="优先级",maxlength="3")
+            span (优先级为0-100的数字)
+        div(class="control-group")
+            p
+              button(type='submit',class='btn btn-primary') 新增
+    div(class="control-group")
+        if(todolist.length)
+            h4 已有条目
+                small (#{user.todocount})
+            each item,i in todolist
+                div(class="todo-edit-list")
+                  if(item.finished)
+                    del(class="finished") #{item.content}
+                  else
+                    span(class="unfinished") #{item.content}
+                  form(class="form-horizontal todo-edit-list",method="post",action="/todo/update",style="display:inline;")
+                      input(name="id",value="#{item._id}",type="hidden")
+                      input(name="important",value="#{item.important}",type="text",maxlength="3",style="width:25px;")
+                      button(type='submit',class='btn') 修改
+                  form(class="form-horizontal todo-edit-list",method="post",action="/todo/remove",style="display:inline;")
+                      input(name="id",value="#{item._id}",type="hidden")
+                      button(type='submit',class='btn btn-danger') 删除
+            !{pag}
+        else
+            p 还没有已加条目.
+    include ../common/footer
+

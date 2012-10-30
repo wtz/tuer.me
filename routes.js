@@ -9,6 +9,7 @@ tips = require('./routes/tips'),
 user = require('./routes/user'),
 diary = require('./routes/diary'),
 log = require('./routes/log'),
+todo = require('./routes/todo'),
 notebook = require('./routes/notebook'),
 comment = require('./routes/comment'),
 friend = require('./routes/friend'),
@@ -54,6 +55,14 @@ module.exports = function(app) {
     app.post('/forgot/findpwd',forgot.findpwd);
 
     app.get('/tips',tips.index);
+
+    app.post('/todo/save',todo.save);
+    app.post('/todo/update',todo.update);
+    app.post('/todo/remove',todo.remove);
+    app.post('/todo/finished',todo.finished);
+
+    app.get('/todo',todo.index);
+    app.get('/todo/:id',todo.detail);
 
     app.get('/user/profile/:id',user.profile);
     app.get('/user/:uid/diaries/:page?',user.diaries);
@@ -107,6 +116,7 @@ module.exports = function(app) {
     app.get('/music/check',music.check);
 
     app.get('/api',api.index);
+
 
     app.get('/404',error.notFound);
     app.get('/500',error.proError);

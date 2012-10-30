@@ -8,6 +8,10 @@ block content
            small &nbsp;&nbsp;(#{user.profile})
          hr 
          div(class='row Note-list')
+          h4 
+           a(href="/todo/#{user._id}",title="#{user.nick}的TODOS") #{user.nick}的TODOS
+           small (#{user.todocount})
+         div(class='row Note-list')
           h4 #{user.nick}的日记本
            small (#{notebooks.length})
           ul 

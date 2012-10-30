@@ -1,0 +1,73 @@
+extends ../common/layout
+block content
+  div(class='container')
+    div(class='row-fluid show-grid')
+        div(class="span12")
+         h4 #{user.nick} 的TODOS
+            small &nbsp;&nbsp;(#{user.profile})
+         ul(class='User-muen')
+           li
+              a(class='gh-btn',href='/user/profile/#{user._id}') #{user.nick} 的主页
+           if(isSelf)
+              li
+                 a(class='gh-btn',href='/todo') 编辑Todos
+         hr 
+         div(class="todo-edit-list")
+            if(todolist.length)
+                ol
+                  each item,i in todolist
+                    li
+                      if(item.finished)
+                        del(class="finished") #{item.content}
+                      else
+                        span(class="unfinished") #{item.content}
+                      if(isSelf)
+                        if(item.finished)
+                           input(type="button",data-content="#{item.content}",data-id="#{item._id}",value="已完成",class="btn btn-success J_edit_finish")
+                        else
+                           input(type="button",data-content="#{item.content}",data-id="#{item._id}",value="未完成",class="btn btn-warning J_edit_finish")
+                      else
+                        if(item.finished)
+                           small 已完成
+                        else
+                           small 未完成
+                !{pag}
+            else
+               p #{user.nick}暂时还没TODOS要做.
+    include ../common/footer
+    script
+        $('.J_edit_finish').click(function(){
+           var that = this,
+           li = $(this).parent(),
+           id = $(this).attr('data-id'),
+           content = $(this).attr('data-content'),
+           span = li.find('span'),
+           del = li.find('del');
+           $(this).addClass("disabled");
+           $.ajax({
+             type:'post',
+             url:'/todo/finished',
+             data:{
+                id:id    
+             },
+             dataType:'json',
+             success:function(json){
+                if(json.ret){
+                    if(json.finished){
+                        $(that).removeClass('btn-warning').addClass('btn-success');
+                        $(that).val('已完成');
+                        span.remove();
+                        li.prepend("<del class='finished'>"+content+"</del>");
+                    }else{
+                        $(that).removeClass('btn-success').addClass('btn-warning');
+                        $(that).val('未完成');
+                        del.remove();
+                        li.prepend("<span class='unfinished'>"+content+"</span>");
+                    }
+                }else{
+                    alert(json.error);    
+                } 
+                $(that).removeClass("disabled");
+             }
+           })
+        });

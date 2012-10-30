@@ -113,6 +113,7 @@ exports.active = function(req, res) {
 						profile: 'nothing yet',
 						firends: [],
                         notebook:0,
+                        todocount:0,
 						pageurl: ''
 					},
 					'users', function(err, data) {
