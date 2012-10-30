@@ -10,7 +10,7 @@ div(class='navbar navbar-fixed-top')
          ul(class='nav')
            - var muens;
            - if(session.is_login){
-             - muens = [{text:'首页',href:'/',template:'index'},{text:'我的主页',href:'/user/profile/'+session.userdata._id,template:'myprofile'},{text:'我的TODOS',href:'/todo/'+session.userdata._id},{text:'我关注的日记',href:'/followed/diaries/',template:'followedDiaries'},{text:'全部日记',href:'/diaries',template:'diaries'},{text:'手机简版',href:'http://m.tuer.me'}];
+             - muens = [{text:'首页',href:'/',template:'index'},{text:'我的主页',href:'/user/profile/'+session.userdata._id,template:'myprofile'},{text:'我的TODOS',href:'/todo/'+session.userdata._id,template:'mytodo'},{text:'我关注的日记',href:'/followed/diaries/',template:'followedDiaries'},{text:'全部日记',href:'/diaries',template:'diaries'},{text:'手机简版',href:'http://m.tuer.me'}];
            - }else{
              - muens = config.muens;
            - }

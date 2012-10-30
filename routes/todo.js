@@ -110,7 +110,8 @@ exports.detail = function(req, res) {
 	render = function(user, isSelf, todolist) {
 
 		req.session.title = user.nick + "的TODO";
-		req.session.template = "todo-detail";
+        if(isSelf) req.session.template = "mytodo";
+        else req.session.template = "tododetail";
 
 		res.render('todo/detail', {
 			todolist: todolist,
