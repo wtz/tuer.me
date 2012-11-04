@@ -12,7 +12,7 @@ var EventProxy = require('eventproxy').EventProxy;
 var util = require('../lib/util');
 
 var tuerBase = function(host, port) {
-	this.db = new Db('node-mongo-tuer', new Server(host, port, {
+	this.db = new Db(config.dbname, new Server(host, port, {
 		auto_reconnect: true
 	},
 	{}));
@@ -781,5 +781,5 @@ tuerBase.prototype.updateDiaryCommentCount = function(callback) {
 	});
 };
 
-module.exports = new tuerBase('127.0.0.1', 10001);
+module.exports = new tuerBase(config.dbhost, config.dbport);
 
