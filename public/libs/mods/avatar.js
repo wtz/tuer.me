@@ -20,7 +20,7 @@ define(function(require, exports, module) {
 		$('#J_avatar').val(img.src);
 	};
 
-	swfobject.embedSWF('http://assest.tuer.me/libs/imgforbase64/imgforbase64.swf?v=20120803', 'avatar', 104, 24, '9.0.0', 'http://www.adobe.com/cfusion/knowledgebase/index.cfm?id=6a253b75', {
+	swfobject.embedSWF('http://'+location.host+'/libs/imgforbase64/imgforbase64.swf?v=20120803', 'avatar', 104, 24, '9.0.0', 'http://www.adobe.com/cfusion/knowledgebase/index.cfm?id=6a253b75', {
 		width: 104,
 		height: 24,
 		outwidth: 150,
