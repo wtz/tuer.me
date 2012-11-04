@@ -3,7 +3,8 @@
  */
 
 var express = require('express'),
-rootdir = require('./lib/config').rootdir,
+config = require('./lib/config'),
+rootdir = config.rootdir,
 RedisStore = require('connect-redis')(express);
 var app = express.createServer();
 var wap = express.createServer();
@@ -63,8 +64,8 @@ wap.configure('production', function() {
 require('./routes')(app);
 require('./wapRoutes')(wap);
 
-app.listen(3000);
-wap.listen(3030);
+app.listen(config.port);
+wap.listen(config.mport);
 //console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
-console.log('app server on 3000');
-console.log('wap server on 3030');
+console.log('app server on '+config.host);
+console.log('wap server on '+config.mhost);

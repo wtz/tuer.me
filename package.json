@@ -1,6 +1,6 @@
 {
     "name": "tuer"
-  , "version": "0.2.1"
+  , "version": "0.2.2"
   , "author":"xiaojue"
   , "keywords":[
     "cms",
@@ -26,7 +26,8 @@
     , "punycode":"1.2.0"
   }
   , "scripts":{
-       "test":"node ./checkService.js"
+       "test":"node ./checkService.js",
+       "start":"node ./app.js"
    }
   ,"contributors":[ "xiaojue" ,"JokerQyou"]
   ,"homepage":"http://www.tuer.me"
