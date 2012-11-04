@@ -19,6 +19,7 @@ exports.profile = function(req, res) {
 			item.content = item.content.length > 50 ? item.content.slice(0, 50) + '...': item.content;
 		});
 		res.render('wap/user/profile', {
+            config:config,
 			session: req.session,
 			title: user.nick + '的个人主页',
 			isSelf: isSelf,
@@ -115,6 +116,7 @@ exports.diaries = function(req, res, next) {
 		});
 
 		res.render('wap/user/diarylist', {
+            config:config,
 			session: req.session,
             title:user.nick + '的日记列表页',
 			isSelf: isSelf,

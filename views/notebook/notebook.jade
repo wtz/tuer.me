@@ -1,7 +1,7 @@
 extends ../common/layout
 block content
-  link(rel='stylesheet',href='http://css.tuer.me/libs/colorpicker/css/colorpicker.css');
-  script(src='http://js.tuer.me/libs/colorpicker/js/colorpicker.js');
+  link(rel='stylesheet',href='http://#{config.csshost}/libs/colorpicker/css/colorpicker.css');
+  script(src='http://#{config.jshost}/libs/colorpicker/js/colorpicker.js');
   div(class='container')
     h2 #{session.title}
     hr

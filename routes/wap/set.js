@@ -13,6 +13,7 @@ exports.index = function(req,res){
 		req.session.success = req.flash('success');
 		req.session.error = req.flash('error');
         res.render('wap/set/set',{
+            config:config,
             title:'设置',
             session:req.session,
             user:user
@@ -71,6 +72,7 @@ exports.pwd = function(req, res) {
 			req.session.success = req.flash('success');
 			req.session.error = req.flash('error');
 			res.render('wap/set/pwd', {
+                config:config,
 				user: user,
                 title:'修改密码',
 				session: req.session

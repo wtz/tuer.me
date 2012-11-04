@@ -9,6 +9,7 @@ exports.index = function(req, res) {
 		req.session.error = req.flash('error');
 		res.render('wap/index', {
 			title: '首页',
+            config:config,
 			session: req.session
 		});
 	}

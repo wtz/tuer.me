@@ -16,18 +16,18 @@ var signsuccess = function(req, res, userdata, accounts, pwd, remember, callback
 		res.cookie('remember', 1, {
 			maxAge: maxAge,
             path:'/',
-			domain: ".tuer.me"
+			domain: config.cookiepath
 		});
 	}
 	res.cookie('accounts', cookie_accounts, {
 		maxAge: maxAge,
         path:'/',
-		domain: ".tuer.me"
+		domain: config.cookiepath
 	});
 	res.cookie('pwd', cookie_pwd, {
 		maxAge: maxAge,
         path:'/',
-		domain: ".tuer.me"
+		domain: config.cookiepath
 	});
 	req.session.is_login = true;
 	req.session.userdata = userdata;
@@ -127,15 +127,15 @@ exports.logout = function(req, res) {
 		req.session.destroy(function(err) {
 			res.clearCookie('accounts', {
                 path:'/',
-				domain: '.tuer.me'
+		        domain: config.cookiepath
 			});
 			res.clearCookie('pwd', {
                 path:'/',
-				domain: '.tuer.me'
+		        domain: config.cookiepath
 			});
 			res.clearCookie('remember', {
                 path:'/',
-				domain: '.tuer.me'
+		        domain: config.cookiepath
 			});
 			res.redirect('/');
 		});

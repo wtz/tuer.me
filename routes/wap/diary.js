@@ -35,6 +35,7 @@ exports.detail = function(req,res,next) {
 
 		res.render('wap/diary/detail', {
             session:req.session,
+            config:config,
             title:user.nick+'的日记 '+'<<'+(diary.title || diary.bookname)+'>>',
 			user: user,
 			isSelf: isSelf,
@@ -108,6 +109,7 @@ exports.list = function(req,res) {
 		});
 
 		res.render('wap/diary/diaries', {
+            config:config,
             title:'全部日记',
             session:req.session,
 			diaries: Diaries,
@@ -153,6 +155,7 @@ exports.write = function(req,res) {
         req.session.error = req.flash('error');
 
 		res.render('wap/diary/write', {
+            config:config,
 			title: '写日记',
             session:req.session,
 			action: '/diary/save',
@@ -204,6 +207,7 @@ exports.edit = function(req,res) {
 
 		res.render('wap/diary/write', {
 			title: '编辑日记',
+            config:config,
             session:req.session,
 			action: '/diary/update',
 			user: user,

@@ -10,6 +10,7 @@ exports.index = function(req, res) {
 	if (!req.session.is_login) {
         req.session.error = req.flash('error');
 		res.render('wap/login/register', {
+            config:config,
             session:req.session,
 			title: '注册'
 		});
@@ -34,6 +35,7 @@ exports.invite = function(req, res) {
 			}
 			util.setNoCache(res);
 			res.render('wap/login/invite', {
+                config:config,
                 title:'激活页面',
                 session:req.session,
 				message: message
