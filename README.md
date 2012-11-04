@@ -7,7 +7,7 @@ tuer.me
 
   2,安装好后，进入tuer目录，npm test 查看环境变量和wiki地址帮助说明.
 
-  3,根据test提示，进行本地环境配置，网站的所有配置信息都在./lib/config.js 里，端口已经host请自行修改.
+  3,根据test提示，进行本地环境配置，网站的所有配置信息都在./lib/config.js 里，端口以及host请自行修改.
 
   4,初始化mongodb数据 命令为: mongo host:port/dbname ./model/init.js 执行命令进行数据库初始化,其中host，port，dbname都要和config.js里的匹配.
 
