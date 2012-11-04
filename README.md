@@ -24,3 +24,5 @@ tuer.me
   var tuer = require('tuer'),
   tuer.start();
 ````
+
+  如果有安装问题欢迎邮件联系:designsor@gmail.com 或者去tuer.me 网站留言给我
