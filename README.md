@@ -1,7 +1,11 @@
 # tuer.me
   
 ## 安装说明：
+
+  * 建议在linux下开发，windows和mac os都没测过。。npm搞不定，建议使用git clone直接下载源码再npm install -d 也可以.
   
+  * npm安装tuer之前，严重建议先自己把以下几个模块搞定node-canvas,ImageMagick,SendMail自行搞定。可以自己找个空目录npm安装下试试，官方有文档在不同系统下的配置wiki.
+
   * npm安装 npm install tuer
 
   * 安装好后，进入tuer目录，npm test 查看环境变量和wiki地址帮助说明.
