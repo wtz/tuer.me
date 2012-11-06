@@ -19,18 +19,20 @@ block content
           a(href="/notebook",title="管理我的日记本") &nbsp;&nbsp;管理我的日记本 
       div(class="control-group")
            each item,i in mood
-             label(class="inline") #{item.value} 
+             label(class="inline")
                if(item.value == diary.mood)
                  input(type="radio",value="#{item._id}",name="mood",checked="true") 
                else
                  input(type="radio",value="#{item._id}",name="mood") 
+               #{item.value} 
       div(class="control-group")
            each item,i in weather
-             label(class="inline") #{item.value} 
+             label(class="inline")
                if(item.value == diary.weather)
                  input(type="radio",value="#{item._id}",name="weather",checked="true") 
                else
                  input(type="radio",value="#{item._id}",name="weather") 
+               #{item.value} 
       div(class="control-group")
             label 地点: 
               if(diary.location)
