@@ -1,0 +1,30 @@
+#!/bin/bash
+#chkconfig:345 99 01
+#description:tuer
+export PKG_CONFIG_PATH='/usr/local/lib/pkgconfig'
+export LD_LIBRARY_PATH='/usr/local/lib':$LD_LIBRARY_PATH
+DIR='/home/tuer2.0'
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+NODE_PATH='/home/tuer2.0/node_modules'
+NODE=/usr/local/bin/node
+
+test -x $NODE || exit 0
+function start_app {
+    forever start "$DIR/index.js" -l "$DIR/logs/tuer.log" -o "$DIR/logs/tuer.out.log" -e "$DIR/logs/tuer.err.log"
+}
+function stop_app {
+    forever stop "$DIR/index.js"
+}
+case $1 in
+    start)
+        start_app ;;
+    stop)
+        stop_app ;;
+    restart)
+        stop_app
+        start_app
+        ;;
+    *)
+    echo "usage: clearstonecc {start|stop}" ;;
+esac
+exit 0
