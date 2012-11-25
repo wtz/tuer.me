@@ -8,7 +8,7 @@ var tuerBase = require('../model/base'),
 
 var index = function(req,res,next){
     var proxy = new EventProxy(),
-        render = function(diaries,usersCount,privacyCount,diariesCount){
+        render = function(diaries,usersCount,privacyCount,diariesCount,todoCount){
 
             req.session.title = "首页";
             req.session.template = "index";
@@ -40,11 +40,12 @@ var index = function(req,res,next){
                 usersCount:usersCount,
                 monthHTML:monthHTML,
                 privacyCount:privacyCount,
-                diariesCount:diariesCount
+                diariesCount:diariesCount,
+                todoCount:todoCount
             });
         };
 
-    proxy.assign('diaries','usersCount','privacyCount','diariesCount',render);
+    proxy.assign('diaries','usersCount','privacyCount','diariesCount','todoCount',render);
 
     tuerBase.findAllDiary(15,function(err,diaries){
         if(err){
@@ -75,6 +76,14 @@ var index = function(req,res,next){
             res.redirect('500');
         }else{
             proxy.trigger('diariesCount',diariesCount);
+        }
+    });
+
+    tuerBase.getCount({},'todos',function(err,todoCount){
+        if(err){
+            res.redirect('500');
+        }else{
+            proxy.trigger('todoCount',todoCount);
         }
     });
 

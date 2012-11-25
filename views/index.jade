@@ -6,7 +6,7 @@ block content
           div(class='span8')
             div(class='well row')
               h2 欢迎访问兔耳Beta版!
-              h3 网站目前为止已经有#{usersCount}个注册用户,#{diariesCount}篇公开日记和#{privacyCount}篇私密日记啦!
+              h3 网站目前为止已经有#{usersCount}个注册用户,#{todoCount}条Todo,#{diariesCount}篇公开日记和#{privacyCount}篇私密日记啦!
              div(class='row')
                include package/lastfeed
           div(class='span4') 
@@ -26,9 +26,6 @@ block content
                 div(class='well')
                   h4 
                     a(href='/todo',title='创建todo') 我的TODO
-            div(class="well")
-              a(href="http://#{config.host}/diary/5089f4b11c63d8bc49000004",title="给兔耳们的明信片")
-                img(src="http://#{config.csshost}/style/image/postal.jpg",alt="兔耳明信片活动")
             div(class='well')
               h4
                 a(href="/log",title="ChangeLog") ChangeLog
