@@ -67,7 +67,13 @@ wap.configure('production', function() {
 	production(wap);
 });
 
-exports.start = function() {
+exports.start = function(conf) {
+
+	if (conf) {
+		for (var i in conf) {
+			if (config.hasOwnProperty(i)) config[i] = conf[i];
+		}
+	}
 	//controllers
 	require('./routes')(app);
 	require('./wapRoutes')(wap);
