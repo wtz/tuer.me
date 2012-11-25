@@ -24,7 +24,7 @@ block content
                  input(type="radio",value="#{item._id}",name="mood",checked="true") 
                else
                  input(type="radio",value="#{item._id}",name="mood") 
-               #{item.value} 
+               span #{item.value} 
       div(class="control-group")
            each item,i in weather
              label(class="inline")
@@ -32,7 +32,7 @@ block content
                  input(type="radio",value="#{item._id}",name="weather",checked="true") 
                else
                  input(type="radio",value="#{item._id}",name="weather") 
-               #{item.value} 
+               span #{item.value} 
       div(class="control-group")
             label 地点: 
               if(diary.location)
