@@ -1,5 +1,5 @@
 #!/bin/sh
-
+cd '/home/tuer2.0/'
 cur_dir=$(pwd)
 #重启服务
 cd $cur_dir
