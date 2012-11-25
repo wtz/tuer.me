@@ -24,6 +24,7 @@
   //参见目录下的index.js
   var tuer = require('tuer'),
   tuer.start({
+    rootdir:'/app/path',
     port:3000,
     mport:3030,
     cookiepath:'tuer.me',
