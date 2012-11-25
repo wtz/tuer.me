@@ -262,6 +262,10 @@ ol li small{
     margin:0;
 }
 
+label.inline{
+    margin-right:15px;
+}
+
 /*docs*/
 .bs-docs-sidenav {
   width: 228px;
