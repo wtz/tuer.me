@@ -10,7 +10,7 @@ var app = express.createServer();
 var wap = express.createServer();
 
 // Configuration
-function Configuration(app) {
+function Configuration(app, rootdir) {
 	app.set('views', __dirname + '/views');
 	app.set('view engine', 'jade');
 	app.set('view options', {
@@ -43,30 +43,6 @@ function production(app) {
 	app.use(express.errorHandler());
 }
 
-app.configure(function() {
-	Configuration(app);
-});
-
-app.configure('development', function() {
-	development(app);
-});
-
-app.configure('production', function() {
-	production(app);
-});
-
-wap.configure(function() {
-	Configuration(wap);
-});
-
-wap.configure('development', function() {
-	development(wap);
-});
-
-wap.configure('production', function() {
-	production(wap);
-});
-
 exports.start = function(conf) {
 
 	if (conf) {
@@ -74,6 +50,29 @@ exports.start = function(conf) {
 			if (config.hasOwnProperty(i)) config[i] = conf[i];
 		}
 	}
+	app.configure(function() {
+		Configuration(app, config.rootdir);
+	});
+
+	app.configure('development', function() {
+		development(app);
+	});
+
+	app.configure('production', function() {
+		production(app);
+	});
+
+	wap.configure(function() {
+		Configuration(wap, config.rootdir);
+	});
+
+	wap.configure('development', function() {
+		development(wap);
+	});
+
+	wap.configure('production', function() {
+		production(wap);
+	});
 	//controllers
 	require('./routes')(app);
 	require('./wapRoutes')(wap);

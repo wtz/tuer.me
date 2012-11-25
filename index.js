@@ -1,6 +1,7 @@
 var tuer = require('./app');
 
 tuer.start({
+    rootdir:'/home/tuer2.0/',
     port:3000,
     mport:3030,
     cookiepath:'tuer.me',
