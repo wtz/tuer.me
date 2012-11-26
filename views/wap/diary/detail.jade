@@ -12,7 +12,7 @@ block content
       p 
         img(src="#{diary.img}")
     a(href="/profile/#{user._id}",title="#{user.nick}") #{user.nick}:
-    !{diary.content}
+    div !{diary.content}
     if(isSelf)
       p 
         a(href="/diary/edit/#{diary._id}") 编辑
