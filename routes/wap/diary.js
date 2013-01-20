@@ -6,37 +6,37 @@ pag = require('../../lib/pag').pag,
 escape = require('jade').runtime.escape,
 EventProxy = require('eventproxy').EventProxy;
 
-exports.detail = function(req,res,next) {
+exports.detail = function(req, res, next) {
 	var id = req.params.id,
-    space = 100,
-    page = isNaN(req.query.page) ? 0 : req.query.page - 1,
+	space = 100,
+	page = isNaN(req.query.page) ? 0: req.query.page - 1,
 	proxy = new EventProxy(),
 	render = function(user, isSelf, diary, comments) {
 
 		if (req.session.is_login) tuerBase.removeDiaryTips(req.session.userdata._id, diary._id);
 
-        if(diary.privacy == 1 && user._id.toString() != req.session.userdata._id.toString()){
-            res.redirect('404');
-            return;
-        }
+		if (diary.privacy == 1 && user._id.toString() != req.session.userdata._id.toString()) {
+			res.redirect('404');
+			return;
+		}
 
 		util.setTime(diary);
 		diary.img = util.getpics(80, 1, diary.filelist);
-		diary.content = escape(diary.content).replace(/\r\n/g,'<br>');
+		diary.content = escape(diary.content).replace(/\r\n/g, '<br>');
 
 		user.avatarUrl = Avatar.getUrl(user._id);
 
 		comments.forEach(function(item) {
 			item.content = escape(item.content).replace(/\r\n/g, '<br>');
-            if(req.session.is_login && (diary.userid == req.session.userdata._id.toString() || item.userid == req.session.userdata._id.toString())) item.del = true;
+			if (req.session.is_login && (diary.userid == req.session.userdata._id.toString() || item.userid == req.session.userdata._id.toString())) item.del = true;
 		});
 
-        req.session.error = req.flash('error');
+		req.session.error = req.flash('error');
 
 		res.render('wap/diary/detail', {
-            session:req.session,
-            config:config,
-            title:user.nick+'的日记 '+'<<'+(diary.title || diary.bookname)+'>>',
+			session: req.session,
+			config: config,
+			title: user.nick + '的日记 ' + '<<' + (diary.title || diary.bookname) + '>>',
 			user: user,
 			isSelf: isSelf,
 			diary: diary,
@@ -44,8 +44,8 @@ exports.detail = function(req,res,next) {
 				cur: page + 1,
 				space: space,
 				total: diary.commentcount,
-                split:'=',
-				url: '/diary/'+diary._id+'?page'
+				split: '=',
+				url: '/diary/' + diary._id + '?page'
 			}).init(),
 			comments: comments
 		});
@@ -70,12 +70,12 @@ exports.detail = function(req,res,next) {
 						res.redirect('500');
 					} else {
 						proxy.trigger('user', user);
-						var isSelf = req.session.is_login ? req.session.userdata._id.toString() == user._id.toString(): false;
+						var isSelf = req.session.is_login ? req.session.userdata._id.toString() == user._id.toString() : false;
 						proxy.trigger('isSelf', isSelf);
 					}
 				});
 
-				tuerBase.findCommentSlice(id,page * space , page * space + space, function(err, comments) {
+				tuerBase.findCommentSlice(id, page * space, page * space + space, function(err, comments) {
 					if (err) {
 						res.redirect('500');
 					} else {
@@ -87,7 +87,7 @@ exports.detail = function(req,res,next) {
 	}
 };
 
-exports.list = function(req,res) {
+exports.list = function(req, res) {
 	var page = req.params.page,
 	space = 8,
 	proxy = new EventProxy();
@@ -105,13 +105,13 @@ exports.list = function(req,res) {
 
 		Diaries.forEach(function(item) {
 			item.img = util.getpics(80, 1, item.filelist);
-			item.content = item.content.length > 50 ? item.content.slice(0,50) + '...' : item.content;
+			item.content = item.content.length > 50 ? item.content.slice(0, 50) + '...': item.content;
 		});
 
 		res.render('wap/diary/diaries', {
-            config:config,
-            title:'全部日记',
-            session:req.session,
+			config: config,
+			title: '全部日记',
+			session: req.session,
 			diaries: Diaries,
 			pag: new pag({
 				cur: page + 1,
@@ -143,7 +143,7 @@ exports.list = function(req,res) {
 		}
 	});
 };
-exports.write = function(req,res) {
+exports.write = function(req, res) {
 	if (!req.session.is_login) {
 		res.redirect('/');
 		return;
@@ -152,12 +152,12 @@ exports.write = function(req,res) {
 	proxy = new EventProxy(),
 	render = function(user, books) {
 
-        req.session.error = req.flash('error');
+		req.session.error = req.flash('error');
 
 		res.render('wap/diary/write', {
-            config:config,
+			config: config,
 			title: '写日记',
-            session:req.session,
+			session: req.session,
 			action: '/diary/save',
 			user: user,
 			books: books,
@@ -186,7 +186,7 @@ exports.write = function(req,res) {
 		}
 	});
 };
-exports.edit = function(req,res) {
+exports.edit = function(req, res) {
 
 	if (!req.session.is_login) {
 		res.redirect('/');
@@ -207,8 +207,8 @@ exports.edit = function(req,res) {
 
 		res.render('wap/diary/write', {
 			title: '编辑日记',
-            config:config,
-            session:req.session,
+			config: config,
+			session: req.session,
 			action: '/diary/update',
 			user: user,
 			books: books,
@@ -217,7 +217,6 @@ exports.edit = function(req,res) {
 	};
 
 	proxy.assign('user', 'books', 'diary', render);
-
 
 	tuerBase.findUser(uid, function(err, user) {
 		if (err) {
@@ -248,7 +247,7 @@ exports.edit = function(req,res) {
 		}
 	});
 };
-exports.save = function(req,res) {
+exports.save = function(req, res) {
 	if (!req.session.is_login) {
 		res.redirect('/');
 		return;
@@ -282,15 +281,27 @@ exports.save = function(req,res) {
 		},
 		'diary', function(err, data) {
 			if (err) {
-                req.flash('error',err);
-                res.redirect('back');
+				req.flash('error', err);
+				res.redirect('back');
 			} else {
-				res.redirect('/');
+				tuerBase.updateById(req.session.userdata._id, {
+					'$inc': {
+						diarycount: 1
+					}
+				},
+				'users', function(err) {
+					if (err) {
+						req.flash('error', err);
+						res.redirect('back');
+					} else {
+						res.redirect('/');
+					}
+				});
 			}
 		});
-	}();
+	} ();
 };
-exports.update = function(req,res) {
+exports.update = function(req, res) {
 
 	if (!req.session.is_login) {
 		res.redirect('/');
@@ -343,14 +354,14 @@ exports.update = function(req,res) {
 	proxy.assign('diary', updateNote);
 	tuerBase.findById(diaryid, 'diary', function(err, diary) {
 		if (err) {
-            res.redirect('500');
+			res.redirect('500');
 		} else {
 			proxy.trigger('diary', diary);
 		}
 	});
 
 };
-exports.remove = function(req,res) {
+exports.remove = function(req, res) {
 	var id = req.body.id,
 	proxy = new EventProxy();
 	if (!req.session.is_login) {
@@ -362,7 +373,7 @@ exports.remove = function(req,res) {
 		res.redirect('/');
 	};
 
-	proxy.assign('rmdiary', 'rmcomments', 'rmpics', render);
+	proxy.assign('rmdiary', 'rmcomments', 'rmpics', 'rmcounts', render);
 
 	tuerBase.findById(id, 'diary', function(err, diary) {
 		if (err) {
@@ -383,6 +394,15 @@ exports.remove = function(req,res) {
 			'comment', function(err, ret) {
 				if (err) throw err;
 				else proxy.trigger('rmcomments');
+			});
+			tuerBase.updateById(diary.userid, {
+				'$inc': {
+					diarycount: - 1
+				}
+			},
+			'users', function(err) {
+				if (err) throw err;
+				else proxy.trigger('rmcounts');
 			});
 		} else {
 			res.redirect('404');

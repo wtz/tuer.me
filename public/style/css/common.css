@@ -10,6 +10,9 @@ form.indexLogin label.control-label{
 form.indexLogin .controls{
     margin-left:30px;
 }
+ul{
+    list-style:none;
+}
 /* user */
 .User-box{
     word-wrap:break-word;
@@ -22,7 +25,6 @@ form.indexLogin .controls{
 }
 .User-bar ul,.User-muen{
     margin:10px 0px 0px;
-    list-style:none;
 }
 .User-about {
     margin-top:10px;
@@ -154,9 +156,9 @@ form.reply textarea.input {
     list-style:none;
     float:left;
     width:50px;
-    height:68px;
+    height:73px;
     overflow:hidden;
-    margin:5px 10px 5px 0;
+    margin:5px 10px 10px 0;
 }
 .Friends-list ul li a{
     display:block;
@@ -164,6 +166,7 @@ form.reply textarea.input {
 .Friends-list ul li span{
     display:block;
     text-align:center;
+    margin-top:5px;
 }
 .Friends-list p{
     margin-top:10px;
@@ -325,4 +328,20 @@ section{
 }
 .todo-edit-list ol li{
     margin-bottom:10px;
+}
+/*hot*/
+.hot {
+    margin-bottom:20px;
+}
+.hot ul{
+    margin:0px;
+}
+.hot li{
+    border-bottom:1px dashed #DDD;
+    margin-bottom:5px;
+    padding-bottom:5px;
+}
+.hot li span{
+    color:#999;
+    font-size:12px;
 }

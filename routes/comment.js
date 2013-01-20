@@ -50,8 +50,17 @@ var save = function(req, res) {
 						},
 						'diary', function(err) {
 							if (!err) {
-								if (diarydata.userid !== userid) tuerBase.addDiaryTips(diarydata.userid, diaryid);
-								if (replyid && replyid != userid) tuerBase.addDiaryTips(replyid, diaryid);
+								tuerBase.updateById(userid, {
+									'$inc': {
+										'tocommentcount': 1
+									}
+								},
+								'users', function(err) {
+									if (!err) {
+										if (diarydata.userid !== userid) tuerBase.addDiaryTips(diarydata.userid, diaryid);
+										if (replyid && replyid != userid) tuerBase.addDiaryTips(replyid, diaryid);
+									}
+								});
 							}
 						});
 					}
@@ -100,7 +109,7 @@ var remove = function(req, res) {
 				});
 			};
 
-			deleteproxy.assign('user', 'removecomment', 'updatecount', render);
+			deleteproxy.assign('user', 'removecomment', 'updatecount', 'updateusercount', render);
 
 			tuerBase.removeById(id, 'comment', function(err) {
 				if (err) {
@@ -131,6 +140,19 @@ var remove = function(req, res) {
 					res.redirect('500');
 				} else {
 					deleteproxy.trigger('updatecount');
+				}
+			});
+
+			tuerBase.updateById(comment.userid, {
+				'$inc': {
+					'tocommentcount': - 1
+				}
+			},
+			'users', function(err) {
+				if (err) {
+					res.redirect('500');
+				} else {
+					deleteproxy.trigger('updateusercount');
 				}
 			});
 		}

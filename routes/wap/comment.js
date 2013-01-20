@@ -10,12 +10,12 @@ var save = function(req, res) {
 		replyname = req.body.replyname,
 		diaryid = req.body.diaryid;
 		//校验
-        if(!diaryid){
+		if (!diaryid) {
 			res.redirect('500');
-            return;
-        }
+			return;
+		}
 		if (content.length <= 0 || content.length > 220) {
-			req.flash('error',"评论内容不能为空或超过220个字节");
+			req.flash('error', "评论内容不能为空或超过220个字节");
 			res.redirect('/diary/' + diaryid);
 			return;
 		}
@@ -33,7 +33,7 @@ var save = function(req, res) {
 		tuerBase.findById(diaryid, 'diary', function(err, diarydata) {
 			if (!err) {
 				if (diarydata.forbid == 1) {
-					req.flash('error','此日记不允许被评论');
+					req.flash('error', '此日记不允许被评论');
 					res.redirect('/diary/' + diaryid);
 					return;
 				}
@@ -49,8 +49,17 @@ var save = function(req, res) {
 						},
 						'diary', function(err) {
 							if (!err) {
-								if (diarydata.userid !== userid) tuerBase.addDiaryTips(diarydata.userid, diaryid);
-								if (replyid && replyid != userid) tuerBase.addDiaryTips(replyid, diaryid);
+								tuerBase.updateById(userid, {
+									'$inc': {
+										'tocommentcount': 1
+									}
+								},
+								'users', function(err) {
+									if (!err) {
+										if (diarydata.userid !== userid) tuerBase.addDiaryTips(diarydata.userid, diaryid);
+										if (replyid && replyid != userid) tuerBase.addDiaryTips(replyid, diaryid);
+									}
+								});
 							}
 						});
 					}
@@ -86,7 +95,7 @@ var remove = function(req, res) {
 				res.redirect('back');
 			};
 
-			deleteproxy.assign('user', 'removecomment', 'updatecount', render);
+			deleteproxy.assign('user', 'removecomment', 'updatecount','updateusercount', render);
 
 			tuerBase.removeById(id, 'comment', function(err) {
 				if (err) {
@@ -100,8 +109,8 @@ var remove = function(req, res) {
 				if (err) {
 					res.redirect('500');
 				} else {
-                    deleteproxy.trigger('user',user);
-                }
+					deleteproxy.trigger('user', user);
+				}
 			});
 
 			tuerBase.update({
@@ -117,6 +126,19 @@ var remove = function(req, res) {
 					res.redirect('500');
 				} else {
 					deleteproxy.trigger('updatecount');
+				}
+			});
+
+			tuerBase.updateById(comment.userid, {
+				'$inc': {
+					'tocommentcount': - 1
+				}
+			},
+			'users', function(err) {
+				if (err) {
+					res.redirect('500');
+				} else {
+					deleteproxy.trigger('updateusercount');
 				}
 			});
 		}
@@ -146,3 +168,4 @@ var remove = function(req, res) {
 
 exports.save = save;
 exports.remove = remove;
+

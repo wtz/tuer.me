@@ -124,6 +124,8 @@ var active = function(req, res, next) {
 						firends: [],
 						notebook: 0,
                         todocount:0,
+                        tocommentcount:0,
+                        diarycount:0,
 						pageurl: ''
 					},
 					'users', function(err, data) {

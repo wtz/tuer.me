@@ -1,0 +1,18 @@
+div(class='hot') 
+    h4 热门日记
+    hr 
+    ul
+        each item,i in hotdiarys 
+            li 
+                a(href='/diary/#{item._id}') #{item.content} 
+                span (#{item.created_user} #{item.commentcount}回应)
+div(class='row Friends-list') 
+    h4 活跃用户
+    hr 
+    ul
+        each item,i in hotusers
+            li 
+                a(href='/user/profile/#{item._id}')
+                    img(src='#{item.avatarUrl}',alt='#{item.nick}')
+                span 
+                  small #{item.nick}

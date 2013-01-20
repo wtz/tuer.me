@@ -329,7 +329,19 @@ var save = function(req, res) {
 				req.flash('error', err);
 				res.redirect('back');
 			} else {
-				res.redirect('home');
+				tuerBase.updateById(req.session.userdata._id, {
+					'$inc': {
+						diarycount: 1
+					}
+				},
+				'users', function(err) {
+					if (err) {
+						req.flash('error', err);
+						res.redirect('back');
+					} else {
+						res.redirect('home');
+					}
+				});
 			}
 		});
 	};
@@ -475,22 +487,22 @@ var update = function(req, res) {
 	diaryid = req.body.id,
 	privacy = req.body.privacy || 0,
 	forbid = req.body.forbid || 0;
-    if(req.files.hasOwnProperty('uploadPic')){
-	var uploadPic = req.files.uploadPic,
-	temp_path = uploadPic.path,
-	type = function() {
-		var _type;
-		try {
-			_type = '.' + uploadPic.type.split('/')[1];
-		} catch(e) {
-			return ".undef";
-		}
-		return _type;
-	} (),
-	filename = path.basename(temp_path),
-	picname = filename + type,
-	target_path = rootdir + '/public/images/' + picname;
-    }
+	if (req.files.hasOwnProperty('uploadPic')) {
+		var uploadPic = req.files.uploadPic,
+		temp_path = uploadPic.path,
+		type = function() {
+			var _type;
+			try {
+				_type = '.' + uploadPic.type.split('/')[1];
+			} catch(e) {
+				return ".undef";
+			}
+			return _type;
+		} (),
+		filename = path.basename(temp_path),
+		picname = filename + type,
+		target_path = rootdir + '/public/images/' + picname;
+	}
 	updateNote = function(removeTemp, pic_path, diary) {
 
 		if (req.session.userdata._id.toString() != diary.userid) {
@@ -534,21 +546,21 @@ var update = function(req, res) {
 
 	if ((!bookid || ! content) || ((privacy !== 0 && privacy != 1) || (forbid !== 0 && forbid != 1))) {
 		req.flash('error', '非法操作');
-		if(temp_path) util.remove_temp(proxy, 'removeTemp', temp_path);
+		if (temp_path) util.remove_temp(proxy, 'removeTemp', temp_path);
 		res.redirect('back');
 		return;
 	}
 
 	if (location.trim().length > 10) {
 		req.flash('error', '地点最多10个字');
-		if(temp_path) util.remove_temp(proxy, 'removeTemp', temp_path);
+		if (temp_path) util.remove_temp(proxy, 'removeTemp', temp_path);
 		res.redirect('back');
 		return;
 	}
 
 	if (content.trim().length > 2200) {
 		req.flash('error', '日记字数最多2200字');
-		if(temp_path) util.remove_temp(proxy, 'removeTemp', temp_path);
+		if (temp_path) util.remove_temp(proxy, 'removeTemp', temp_path);
 		res.redirect('back');
 		return;
 	}
@@ -584,7 +596,7 @@ var update = function(req, res) {
 				}
 			});
 		} else {
-		    if(temp_path) util.remove_temp(proxy, 'removeTemp', temp_path);
+			if (temp_path) util.remove_temp(proxy, 'removeTemp', temp_path);
 			proxy.trigger('pic_path', false);
 		}
 	} else {
@@ -613,7 +625,7 @@ var remove = function(req, res) {
 		res.redirect('home');
 	};
 
-	proxy.assign('rmdiary', 'rmcomments', 'rmpics', render);
+	proxy.assign('rmdiary', 'rmcomments', 'rmpics', 'rmcounts', render);
 
 	tuerBase.findById(id, 'diary', function(err, diary) {
 		if (err) {
@@ -634,6 +646,15 @@ var remove = function(req, res) {
 			'comment', function(err, ret) {
 				if (err) throw err;
 				else proxy.trigger('rmcomments');
+			});
+			tuerBase.updateById(diary.userid, {
+				'$inc': {
+					diarycount: - 1
+				}
+			},
+			'users', function(err) {
+				if (err) throw err;
+				else proxy.trigger('rmcounts');
 			});
 		} else {
 			res.redirect('404');

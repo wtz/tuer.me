@@ -41,7 +41,7 @@ tuerBase.prototype.findBySlice = function(selector, collection, start, end, call
 	});
 };
 
-tuerBase.prototype.findBySortSlice = function(selector,sort,collection,start,end,callback){
+tuerBase.prototype.findBySortSlice = function(selector, sort, collection, start, end, callback) {
 	var self = this;
 	this.getCollection(collection, function(err, db) {
 		if (err) callback(err);
@@ -54,12 +54,15 @@ tuerBase.prototype.findBySortSlice = function(selector,sort,collection,start,end
 	});
 };
 
-tuerBase.prototype.findBySort = function(selector,sort ,collection, limit, callback) {
-    this.findBySortSlice(selector,sort,collection,0,limit,callback);
+tuerBase.prototype.findBySort = function(selector, sort, collection, limit, callback) {
+	this.findBySortSlice(selector, sort, collection, 0, limit, callback);
 };
 
 tuerBase.prototype.findBy = function(selector, collection, limit, callback) {
-    this.findBySort(selector,{_id:-1},collection,limit,callback);
+	this.findBySort(selector, {
+		_id: - 1
+	},
+	collection, limit, callback);
 };
 
 tuerBase.prototype.findAll = function(collection, limit, callback) {
@@ -419,6 +422,83 @@ tuerBase.prototype.findDiaryById = function(id, callback) {
 	});
 };
 
+tuerBase.prototype.batchDiary = function(cursor, callback) {
+	var self = this;
+	cursor.toArray(function(err, diarys) {
+		if (err) callback(err);
+		else {
+			var map = [],
+			ids = {};
+			diarys.forEach(function(diary, index) {
+				if (diary.weather) diary.weather = config.weather[diary.weather]['value'];
+				if (diary.mood) diary.mood = config.mood[diary.mood]['value'];
+				if (ids[diary.userid]) {
+					ids[diary.userid].push(index);
+				} else {
+					ids[diary.userid] = [index];
+					map.push(diary.userid);
+				}
+			});
+			self.getCollection('users', function(err, db) {
+				if (err) callback(err);
+				else {
+					map.forEach(function(id, index) {
+						map[index] = db.db.bson_serializer.ObjectID.createFromHexString(id);
+					});
+					db.find({
+						_id: {
+							$in: map
+						}
+					}).toArray(function(err, users) {
+						if (err) callback(err);
+						else {
+							users.forEach(function(data, index) {
+								ids[data._id].forEach(function(i) {
+									diarys[i]['pageurl'] = !! data['pageurl'] ? data['pageurl'] : data._id;
+									diarys[i]['created_user'] = data['nick'];
+								});
+							});
+							self.getCollection('notebooks', function(err, db) {
+								if (err) callback(err);
+								else {
+									var bookids = {},
+									bookmap = [];
+									diarys.forEach(function(diary, index) {
+										if (bookids[diary.notebook]) {
+											bookids[diary.notebook].push(index);
+										} else {
+											bookids[diary.notebook] = [index];
+											bookmap.push(diary.notebook);
+										}
+									});
+									bookmap.forEach(function(id, index) {
+										bookmap[index] = db.db.bson_serializer.ObjectID.createFromHexString(id);
+									});
+									db.find({
+										_id: {
+											$in: bookmap
+										}
+									}).toArray(function(err, notebooks) {
+										if (err) callback(err);
+										else {
+											notebooks.forEach(function(data, index) {
+												bookids[data._id].forEach(function(i) {
+													diarys[i]['bookname'] = data['name'];
+												});
+											});
+											callback(null, diarys);
+										}
+									});
+								}
+							});
+						}
+					});
+				}
+			});
+		}
+	});
+};
+
 tuerBase.prototype.findDiaryBy = function(source, start, end, callback) {
 	var self = this;
 	this.getCollection('diary', function(err, db) {
@@ -428,79 +508,7 @@ tuerBase.prototype.findDiaryBy = function(source, start, end, callback) {
 			cursor.sort({
 				_id: - 1
 			}).skip(start).limit(end - start);
-			cursor.toArray(function(err, diarys) {
-				if (err) callback(err);
-				else {
-					var map = [],
-					ids = {};
-					diarys.forEach(function(diary, index) {
-                        if(diary.weather) diary.weather = config.weather[diary.weather]['value'];
-                        if(diary.mood) diary.mood = config.mood[diary.mood]['value'];
-						if (ids[diary.userid]) {
-							ids[diary.userid].push(index);
-						} else {
-							ids[diary.userid] = [index];
-							map.push(diary.userid);
-						}
-					});
-					self.getCollection('users', function(err, db) {
-						if (err) callback(err);
-						else {
-							map.forEach(function(id, index) {
-								map[index] = db.db.bson_serializer.ObjectID.createFromHexString(id);
-							});
-							db.find({
-								_id: {
-									$in: map
-								}
-							}).toArray(function(err, users) {
-								if (err) callback(err);
-								else {
-									users.forEach(function(data, index) {
-										ids[data._id].forEach(function(i) {
-											diarys[i]['pageurl'] = !! data['pageurl'] ? data['pageurl'] : data._id;
-											diarys[i]['created_user'] = data['nick'];
-										});
-									});
-									self.getCollection('notebooks', function(err, db) {
-										if (err) callback(err);
-										else {
-											var bookids = {},
-											bookmap = [];
-											diarys.forEach(function(diary, index) {
-												if (bookids[diary.notebook]) {
-													bookids[diary.notebook].push(index);
-												} else {
-													bookids[diary.notebook] = [index];
-													bookmap.push(diary.notebook);
-												}
-											});
-											bookmap.forEach(function(id, index) {
-												bookmap[index] = db.db.bson_serializer.ObjectID.createFromHexString(id);
-											});
-											db.find({
-												_id: {
-													$in: bookmap
-												}
-											}).toArray(function(err, notebooks) {
-												if (err) callback(err);
-												else {
-													notebooks.forEach(function(data, index) {
-														bookids[data._id].forEach(function(i) {
-															diarys[i]['bookname'] = data['name'];
-														});
-													});
-													callback(null, diarys);
-												}
-											});
-										}
-									});
-								}
-							});
-						}
-					});
-				}
-			});
+			self.batchDiary(cursor, callback);
 		}
 	});
 };
@@ -777,6 +785,30 @@ tuerBase.prototype.updateDiaryCommentCount = function(callback) {
 					});
 				}
 			});
+		}
+	});
+};
+
+tuerBase.prototype.getHotUser = function(limit, callback) {
+	this.findBySort({},
+	{
+		//"tocommentcount": - 1,
+		"diarycount": - 1,
+		"todocount": - 1
+	},
+	'users', limit, callback);
+};
+
+tuerBase.prototype.getHotDiary = function(limit, callback) {
+	var self = this;
+	this.getCollection('diary', function(err, db) {
+		if (err) callback(err);
+		else {
+			var cursor = db.find({});
+			cursor.sort({
+                commentcount:-1
+			}).limit(limit);
+			self.batchDiary(cursor, callback);
 		}
 	});
 };

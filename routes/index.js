@@ -8,7 +8,7 @@ var tuerBase = require('../model/base'),
 
 var index = function(req,res,next){
     var proxy = new EventProxy(),
-        render = function(diaries,usersCount,privacyCount,diariesCount,todoCount){
+        render = function(diaries,usersCount,privacyCount,diariesCount,todoCount,hotusers,hotdiarys){
 
             req.session.title = "首页";
             req.session.template = "index";
@@ -20,17 +20,27 @@ var index = function(req,res,next){
                 util.setTime(item);
             });
 
+            hotusers.forEach(function(item){
+                item.avatarUrl = Avatar.getUrl(item._id);
+            });
+
+            hotdiarys.forEach(function(item){
+                item.content = item.content.length > 10 ? item.content.slice(0,10)+'...' : item.content;
+            });
+            /*
             var now = new Date(),
                 year = now.getFullYear(),
                 month = now.getMonth(),
                 Day = now.getDate(),
                 head = '<tr><th colspan="7">'+year + '-' + (month + 1) + '-' + Day + ' '+config.countDownTime()+'</th></tr>',
                 monthHTML = util.monthHTML(year,month,Day,'cur',head);
-
+            */
             res.render('index',{
                 config:config,
                 session:req.session,
                 diaries:diaries,
+                hotdiarys:hotdiarys,
+                hotusers:hotusers,
                 pag:new pag({
                     cur:1,
                     space:15,
@@ -38,14 +48,14 @@ var index = function(req,res,next){
                     url:'/diaries'
                 }).init(),
                 usersCount:usersCount,
-                monthHTML:monthHTML,
+                //monthHTML:monthHTML,
                 privacyCount:privacyCount,
                 diariesCount:diariesCount,
                 todoCount:todoCount
             });
         };
 
-    proxy.assign('diaries','usersCount','privacyCount','diariesCount','todoCount',render);
+    proxy.assign('diaries','usersCount','privacyCount','diariesCount','todoCount','hotusers','hotdiarys',render);
 
     tuerBase.findAllDiary(15,function(err,diaries){
         if(err){
@@ -87,6 +97,21 @@ var index = function(req,res,next){
         }
     });
 
+    tuerBase.getHotUser(15,function(err,users){
+        if(err){
+            res.redirect('500');
+        }else{
+            proxy.trigger('hotusers',users);
+        }
+    });
+
+    tuerBase.getHotDiary(10,function(err,diarys){
+        if(err){
+            res.redirect('500');
+        }else{
+            proxy.trigger('hotdiarys',diarys);
+        }
+    });
 };
 
 exports.index= index;

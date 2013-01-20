@@ -491,7 +491,6 @@ var avatar = function(req, res) {
 			var ifModifiedSince = 'if-modified-since',
 			D = new Date(),
 			year = 1000 * 60 * 60 * 24,
-			lastModified = new Date(D.valueOf() - year).toString(),
 			Expires = new Date(D.valueOf() + year).toString();
 
 			if (req.headers[ifModifiedSince] && lastMod == req.headers[ifModifiedSince]) {
@@ -517,7 +516,6 @@ var art = function(req, res) {
 			var ifModifiedSince = 'if-modified-since',
 			D = new Date(),
 			year = 1000 * 60 * 60 * 24,
-			lastModified = new Date(D.valueOf() - year).toString(),
 			Expires = new Date(D.valueOf() + year).toString();
 
 			if (req.headers[ifModifiedSince] && lastMod == req.headers[ifModifiedSince]) {

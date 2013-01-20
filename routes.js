@@ -33,12 +33,11 @@ module.exports = function(app) {
     app.redirect('404','/404');
     app.redirect('500','/500');
 
+    app.get('*',login.cookies);
 
     app.get('/login',login.index);
     app.post('/login',login.signin);
     app.get('/logout',login.logout);
-
-    app.get('*',login.cookies);
 
     app.get('/register', register.index);
     app.post('/register/invite', register.invite);
