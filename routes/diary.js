@@ -17,7 +17,7 @@ var detail = function(req, res, next) {
 	render = function(user, isSelf, diary, comments) {
 
 		if (req.session.is_login) tuerBase.removeDiaryTips(req.session.userdata._id, diary._id);
-		if (!req.session.userdata || (diary.privacy == 1 && user._id.toString() != req.session.userdata._id.toString())) {
+		if ((diary.privacy == 1 && !req.session.userdata) || (diary.privacy == 1 && user._id.toString() != req.session.userdata._id.toString())) {
 			res.redirect('404');
 			return;
 		}
