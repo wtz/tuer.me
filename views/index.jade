@@ -11,14 +11,18 @@ block content
             div(class='row')
               include package/lastfeed
           div(class='span4') 
-            div(class='well',id='J_UserBar')
-                if(session.is_login)
-                  div(class='btn-group hot')
-                    a(class="btn btn-large btn-primary",href='/diary/write',title='写日记') 写日记
-                    a(class="btn btn-large",href='/notebook',title='管理日记本') 管理日记本
-                    a(class="btn btn-large",href='/todo',title='创建Todo') TODO
-                else
-                    include package/smallLogin
+            if(session.is_login)
+              h4 欢迎回来,#{session.userdata.nick}!
+              hr
+              div(id='J_UserBar')
+                div(class='btn-group hot',id='J_UserBar')
+                  a(class="btn btn-primary",href='/diary/write',title='写日记') 写日记
+                  a(class="btn",href='/notebook',title='管理日记本') 管理日记本
+                  a(class="btn",href='/todo',title='创建Todo') TODO
+              hr
+            else
+              div(class='well')
+                include package/smallLogin
             include package/hot
     include common/footer
   if(session.is_login)
