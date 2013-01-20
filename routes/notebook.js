@@ -57,6 +57,12 @@ var save = function(req, res) {
 		res.redirect('notebook');
 	};
 
+	if (name.trim().length === 0) {
+		req.flash('error', '日记本名称不能为空');
+		res.redirect('back');
+        return;
+	}
+
 	proxy.assign('updateUser', 'saveBook', render);
 	//增加限制个数的检测
 	tuerBase.save({
