@@ -804,7 +804,7 @@ tuerBase.prototype.getHotDiary = function(limit, callback) {
 	this.getCollection('diary', function(err, db) {
 		if (err) callback(err);
 		else {
-			var cursor = db.find({});
+			var cursor = db.find({privacy:0});
 			cursor.sort({
                 commentcount:-1
 			}).limit(limit);

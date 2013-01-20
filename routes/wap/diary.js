@@ -15,7 +15,7 @@ exports.detail = function(req, res, next) {
 
 		if (req.session.is_login) tuerBase.removeDiaryTips(req.session.userdata._id, diary._id);
 
-		if (diary.privacy == 1 && user._id.toString() != req.session.userdata._id.toString()) {
+		if (!req.session.userdata || (diary.privacy == 1 && user._id.toString() != req.session.userdata._id.toString())) {
 			res.redirect('404');
 			return;
 		}
