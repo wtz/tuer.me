@@ -5,7 +5,7 @@ if(diaries.length)
     each item,i in diaries 
       div(class='Diary-row')
         div(class='Diary-left')
-         a(href='/user/profile/#{item._id}',title='#{item.created_user}')
+         a(href='/user/profile/#{item.pageurl}',title='#{item.created_user}')
            img(src='#{item.avatarUrl}',alt='#{item.created_user}')
         div(class='Diary-right')
          h5 
