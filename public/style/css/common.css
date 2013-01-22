@@ -227,6 +227,7 @@ ol li small{
     display:inline-block;
     width:10px;
     height:10px;
+    border:#eee solid 1px;
     margin-right:5px;
 }
 .Calendar {
