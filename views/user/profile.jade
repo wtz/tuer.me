@@ -54,14 +54,14 @@ block content
              img(src='#{user.avatarUrl}',title='#{user.nick}')
            dd 
              p #{user.nick} 于 #{user.created_at} 加入
-           if(session.is_login)
               dd
                 div(class='btn-group')
-                  if(!isSelf)
-                    if(user.isFriend)
-                      a(href='#',class='J_removeFriend btn btn-danger btn-small',target_id='#{user._id}') 解除关注
-                    else if(!isSelf)
-                      a(href='#',class='J_addFriend btn btn-primary btn-small',target_id='#{user._id}') 关注此人
+                  if(session.is_login)
+                    if(!isSelf)
+                      if(user.isFriend)
+                        a(href='#',class='J_removeFriend btn btn-danger btn-small',target_id='#{user._id}') 解除关注
+                      else if(!isSelf)
+                        a(href='#',class='J_addFriend btn btn-primary btn-small',target_id='#{user._id}') 关注此人
                   a(href="/todo/#{user._id}",class="btn btn-small",title="#{user.nick}的TODOS") TODOS
                   a(href='/user/rss/#{user._id}',class="btn btn-small",target='_blank') RSS
            if(user.about)
