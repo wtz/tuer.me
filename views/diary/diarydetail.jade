@@ -66,10 +66,11 @@ block content
                    })()
              div(class='bar') #{diary.created_at} #{diary.created_user} #{diary.commentcount}回应  
                if(isSelf)
-                 a(class='btn',href='/diary/edit/#{diary._id}') 编辑
                  form(action='/diary/remove',method='post') 
                    input(type='hidden',value='#{diary._id}',name='id')
-                   button(class='btn btn-danger',type='submit') 删除 
+                   div(class='btn-group')
+                     a(class='btn btn-mini',href='/diary/edit/#{diary._id}') Edit
+                     button(class='btn btn-mini btn-danger',type='submit') Del 
              if(comments.length)
                each item,i in comments
                   div(class='row-fluid show-grid comment-item')
@@ -84,7 +85,7 @@ block content
                                 form(class='delete-comment',action='/comment/remove',method='post')
                                   input(value='#{item._id}',type='hidden',name='commentid')
                                   input(value='#{diary._id}',type='hidden',name='diaryid')
-                                  button(class='btn btn-danger',type='submit') 删除 
+                                  button(class='btn btn-danger btn-mini',type='submit') Del
                           div(class='comment-content') !{item.content} 
                             if(item.reply && diary.forbid == 0)
                               a(href='#',class='J_reply',data-replyname='#{item.nick}',data-replyid='#{item.userid}',data-diaryid='#{diary._id}') 回复

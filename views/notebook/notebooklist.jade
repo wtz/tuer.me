@@ -14,13 +14,13 @@ block content
            div(class='Diary-wrap')
              each item,i in userDiaryList 
                h5
+                 small [#{notebook.name}]
                  if(item.title)
-                   a(href='/diary/#{item._id}') #{item.title} 
-                   small [#{notebook.name}] 
+                   a(href='/diary/#{item._id}') 
+                     small [#{item.title}] 
                    if(item.privacy == 1)
                      small [仅自己可见] 
                  else
-                   a(href='/diary/#{item._id}') #{notebook.name} 
                    if(item.privacy == 1)
                      small [仅自己可见]
                    if(item.weather)
@@ -33,12 +33,15 @@ block content
                   if(item.img)
                       img(src='#{item.img}')
                   p #{item.content}
-               div(class='bar') #{item.created_at} #{item.created_user} #{item.commentcount}回应 
+               div(class='bar') #{item.created_at} 
                  if(isSelf)
-                   a(class='btn',href='/diary/edit/#{item._id}') 编辑 
+                   small 
+                     a(href='/diary/#{item._id}') #{item.commentcount}回复 
                    form(action='/diary/remove',method='post') 
                      input(type='hidden',value='#{item._id}',name='id')
-                     button(class='btn btn-danger',type='submit') 删除 
+                     div(class="btn-group")
+                       a(class='btn btn-mini',href='/diary/edit/#{item._id}') Edit 
+                       button(class='btn btn-mini btn-danger',type='submit') Del
            !{pag}
          else
            p 额，他还什么都木有写……

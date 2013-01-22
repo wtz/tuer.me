@@ -23,9 +23,9 @@ block content
                         span(class="unfinished") #{item.content}
                       if(isSelf)
                         if(item.finished)
-                           input(type="button",data-content="#{item.content}",data-id="#{item._id}",value="已完成",class="btn btn-success J_edit_finish")
+                           input(type="button",data-content="#{item.content}",data-id="#{item._id}",value="已完成",class="btn btn-success btn-small J_edit_finish")
                         else
-                           input(type="button",data-content="#{item.content}",data-id="#{item._id}",value="未完成",class="btn btn-warning J_edit_finish")
+                           input(type="button",data-content="#{item.content}",data-id="#{item._id}",value="未完成",class="btn btn-warning btn-small J_edit_finish")
                       else
                         if(item.finished)
                            small 已完成
@@ -33,7 +33,7 @@ block content
                            small 未完成
                 !{pag}
             else
-               p #{user.nick}暂时还没TODOS要做.
+               p #{user.nick} 暂时还没有事要做.
     include ../common/footer
     script
         $('.J_edit_finish').click(function(){

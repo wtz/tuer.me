@@ -7,18 +7,6 @@ block content
            span #{user.nick}
            small &nbsp;&nbsp;(#{user.profile})
          hr 
-         div(class='row Note-list')
-          h4 
-           a(href="/todo/#{user._id}",title="#{user.nick}的TODOS") #{user.nick}的TODOS
-           small (#{user.todocount})
-         div(class='row Note-list')
-          h4 #{user.nick}的日记本
-           small (#{notebooks.length})
-          ul 
-           each book,i in notebooks
-            li 
-             span(class='bookcover',style='background:##{book.bgcolor};color:#{book.fontcolor}') #{book.size}
-             a(title="#{book.name}",href="/user/#{user._id}/notebook/#{book._id}/1") #{book.name}
          if(userDiaryList.length)
            h4 #{user.nick}的日记
             small (#{diaryCount})
@@ -26,12 +14,15 @@ block content
              each item,i in userDiaryList 
                h5 
                  if(item.title)
-                   a(href='/diary/#{item._id}') #{item.title} 
-                   small [#{item.bookname}] 
+                   a(href='/diary/#{item._id}') 
+                     small #{item.title} 
+                   a(href="/user/#{item.pageurl}/notebook/#{item.notebook}") 
+                     small [#{item.bookname}] 
                    if(item.privacy == 1)
                      small [仅自己可见] 
                  else
-                   a(href='/diary/#{item._id}') #{item.bookname} 
+                   a(href="/user/#{item.pageurl}/notebook/#{item.notebook}") 
+                     small [#{item.bookname}] 
                    if(item.privacy == 1)
                      small [仅自己可见] 
                    if(item.weather)
@@ -44,12 +35,15 @@ block content
                   if(item.img)
                       img(src='#{item.img}')
                   p #{item.content}
-               div(class='bar') #{item.created_at} #{item.created_user} #{item.commentcount}回应 
+               div(class='bar') #{item.created_at}
+                 small 
+                   a(href='/diary/#{item._id}') #{item.commentcount}回复 
                  if(isSelf)
-                   a(class='btn',href='/diary/edit/#{item._id}') 编辑 
                    form(action='/diary/remove',method='post') 
                      input(type='hidden',value='#{item._id}',name='id')
-                     button(class='btn btn-danger',type='submit') 删除  
+                     div(class="btn-group")
+                      a(class='btn btn-mini',href='/diary/edit/#{item._id}') Edit
+                      button(class='btn btn-danger btn-mini',type='submit') Del 
            !{pag}
          else
            p 额，他还神马都没有写过……
@@ -60,24 +54,26 @@ block content
              img(src='#{user.avatarUrl}',title='#{user.nick}')
            dd 
              p #{user.nick} 于 #{user.created_at} 加入
-             p 
-               a(href='/user/rss/#{user._id}',target='_blank') 日记rss
            if(session.is_login)
-            if(!isSelf)
               dd
-                if(user.isFriend)
-                  a(href='#',class='J_removeFriend',target_id='#{user._id}') 解除关注
-                else
-                  a(href='#',class='J_addFriend',target_id='#{user._id}') 关注此人
-          if(isSelf)
-            div(class='User-bar')
-             ul
-              li 
-               a(href='/diary/write',title='我要写日记') 我要写日记
-              li 
-               a(href='/notebook',title='管理日记本') 管理日记本
+                div(class='btn-group')
+                  if(!isSelf)
+                    if(user.isFriend)
+                      a(href='#',class='J_removeFriend btn btn-danger btn-small',target_id='#{user._id}') 解除关注
+                    else if(!isSelf)
+                      a(href='#',class='J_addFriend btn btn-primary btn-small',target_id='#{user._id}') 关注此人
+                  a(href="/todo/#{user._id}",class="btn btn-small",title="#{user.nick}的TODOS") TODOS
+                  a(href='/user/rss/#{user._id}',class="btn btn-small",target='_blank') RSS
            if(user.about)
             p(class='User-about') !{user.about}
+         div(class='row Note-list')
+          h4 #{user.nick}的日记本
+            small (#{notebooks.length})
+          ul 
+            each book,i in notebooks
+             li 
+              span(class='bookcover',style='background:##{book.bgcolor};')
+              a(title="#{book.name}",href="/user/#{user._id}/notebook/#{book._id}/1") #{book.name} (#{book.size})
          div(class='row Friends-list')
           h4 #{user.nick}关注的人 
             a(href='/user/followed/#{user._id}') (#{user.firends.length})
