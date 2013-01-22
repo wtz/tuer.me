@@ -34,9 +34,9 @@ block content
                       img(src='#{item.img}')
                   p #{item.content}
                div(class='bar') #{item.created_at} 
+                 small 
+                   a(href='/diary/#{item._id}') #{item.commentcount}回复 
                  if(isSelf)
-                   small 
-                     a(href='/diary/#{item._id}') #{item.commentcount}回复 
                    form(action='/diary/remove',method='post') 
                      input(type='hidden',value='#{item._id}',name='id')
                      div(class="btn-group")
