@@ -26,7 +26,6 @@ div(class='navbar navbar-fixed-top')
          - var operate = config.nav
          - if(session.is_login)
            - operate = config.loginnav
-           - operate[0].text = session.userdata.nick+'的帐号';
          each item in operate
           li
             a(href='#{item.href}') #{item.text}

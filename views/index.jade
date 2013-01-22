@@ -6,9 +6,10 @@ block content
           div(class='span8')
             if(!session.is_login)
               div(class='well row')
-                h2 欢迎访问兔耳Beta版!
-                h3 网站目前为止已经有#{usersCount}个注册用户,#{todoCount}条Todo,#{diariesCount}篇公开日记和#{privacyCount}篇私密日记啦!
+                h4 已经有#{usersCount}位朋友写下了#{diariesCount}篇公开日记，#{privacyCount}篇私密日记，#{todoCount}条Todo.
             div(class='row')
+              h4 最新日记 
+              hr 
               include package/lastfeed
           div(class='span4') 
             if(session.is_login)

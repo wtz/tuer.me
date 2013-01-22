@@ -118,8 +118,11 @@ form.reply textarea.input {
     color:#888;
     margin-bottom:30px;
 }
+.Diary-wrap .bar .btn-group{
+    display:inline;
+}
 .Diary-wrap .bar .btn{
-    margin-right:5px;
+   /* margin-right:5px;*/
 }
 .Diary-wrap .bar form{
     display:inline;
@@ -146,11 +149,6 @@ form.reply textarea.input {
 .Note-list ul li{
     list-style:none;
     margin:5px 10px 5px 0px;
-    width:100px;
-    height:120px;
-    text-align:center;
-    overflow:hidden;
-    float:left;
 }
 .Friends-list ul li{
     list-style:none;
@@ -226,12 +224,10 @@ ol li small{
 }
 
 .bookcover{
-    display:block;
-    width:100px;
-    height:100px;
-    line-height:100px;
-    text-align:center;
-    font-size:36px;
+    display:inline-block;
+    width:10px;
+    height:10px;
+    margin-right:5px;
 }
 .Calendar {
     margin-bottom:20px;
