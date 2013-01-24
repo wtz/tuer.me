@@ -10,13 +10,13 @@ var index = function(req, res, next) {
 	}],
 	proxy = new EventProxy(),
 	render = function(diaryList) {
-       req.session.title = '搜索';
-	   req.session.template = 'search';
-       res.render('search/search',{
-            config:config,
-            session:req.session,
-            result:diaryList
-       }); 
+		req.session.title = '搜索';
+		req.session.template = 'search';
+		res.render('search/search', {
+			config: config,
+			session: req.session,
+			result: diaryList
+		});
 	};
 	proxy.assign('findDiary', render);
 	if (q) {
@@ -24,7 +24,12 @@ var index = function(req, res, next) {
 		searchReg = new RegExp('.*' + qstr + '|' + qstr + '.*', 'i');
 
 		tuerBase.findDiaryBy({
-			title: searchReg
+			'$or': [{
+				title: searchReg
+			},
+			{
+				content: searchReg
+			}]
 		},
 		'diary', 10, function(err, diaryList) {
 			if (err) throw err;
