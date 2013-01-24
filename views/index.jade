@@ -7,7 +7,7 @@ block content
             if(!session.is_login)
               div(class='well row')
                 h3 兔耳日记 
-                  small 留住身边的美好
+                  small 留住身边的美好,让生活慢下来
                 h5 已经有#{usersCount}位朋友写下了#{diariesCount}件小事，#{privacyCount}个秘密，#{todoCount}条心愿.
             div(class='row')
               h4 最新日记 
@@ -21,7 +21,7 @@ block content
                 div(class='btn-group hot',id='J_UserBar')
                   a(class="btn btn-primary",href='/diary/write',title='写日记') 写日记
                   a(class="btn",href='/notebook',title='管理日记本') 管理日记本
-                  a(class="btn",href='/todo',title='创建Todo') TODO
+                  a(class="btn",href='/todo',title='管理Todo') 管理TODO
               hr
             else
               div(class='well')

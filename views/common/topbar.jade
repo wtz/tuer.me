@@ -7,19 +7,28 @@ div(class='navbar navbar-fixed-top')
          span(class='icon-bar')
        a(class='brand', href='/') Tuer.me
        div(class='nav-collapse')
-         ul(class='nav')
+         ul(class='nav nav-pills')
            - var muens;
            - if(session.is_login){
-             - muens = [{text:'首页',href:'/',template:'index'},{text:'我的主页',href:'/user/profile/'+session.userdata._id,template:'myprofile'},{text:'我的TODOS',href:'/todo/'+session.userdata._id,template:'mytodo'},{text:'我关注的日记',href:'/followed/diaries/',template:'followedDiaries'},{text:'全部日记',href:'/diaries',template:'diaries'},{text:'手机简版',href:'http://'+config.mhost}];
+             - muens = [{text:'首页',href:'/',template:'index'},{text:'全部日记',href:'/diaries',template:'diaries'},{text:'我的主页',href:'/user/profile/'+session.userdata._id,template:'myprofile'}];
            - }else{
-             - muens = config.muens;
+             - muens = [{text:'首页',href:'/',template:'index'},{text:'全部日记',href:'/diaries/',template:'diaries'}];
            - }
            for muen in muens
-             - var cls=''
+             - var cls='';
              - if(session.template == muen.template)
                - cls='active'
              li(class='#{cls}')
                a(href='#{muen.href}',title='#{muen.text}') #{muen.text} 
+           if(session.is_login)
+             li(class='dropdown')
+               a(class='dropdown-toggle',data-toggle='dropdown',href='#') 更多
+                 b(class='caret')
+               ul(class='dropdown-menu')
+                 - var more = [{text:'我的TODOS',href:'/todo/'+session.userdata._id,template:'mytodo'},{text:'关注的日记',href:'/followed/diaries/',template:'followedDiaries'}];
+                 for muen in more
+                   li
+                     a(href='#{muen.href}',title='#{muen.text}') #{muen.text}
        form(class='navbar-search pull-left',action='/search/',method='get')
          input(class='search-query span2',type='text',placeholder='Search',name='q')
        ul(class='nav pull-right')

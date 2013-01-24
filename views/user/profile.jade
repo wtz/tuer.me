@@ -13,6 +13,7 @@ block content
            div(class='Diary-wrap')
              each item,i in userDiaryList 
                h5 
+                 a(href="/diary/#{item._id}") #{item.created_user}的日记 
                  if(item.title)
                    a(href='/diary/#{item._id}') 
                      small #{item.title} 
@@ -36,8 +37,7 @@ block content
                       img(src='#{item.img}')
                   p #{item.content}
                div(class='bar') #{item.created_at}
-                 small 
-                   a(href='/diary/#{item._id}') #{item.commentcount}回复 
+                 small #{item.commentcount}回复 
                  if(isSelf)
                    form(action='/diary/remove',method='post') 
                      input(type='hidden',value='#{item._id}',name='id')
