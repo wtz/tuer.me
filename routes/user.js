@@ -20,7 +20,7 @@ var profile = function(req, res) {
 		util.setDay(user);
 		user.avatarUrl = Avatar.getArtUrl(user._id);
 		user.smallAvatar = Avatar.getUrl(user._id);
-        user.about = user.about ? escape(user.about).replace(/\r\n/g, '<br>') : undefined;
+        user.about = user.about ? util.drawUrl(escape(user.about).replace(/\r\n/g, '<br>')) : undefined;
 		user.isFriend = function() {
 			if (!req.session.is_login) return false;
 			var friends = req.session.userdata.firends;

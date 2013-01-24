@@ -25,14 +25,14 @@ var detail = function(req, res, next) {
 		util.setTime(diary);
 		diary.img = util.getpics(150, 1, diary.filelist);
 		diary.bigimg = util.getpics(500, 1, diary.filelist);
-		diary.content = escape(diary.content).replace(/\r\n/g, '<br>');
+		diary.content = util.drawUrl(escape(diary.content).replace(/\r\n/g, '<br>'));
 
 		user.avatarUrl = Avatar.getUrl(user._id);
 
 		comments.forEach(function(item) {
 			util.setTime(item);
 			item.avatarUrl = Avatar.getUrl(item.userid);
-			item.content = escape(item.content).replace(/\r\n/g, '<br>');
+			item.content = util.drawUrl(escape(item.content).replace(/\r\n/g, '<br>'));
 			if (req.session.is_login && item.userid !== req.session.userdata._id.toString()) item.reply = true;
 			if (req.session.is_login && (diary.userid == req.session.userdata._id.toString() || item.userid == req.session.userdata._id.toString())) item.del = true;
 		});
