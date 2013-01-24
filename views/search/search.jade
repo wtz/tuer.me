@@ -10,7 +10,7 @@ block content
             small [#{item.bookname}]
           else
             a(href='/diary/#{item._id}') #{item.bookname}
-            small [#{item.content}]
+            p #{item.content}
         else
           p #{item.title}
     include ../common/footer
