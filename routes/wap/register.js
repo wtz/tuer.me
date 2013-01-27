@@ -88,6 +88,7 @@ exports.active = function(req, res) {
 			}
 			res.render('wap/login/invite', {
 				title: '激活页面',
+                config:config,
                 session:req.session,
 				message: message
 			});
