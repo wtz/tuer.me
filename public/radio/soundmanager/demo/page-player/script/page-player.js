@@ -371,12 +371,13 @@ function PagePlayer() {
       this._data.className = '';
       this._data.oPosition.style.width = '0px';
       // play next if applicable
-      if (self.config.playNext) {
-        pl.playNext(this);
-      } else {
+      //if (self.config.playNext) {
+        //pl.playNext(this);
+      //} else {
         self.setPageTitle();
         self.resetPageIcon();
-      }
+        window.self.location.reload();
+      //}
     },
 
     whileloading: function() {
@@ -693,6 +694,7 @@ function PagePlayer() {
       }
 
       self.lastSound = thisSound; // reference for next call
+      iframeAuto('#tuer-iframe');
       return self.stopEvent(e);
 
     }

@@ -36,5 +36,13 @@ function setTheme(sTheme) {
  <ul class="playlist" id="myradio">
      <!-- <li><a href="http://ftp.luoo.net/radio/radio436/02.mp3">mp3</a></li> -->
  </ul>
+ <iframe id="tuer-iframe" style="display:none;"></iframe>
+ <script>
+    function iframeAuto(id){
+        var src = 'http://www.tuer.me/iframe.html',
+        height = $('body').outerHeight(true);
+        $(id).attr('src',src + '?height='+height);
+    }
+ </script>
 </body>
 </html>

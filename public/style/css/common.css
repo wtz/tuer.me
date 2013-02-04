@@ -344,16 +344,13 @@ section{
 }
 /*radio*/
 #radio{
-    height:66px;
     position:fixed;
     bottom:0px;
-    width:200px;
+    width:300px;
     right:0px;
-    border:#ccc solid 1px;
 }
 #radio .radio-iframe{
-    height:66px;
-    width:200px;
+    width:300px;
     position:absolute;
     right:0px;
 }

@@ -20,8 +20,10 @@
 				} else if (type == 'mp3player') {
 					getXml('playlist', num, callback);
 				} else if (type == 'playlist') {
+					getXml('player', num, callback);
+				} else if (type == 'player') {
 					console.log('歌曲列表不存在');
-				}
+                }
 			},
 			success: function(doc) {
 				var ret = [];
@@ -46,6 +48,7 @@
 			$('#myradio').append('<li><a href="' + song.path + '">' + song.title + '</a></li>');
 			pagePlayer = new PagePlayer();
 			pagePlayer.init(typeof PP_CONFIG !== 'undefined' ? PP_CONFIG: null);
+            iframeAuto('#tuer-iframe');
 		}
 	}
 
