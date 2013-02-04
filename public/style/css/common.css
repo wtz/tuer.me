@@ -342,3 +342,18 @@ section{
     color:#999;
     font-size:12px;
 }
+/*radio*/
+#radio{
+    height:66px;
+    position:fixed;
+    bottom:0px;
+    width:200px;
+    right:0px;
+    border:#ccc solid 1px;
+}
+#radio .radio-iframe{
+    height:66px;
+    width:200px;
+    position:absolute;
+    right:0px;
+}

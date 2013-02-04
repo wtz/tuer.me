@@ -173,6 +173,96 @@ var profile = function(req, res) {
 	});
 };
 
+var book = function(req, res) {
+	var page = req.params.page,
+	space = 6,
+	bookid = req.params.id,
+	uid = req.params.uid;
+	if (page && isNaN(page)) {
+		res.redirect('404');
+	} else if (page == undefined || page == 1) {
+		page = 0;
+	} else {
+		page = page - 1;
+	}
+
+	var proxy = new EventProxy(),
+	render = function(user, notebook,isSelf, diaryCount, userDiaryList) {
+		userDiaryList.forEach(function(item) {
+			util.setTime(item);
+			item.created_user = user.nick;
+			item.img = util.getpics(150, 1, item.filelist);
+            item.weather = item.weather ? config.weather[item.weather].value : undefined;
+            item.mood = item.mood ? config.mood[item.mood].value : undefined;
+		});
+		req.session.title = notebook.name;
+		req.session.template = 'book';
+
+		res.render('book/index', {
+			config: config,
+            notebook:notebook,
+			session: req.session,
+			isSelf: isSelf,
+			user: user,
+			diaryCount: diaryCount,
+			userDiaryList: userDiaryList,
+			pag: new Pag({
+				cur: page + 1,
+				space: space,
+				total: diaryCount,
+				url: '/user/' + uid + '/notebook/'+bookid
+			}).init()
+		});
+
+	};
+
+	proxy.assign('user','notebook' ,'isSelf', 'diaryCount', 'UserDiaryList', render);
+    
+    tuerBase.findById(bookid,'notebooks',function(err,notebook){
+        if(err) res.redirect('500');
+        else{
+             proxy.trigger('notebook',notebook);
+        }
+    });    
+
+	tuerBase.findUser(uid, function(err, user) {
+		if (err) {
+			res.redirect('500');
+		} else {
+
+			proxy.trigger('user', user);
+
+			var uid = user._id.toString(),
+			isSelf = req.session.is_login ? (req.session.userdata._id.toString() == uid) : false;
+
+			proxy.trigger('isSelf', isSelf);            
+
+            var Selector ={
+                userid:uid.toString(),
+                notebook:bookid
+            };
+            if(!isSelf) Selector['privacy'] = 0;
+			tuerBase.getCount(Selector,'diary', function(err, count) {
+				if (err) {
+					res.redirect('500');
+				} else {
+					proxy.trigger('diaryCount', count);
+				}
+			});
+
+			var split = page * space;
+
+			tuerBase.findBySlice(Selector, 'diary', split, split + space, function(err, lists) {
+				if (err) {
+					res.redirect('500');
+				} else {
+					proxy.trigger('UserDiaryList', lists);
+				}
+			});
+		}
+	});
+};
+
 var notebook = function(req, res) {
 	var page = req.params.page,
 	space = 6,
@@ -535,6 +625,7 @@ var art = function(req, res) {
 
 exports.profile = profile;
 exports.diaries = diaries;
+exports.book = book;
 exports.notebook = notebook;
 exports.rss = rss;
 exports.followusers = followusers;

@@ -28,6 +28,8 @@ block content
                 include package/smallLogin
             include package/hot
     include common/footer
+    script
+      seajs.use('mods/radio.js?t=20130204');
   if(session.is_login)
     script
       seajs.use('mods/index.js?t=20121023');
