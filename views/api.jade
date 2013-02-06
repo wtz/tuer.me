@@ -81,14 +81,49 @@ block content
             p 具体的参考信息请见 OAuth2.0 文档。
           section(id="doc") 
             h3 API文档
-            h5 用户相关
-            p 编写中...
-            h5 日记相关
-            p 编写中...
-            h5 日记本相关
-            p 编写中...
-            h5 搜索相关
-            p 编写中...
+            h5 日记列表 
+              small 不含隐私日记
+            table(class="table")
+              tbody
+                tr
+                  th URL
+                  td 
+                    code http://api.tuer.me/rest/get_diary_list
+                tr
+                  th 参数
+                  td
+                    p 
+                      code page:页数
+                    p
+                      code size:单页个数
+                    p
+                      code author:all|userid:全部用户日记或单用户日记
+                tr
+                  th 返回值
+                  td 
+                    pre 
+                      code {code:200,message:{page:page,size:size,data:[{bookname:'默认日记',author:'xiaojue',create_at:'timestamp',short_content:'xxxx,xxxx,xxxx...',reply_count:10,id:'xxxxx',url:'http://xxxx/xx'}]}}
+            h5 日记详细信息
+            table(class="table")
+              tbody
+                tr
+                  th URL
+                  td 
+                    code http://api.tuer.me/rest/get_diary_detail
+                tr
+                  th 参数
+                  td
+                    p 
+                      code id:日记id
+                    p
+                      code page:回复页数
+                    p
+                      code size:单页回复数
+                tr
+                  th 返回值
+                  td 
+                    pre 
+                      code {code:200,message:{page:page,size:size,data:{id:'xxx',content:'xxxx',create_at:'timestamp',reply_count:10,url:'http://xxx/xxx',allow_reply:true,img:['http://xx/xxx.jpge'],author:'xiaojue',comments:[{},{}]}}}
           section(id="help") 
             h3 帮助中心
             p 目前API没有编写完成，还不能申请。

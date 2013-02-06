@@ -35,7 +35,8 @@ function PagePlayer() {
 
   // configuration options
   // note that if Flash 9 is required, you must set soundManager.flashVersion = 9 in your script before this point.
-
+  var href = window.location.href,
+      isAutoStart = href.indexOf('?autoStart') > -1  ? true : false;
   this.config = {
     usePeakData: false,     // [Flash 9 only]: show peak data
     useWaveformData: false, // [Flash 9 only]: enable sound spectrum (raw waveform data) - WARNING: CPU-INTENSIVE: may set CPUs on fire.
@@ -43,7 +44,7 @@ function PagePlayer() {
     fillGraph: false,       // [Flash 9 only]: draw full lines instead of only top (peak) spectrum points
     allowRightClick: true,  // let users right-click MP3 links ("save as...", etc.) or discourage (can't prevent.)
     useThrottling: true,    // try to rate-limit potentially-expensive calls (eg. dragging position around)
-    autoStart: true,       // begin playing first sound when page loads
+    autoStart: isAutoStart,       // begin playing first sound when page loads
     playNext: true,         // stop after one sound, or play through list until end
     updatePageTitle: true,  // change the page title while playing sounds
     emptyTime: '00:00',      // null/undefined timer values (before data is available)
@@ -376,7 +377,7 @@ function PagePlayer() {
       //} else {
         self.setPageTitle();
         self.resetPageIcon();
-        window.self.location.reload();
+        window.self.location.href = 'http://www.luoo.net/tuer/soundmanager/demo/page-player/radio.html?autoStart';
       //}
     },
 
