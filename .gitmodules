@@ -1,0 +1,8 @@
+[submodule "imgforbase64"]
+    path = public/libs/imgforbase64
+    url = https://github.com/xiaojue/imgforbase64.git
+[submodule "Jcrop"]
+    path = public/libs/Jcrop
+    url = https://github.com/tapmodo/Jcrop.git
+
+
