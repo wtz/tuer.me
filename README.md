@@ -8,7 +8,7 @@
 
   * npm安装 npm install tuer
 
-  * 安装好后，进入tuer目录，npm test 查看环境变量和wiki地址帮助说明.
+  * 安装好后，进入tuer目录，npm run ls 查看环境变量和wiki地址帮助说明.
 
   * 根据test提示，进行本地环境配置，网站的所有配置信息都在./lib/config.js 里，端口以及host请自行修改.
 
