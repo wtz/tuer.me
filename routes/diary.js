@@ -361,8 +361,8 @@ var save = function(req, res) {
 		return;
 	}
 
-	if (content.trim().length > 2200) {
-		req.flash('error', '日记字数最多2200字');
+	if (content.trim().length > 22000) {
+		req.flash('error', '日记字数最多22000字');
 		util.remove_temp(proxy, 'removeTemp', temp_path);
 		res.redirect('back');
 		return;
@@ -557,8 +557,8 @@ var update = function(req, res) {
 		return;
 	}
 
-	if (content.trim().length > 2200) {
-		req.flash('error', '日记字数最多2200字');
+	if (content.trim().length > 22000) {
+		req.flash('error', '日记字数最多22000字');
 		if (temp_path) util.remove_temp(proxy, 'removeTemp', temp_path);
 		res.redirect('back');
 		return;
