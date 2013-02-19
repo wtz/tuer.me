@@ -1,6 +1,6 @@
 {
     "name": "tuer"
-  , "version": "0.3.0"
+  , "version": "0.3.2"
   , "author":"xiaojue"
   , "keywords":[
     "cms",
@@ -24,7 +24,7 @@
     , "punycode":"1.2.0"
   }
   , "scripts":{
-       "test":"node ./checkService.js",
+       "ls":"node ./checkService.js",
        "start":"node ./index.js"
    }
   ,"contributors":[ "xiaojue" ,"JokerQyou"]
