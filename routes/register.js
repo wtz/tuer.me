@@ -28,9 +28,10 @@ var invite = function(req, res) {
 		proxy = new EventProxy(),
 		render = function(findEmail, sendMail) {
 			var message = '发信失败了，联系下管理员小爝吧...';
-			if (findEmail && sendMail) {
+			if (findEmail === 1 && sendMail) {
 				message = '我们已经给您的' + email + '邮箱寄了一封激活信，它的有效期为3小时，如果收件箱中没有收到，麻烦您检查您的垃圾邮件夹~，也许会有惊喜...';
 			}
+            if(findEmail === 2) message = '此email已经注册过';
 			util.setNoCache(res);
 			req.session.title = '激活页面';
 			req.session.template = 'invite';
@@ -43,8 +44,9 @@ var invite = function(req, res) {
 
 		proxy.assign('findEmail', 'sendMail', render);
 		try {
-			var activateURL = 'http://www.tuer.me/register/active/' + encodeURIComponent(base64.encode('accounts=' + email + '&timestamp=' + new Date().getTime() + '&nick=' + nick));
+			var activateURL = 'http://www.tuer.me/register/active/' + encodeURIComponent(base64.encode('accounts=' + encodeURIComponent(email) + '&timestamp=' + new Date().getTime() + '&nick=' + encodeURIComponent(nick)));
 		} catch(e) {
+            console.log(e);
 			proxy.trigger('findEmail', 0);
 			proxy.trigger('sendMail', 0);
             return;
@@ -54,10 +56,13 @@ var invite = function(req, res) {
 			accounts: email
 		},
 		'users', function(err, data) {
-			if (err || data) {
+			if (err) {
 				proxy.trigger('findEmail', 0);
 				proxy.trigger('sendMail', 0);
-			} else {
+			}else if(data){
+				proxy.trigger('findEmail', 2);
+				proxy.trigger('sendMail', 0);
+            } else {
 				mail.send_mail({
 					to: email,
 					subject: nick + '欢迎您注册兔耳！',
@@ -78,8 +83,11 @@ var active = function(req, res, next) {
 	} else {
 		var password = util.random36(10),
 		proxy = new EventProxy(),
-		activeData = util.paramUrl(base64.decode(decodeURIComponent(req.params.active))),
-		render = function(args) {
+		activeData = util.paramUrl(base64.decode(decodeURIComponent(req.params.active)));
+        for(var i in activeData){
+            activeData[i] = decodeURIComponent(activeData[i]);    
+        }
+		var render = function(args) {
 			var message, checkUrl = args[0],
 			findAccounts = args[1],
 			saveAccounts = args[2];
