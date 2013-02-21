@@ -27,12 +27,13 @@ exports.invite = function(req, res) {
 		var email = req.body.email.trim(),
 		nick = req.body.nick.trim(),
 		proxy = new EventProxy(),
-		activateURL = 'http://m.tuer.me/register/active/' + encodeURIComponent(base64.encode('accounts=' + email + '&timestamp=' + new Date().getTime() + '&nick=' + nick)),
+		activateURL = 'http://www.tuer.me/register/active/' + encodeURIComponent(base64.encode('accounts=' + encodeURIComponent(email) + '&timestamp=' + new Date().getTime() + '&nick=' + encodeURIComponent(nick)));
 		render = function(findEmail, sendMail) {
 			var message = '发信失败了，联系下管理员小爝吧...';
 			if (findEmail && sendMail) {
 				message = '我们已经给您的' + email + '邮箱寄了一封激活信，它的有效期为3小时，如果收件箱中没有收到，麻烦您检查您的垃圾邮件夹~，也许会有惊喜...';
 			}
+            if(findEmail === 2) message = '此email已经注册过了';
 			util.setNoCache(res);
 			res.render('wap/login/invite', {
                 config:config,
@@ -48,10 +49,13 @@ exports.invite = function(req, res) {
 			accounts: email
 		},
 		'users', function(err, data) {
-			if (err || data) {
+			if (err) {
 				proxy.trigger('findEmail', false);
 				proxy.trigger('sendMail', false);
-			} else {
+			} else if(data){
+				proxy.trigger('findEmail', 2);
+				proxy.trigger('sendMail', false);
+            }else {
 				proxy.trigger('findEmail', true);
 				mail.send_mail({
 					to: email,
@@ -72,8 +76,11 @@ exports.active = function(req, res) {
 	} else {
 		var password = util.random36(10),
 		proxy = new EventProxy(),
-		activeData = util.paramUrl(base64.decode(decodeURIComponent(req.params.active))),
-		render = function(args) {
+		activeData = util.paramUrl(base64.decode(decodeURIComponent(req.params.active)));
+        for(var i in activeData){
+            activeData[i] = decodeURIComponent(activeData[i]);    
+        }
+		var render = function(args) {
 			var message, checkUrl = args[0],
 			findAccounts = args[1],
 			saveAccounts = args[2];

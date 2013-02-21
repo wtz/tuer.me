@@ -15,8 +15,8 @@ var save = function(req, res) {
 			res.redirect('500');
 			return;
 		}
-		if (content.length <= 0 || content.length > 220) {
-			req.flash('error', "评论内容不能为空或超过220个字节");
+		if (content.length <= 0 || content.length > 5000) {
+			req.flash('error', "评论内容不能为空或超过5000个字节");
 			res.redirect('/diary/' + diaryid);
 			return;
 		}
