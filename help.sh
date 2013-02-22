@@ -11,4 +11,4 @@ cd $cur_dir/backup/
 rm *.tar.gz
 tar czf $backmongodbFile my_mongodb_dump/
 rm my_mongodb_dump -rf
-service tuer restart
+/etc/init.d/tuer restart
