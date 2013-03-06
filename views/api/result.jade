@@ -1,0 +1,11 @@
+extends ../common/layout
+block content
+  div(class="container")
+    div(class='div-fluid show-grid')
+      div(class="row")
+        div(class="span12")
+            hr
+            p #{message}
+            p 
+              a(href="/api/market") 前往兔耳应用市场.
+    include ../common/footer

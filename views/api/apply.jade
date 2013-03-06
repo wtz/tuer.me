@@ -1,0 +1,54 @@
+extends ../common/layout
+block content
+  div(class="container")
+    div(class='div-fluid show-grid')
+      div(class="row")
+        div(class="span12") 
+          h3 API KEY申请 
+            small (一个帐号只能申请一个)
+          hr
+          if(session.is_login)
+            form(class="form-horizontal",method="post",action="/api/saveApply")
+                if(session.error.length)
+                    div(class="control-group error")
+                        span(class="help-inline") #{session.error}
+                div(class="control-group")
+                    label(class="control-label",for="J_appName") 应用名称: 
+                    div(class='controls')
+                      input(id="J_appName",type="text",placeholder="应用名称",name="appname")
+                div(class="control-group")
+                    label(class="control-label",for="J_appAbout") 应用简介:  
+                    div(class='controls')
+                      textarea(id="J_appAbout",placeholder="应用简介",name="appabout",row="5")
+                div(class="control-group")
+                    label(class="control-label",for="J_appAddress") 应用地址:  
+                    div(class='controls')
+                      input(id="J_appAddress",type="text",placeholder="应用地址",name="appaddress")
+                div(class="control-group")
+                    label(class="control-label",for="J_appCallback") 回调地址: 
+                    div(class='controls')
+                      input(id="J_appCallback",type="text",placeholder="回调地址",name="appcallback")
+                div(class="control-group")
+                    label(class="control-label") 应用类型: 
+                    div(class='controls')
+                      input(type="radio",name="type",value="webapp")
+                      网站应用
+                      input(type="radio",name="type",value="pcapp")
+                      桌面客户端
+                      input(type="radio",name="type",value="mobileapp")
+                      移动客户端
+                hr
+                div(class="control-group")
+                    label(class="control-label")
+                    div(class='controls')
+                      input(type="checkbox",id="agree",name="agree")
+                      我已经阅读并接受
+                      a(href="#",target="_blank") 兔耳API与开发者协议
+                div(class="control-group")
+                    label(class="control-label")
+                    div(class='controls')
+                      input(type="submit",value="申请APP KEY并创建应用",class="btn btn-primary")
+          else
+            p 必须注册用户才可以申请，
+              a(href='/login') 登陆后即可申请。
+    include ../common/footer

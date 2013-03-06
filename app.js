@@ -20,6 +20,7 @@ function Configuration(app, rootdir) {
 		uploadDir: rootdir + '/public/images/'
 	}));
 	app.use(express.cookieParser());
+	app.use(express.query());
 	app.use(express.session({
 		secret: 'keyboard cat',
 		store: new RedisStore

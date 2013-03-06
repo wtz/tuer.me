@@ -67,6 +67,7 @@ module.exports = function(app) {
     app.get('/user/:uid/diaries/:page?',user.diaries);
     app.get('/user/:uid/notebook/:id/:page?',user.notebook);
     app.get('/user/:uid/book/:id/:page?',user.book);
+    app.get('/user/:uid/api/:page?', user.api);
     app.get('/user/rss/:id', user.rss);
     app.get('/user/follows/:id', user.followusers);
     app.get('/user/followed/:id', user.followedusers);
@@ -116,6 +117,11 @@ module.exports = function(app) {
     app.get('/music/check',music.check);
 
     app.get('/api',api.index);
+    app.get('/api/apply',api.apply);
+    app.get('/api/edit',api.edit);
+    app.get('/api/market/:page?',api.market);
+    app.post('/api/update',api.update);
+    app.post('/api/saveApply',api.save);
 
     app.get('/404',error.notFound);
     app.get('/500',error.proError);

@@ -11,16 +11,25 @@ var index = function(req, res) {
 			if (err) {
 				res.redirect('500');
 			} else {
-				req.session.title = '个人设置';
-				req.session.template = 'set';
-				req.session.success = req.flash('success');
-				req.session.error = req.flash('error');
-				user.BigavatarUrl = Avatar.getArtUrl(user._id);
-				user.avatarUrl = Avatar.getUrl(user._id);
-				res.render('set/set', {
-					user: user,
-					session: req.session,
-					config: config
+				tuerBase.findOne({
+					userid: user._id.toString()
+				},
+				'apis', function(err, api) {
+					if (err) res.redirect('500');
+					else {
+						req.session.title = '个人设置';
+						req.session.template = 'set';
+						req.session.success = req.flash('success');
+						req.session.error = req.flash('error');
+						user.BigavatarUrl = Avatar.getArtUrl(user._id);
+						user.avatarUrl = Avatar.getUrl(user._id);
+						res.render('set/set', {
+							user: user,
+                            api:api,
+							session: req.session,
+							config: config
+						});
+					}
 				});
 			}
 		});
@@ -148,12 +157,12 @@ var avatarSave = function(req, res) {
 		successmsg = '修改头像缩略图成功',
 		lastMod = new Date(),
 		coords = req.body.coordinate;
-        
-        if(!coords){
-            req.flash('error','非法操作,更新失败');
+
+		if (!coords) {
+			req.flash('error', '非法操作,更新失败');
 			res.send('save not passed');
-            return;
-        }
+			return;
+		}
 
 		tuerBase.updateById(uid, {
 			$set: {
@@ -220,19 +229,19 @@ var pwdSave = function(req, res) {
 			if (err) {
 				proxy.trigger('msg', err);
 			} else {
-                var md5 = crypto.createHash("md5");
-                md5.update(oldpwd);
-                oldpwd = md5.digest("hex");
-                var md = crypto.createHash("md5");
-                md.update(newpwd);
-                newpwd = md.digest("hex");
+				var md5 = crypto.createHash("md5");
+				md5.update(oldpwd);
+				oldpwd = md5.digest("hex");
+				var md = crypto.createHash("md5");
+				md.update(newpwd);
+				newpwd = md.digest("hex");
 				if (user.pwd !== oldpwd) {
 					proxy.trigger('msg', '旧密码不正确');
 					return;
 				}
 				tuerBase.updateById(uid, {
 					$set: {
-						pwd:newpwd
+						pwd: newpwd
 					}
 				},
 				'users', function(err, ret) {
