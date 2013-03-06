@@ -4,8 +4,9 @@ block content
     div(class='div-fluid show-grid')
       div(class="row")
         div(class="span12") 
-          h3 API KEY申请 
-            small (一个帐号只能申请一个)
+          if(session.is_login)
+            h3 API KEY申请 
+              small (一个帐号只能申请一个)
           hr
           if(session.is_login)
             form(class="form-horizontal",method="post",action="/api/saveApply")
