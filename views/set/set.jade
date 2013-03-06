@@ -38,6 +38,12 @@ block content
       div(class='control-group validation-container')
         div(class='controls') 
           a(href="/set/pwd",title="修改密码") 修改密码
+      div(class='control-group')
+        div(class='controls') 
+          if(api)
+            a(href="/api/edit",title="APPKEY管理") APPKEY管理
+          else
+            a(href="/api/apply",title="APPKEY管理") 申请APPKEY
       div(class='control-group validation-container')
         label(class='control-label',for='J_soleUrl') 唯一页面地址 
         div(class='controls')

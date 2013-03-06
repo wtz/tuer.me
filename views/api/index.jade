@@ -1,4 +1,4 @@
-extends common/layout
+extends ../common/layout
 block content
   div(class="container")
     div(class='div-fluid show-grid')
@@ -14,11 +14,16 @@ block content
             li
               a(href="#help") 帮助中心
         div(class="span9")
-          h3 兔耳API开放平台
+          h3 兔耳API快速上手
+          img(src="http://ftp.luoo.net/1.jpg")
           p 如果你想使用tuer的数据，开发自己的第三方应用，看这里就对了~
+          p 必须是兔耳注册用户才可以申请Api Key，申请页面在这里: 
+            a(href='/api/apply',target='_blank') 申请
+          p 快速查看已经存在Api应用市场列表在这里: 
+            a(href='/api/market',target='_blank') 应用市场
           section(id="about")
             h3 API使用说明
-            p 要调用兔耳的API，您必需先申请一个API Key和Shared Secret.
+            p 要调用兔耳的API，您必需先申请到一个API Key和Shared Secret:
             p 目前本站只支持REST请求形式，发送一个HTTP请求到特定的地址，并制定调用方法名和参数，然后返回格式化的结果。
             p 例如API地址为:
               code http://api.tuer.me/rest/
@@ -128,6 +133,6 @@ block content
             h3 帮助中心
             p 目前API没有编写完成，还不能申请。
             p 如果想申请appkey,可先邮件我备份到designsor[at]gmail.com，或者站内给我留言.
-    include common/footer
+    include ../common/footer
     script
         $('.bs-docs-sidenav').affix();

@@ -1,0 +1,31 @@
+extends ../common/layout
+block content
+  div(class="container")
+    div(class='div-fluid show-grid')
+      div(class="row")
+        div(class="span12") 
+            h2 兔耳应用市场
+            hr
+            if(apis.length)
+              ul(class="media-list")
+                each item,i in apis
+                  li(class="media")
+                    div(class="media-body")
+                      h4(class="media-heading") #{item.appname}
+                      div(class="media") 
+                        p 应用介绍: #{item.appabout}
+                        p 应用地址: #{item.appaddress}
+                        p 应用类型: #{item.type} 
+                          if(item.appkey == null)
+                            span(class="label label-important") 审核中 
+                          else
+                            span(class="label label-success") 已发放appkey 
+                        p
+                          a(href="/user/profile/#{item.userid}",class="label label-info") 开发者信息
+                        p
+                          if(session.userdata && item.userid == session.userdata._id)
+                            a(href="/api/edit",class="btn btn-mini") 编辑 
+              !{pag}
+            else
+              p 目前还没有人申请过app key...
+    include ../common/footer

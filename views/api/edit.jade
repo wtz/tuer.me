@@ -1,0 +1,52 @@
+extends ../common/layout
+block content
+  div(class="container")
+    div(class='div-fluid show-grid')
+      div(class="row")
+        div(class="span12") 
+          h3 API KEY管理
+          hr
+          form(class="form-horizontal",method="post",action="/api/update")
+              if(session.error.length)
+                  div(class="control-group error")
+                      span(class="help-inline") #{session.error}
+              div(class="control-group")
+                  label(class="control-label",for="J_appName") 应用名称: 
+                  div(class='controls')
+                    input(id="J_appName",type="text",placeholder="应用名称",name="appname",value="#{api.appname}")
+              div(class="control-group")
+                  label(class="control-label",for="J_appAbout") 应用简介:  
+                  div(class='controls')
+                    textarea(id="J_appAbout",placeholder="应用简介",name="appabout",row="5") #{api.appabout}
+              div(class="control-group")
+                  label(class="control-label",for="J_appAddress") 应用地址:  
+                  div(class='controls')
+                    input(id="J_appAddress",type="text",placeholder="应用地址",name="appaddress",value="#{api.appaddress}")
+              div(class="control-group")
+                  label(class="control-label",for="J_appCallback") 回调地址: 
+                  div(class='controls')
+                    input(id="J_appCallback",type="text",placeholder="回调地址",name="appcallback",value="#{api.appcallback}")
+              div(class="control-group")
+                  label(class="control-label") 应用类型: 
+                  div(class='controls')
+                    if(api.type == 'webapp')
+                      input(type="radio",name="type",value="webapp",checked="checked")
+                    else
+                      input(type="radio",name="type",value="webapp")
+                    网站应用
+                    if(api.type == 'pcapp')
+                      input(type="radio",name="type",value="pcapp",checked="checked")
+                    else
+                      input(type="radio",name="type",value="pcapp")
+                    桌面客户端
+                    if(api.type == 'mobileapp')
+                      input(type="radio",name="type",value="mobileapp",checked="checked")
+                    else
+                      input(type="radio",name="type",value="mobileapp")
+                    移动客户端
+              hr
+              div(class="control-group")
+                  label(class="control-label")
+                  div(class='controls')
+                    input(type="submit",value="确认修改",class="btn btn-primary")
+    include ../common/footer
