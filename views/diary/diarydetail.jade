@@ -108,7 +108,7 @@ block content
                a(href='/login') 登录之后就可以评论啦！
     include ../common/footer
     if(diary.img)
-      div(class="modal hide fade",id="myPic",role="dialog",tabindex="-1",aria-labelledby="myPicLabel",class="img-rounded",aria-hidden="true")
+      div(class="modal hide fade",id="myPic",role="dialog",tabindex="-1",aria-labelledby="myPicLabel",aria-hidden="true")
         div(class="modal-body")
           img(src="#{diary.bigimg}")
   script
