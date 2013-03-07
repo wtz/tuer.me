@@ -1,0 +1,31 @@
+extends ../../common/adminlayout
+block content
+  div(class="container")
+    div(class='div-fluid show-grid')
+      div(class="row")
+        div(class="span2")
+            ul(class="nav nav-pills nav-stacked")
+                li(class="active")
+                    a(href="/admin/users") 用户管理
+                li
+                    a(href="/admin/admins") 管理员列表
+        div(class="span10") 
+            h5 普通用户管理
+            if(usersCount > 0)
+             each item,i in users
+               div(class="media")
+                  a(class="pull-left",style="margin:10px;",href="/user/profile/#{item._id}",target="_blank")
+                    img(class="media-object img-rounded",src="#{item.avatarUrl}")
+                  div(class="media-body")
+                    h6 #{item.nick}
+                    span(class="label label-info",style="margin-right:5px;") #{item.created_at}
+                    span(class="label label-important",style="margin-right:5px;") #{item.accounts}
+                    if(item.about)
+                      span(class="label label-success",style="margin-right:5px;") #{item.about}
+                    if(item.profile !== 'nothing yet')
+                      span(class="label label-inverse",style="margin-right:5px;") #{item.profile}
+                    a(class="label label-warning",href="#") 设置成管理员
+             !{pag}
+            else
+             p 暂时还没有用户.
+    include ../../common/adminfooter

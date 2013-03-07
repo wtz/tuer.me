@@ -1,0 +1,19 @@
+!!! 5
+html
+  head
+    title
+      兔耳日记管理后台 | #{session.title} 
+    meta(content='text/html;charset=utf-8',http-equiv='Content-Type')
+    meta(name="description",content="兔耳日记，记录精彩每一天")
+    meta(name="author",content="小爝")
+    link(rel='shortcut icon',href='http://#{config.csshost}/favicon.ico',type='image/x-icon')
+    link(rel='stylesheet', href='http://#{config.csshost}/bootstrap/css/bootstrap.min.css')
+    link(rel='stylesheet', href='http://#{config.csshost}/style/css/common.css?v=201301221440')
+    each js,i in config.scripts
+      script(src='http://#{config.jshost}/#{js}')
+    script
+      seajs.config({'base':'http://#{config.jshost}/libs/'});
+  body(data-spy="scroll",data-target=".bs-docs-sidebar")
+    include admintopbar
+    block content
+    

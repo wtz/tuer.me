@@ -19,6 +19,7 @@ error = require('./routes/error'),
 api = require('./routes/api'),
 guest = require('./routes/guest'),
 music = require('./routes/music'),
+admin = require('./routes/admin'),
 search = require('./routes/search');
 
 module.exports = function(app) {
@@ -122,6 +123,13 @@ module.exports = function(app) {
     app.get('/api/market/:page?',api.market);
     app.post('/api/update',api.update);
     app.post('/api/saveApply',api.save);
+
+    app.get('/admin',admin.index);
+    app.get('/admin/users/:page?',admin.users);
+    app.get('/admin/admins/:page?',admin.adminusers);
+    app.get('/admin/todos',admin.todos);
+    app.get('/admin/appkey',admin.appkey);
+    app.get('/admin/tip',admin.tip);
 
     app.get('/404',error.notFound);
     app.get('/500',error.proError);

@@ -13,6 +13,6 @@ div(class='row Friends-list')
         each item,i in hotusers
             li 
                 a(href='/user/profile/#{item._id}')
-                    img(src='#{item.avatarUrl}',alt='#{item.nick}')
+                    img(src='#{item.avatarUrl}',class="img-rounded",alt='#{item.nick}')
                 span 
                   small #{item.nick}

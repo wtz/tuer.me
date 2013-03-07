@@ -34,7 +34,7 @@ block content
                      small [地点:#{item.location}]
                div(class='Diary-content')
                   if(item.img)
-                      img(src='#{item.img}')
+                      img(class="img-rounded",src='#{item.img}')
                   p #{item.content}
                div(class='bar') #{item.created_at}
                  small #{item.commentcount}回复 
@@ -51,7 +51,7 @@ block content
          div(class='User-box well')
           dl(class='pl')
            dt 
-             img(src='#{user.avatarUrl}',title='#{user.nick}')
+             img(src='#{user.avatarUrl}',class="img-rounded",title='#{user.nick}')
            dd 
              p #{user.nick} 于 #{user.created_at} 加入
               dd
@@ -82,7 +82,7 @@ block content
               each follow,i in Followed
                 li
                   a(href='/user/profile/#{follow._id}',title='#{follow.nick}') 
-                    img(src='#{follow.avatarUrl}',alt='#{follow.nick}')
+                    img(src='#{follow.avatarUrl}',class="img-rounded",alt='#{follow.nick}')
                   span #{follow.nick}
           else
              p 额，他还没有关注任何人
@@ -94,7 +94,7 @@ block content
               each friend,i in Follows
                 li
                   a(href='/user/profile/#{friend._id}',title='#{friend.nick}') 
-                    img(src='#{friend.avatarUrl}',alt='#{friend.nick}')
+                    img(src='#{friend.avatarUrl}',class="img-rounded",alt='#{friend.nick}')
                   span #{friend.nick}
           else
              p 额，还没有任何人关注他
