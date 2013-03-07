@@ -1,0 +1,13 @@
+extends ../../common/adminlayout
+block content
+  div(class="container")
+    div(class='div-fluid show-grid')
+      div(class="row")
+        div(class="span2")
+            ul(class="nav nav-pills nav-stacked")
+                li(class="active")
+                    a(href="/admin") TODO管理
+        div(class="span10") 
+            h5 TODO管理
+            p #{session.userdata.nick} 欢迎您噢,木哈哈！
+    include ../../common/adminfooter

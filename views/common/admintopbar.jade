@@ -1,0 +1,21 @@
+div(class='navbar navbar-fixed-top')
+  div(class='navbar-inner')
+    div(class='container')
+       a(class='btn btn-navbar', data-target='.nav-collapse', data-toggle='collapse')
+         span(class='icon-bar')
+         span(class='icon-bar')
+         span(class='icon-bar')
+       a(class='brand', href='/') Tuer.me
+       div(class='nav-collapse')
+         ul(class='nav nav-pills')
+           - var adminmuens = [{text:'管理首页',href:'/admin',template:'index'},{text:'用户管理',href:'/admin/users',template:'users'},{text:'TODO管理',href:'/admin/todos',template:'todo'},{text:'公告管理',href:'/admin/tip',template:'tip'},{text:'APPKEY管理',href:'/admin/appkey',template:'api'}];
+           for muen in adminmuens
+             - var cls='';
+             - if(session.template == muen.template)
+               - cls='active'
+             li(class='#{cls}')
+               a(href='#{muen.href}',title='#{muen.text}') #{muen.text} 
+       ul(class='nav pull-right')
+         each item in config.adminnav
+          li
+            a(href='#{item.href}') #{item.text}

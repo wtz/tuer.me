@@ -14,7 +14,7 @@ block content
            div(class='Diary-row')
             div(class='Diary-left')
               a(href='/user/profile/#{user._id}')
-               img(src='#{user.avatarUrl}',alt='#{user.nick}')
+               img(src='#{user.avatarUrl}',class="img-rounded",alt='#{user.nick}')
             div(class='Diary-right')
              if(diary.title)
                h5 #{diary.title}  
@@ -37,7 +37,7 @@ block content
                if(diary.img)
                   p 
                     a(title='点击展示大图',href='#myPic',target='_blank',data-toggle="modal") 
-                      img(src='#{diary.img}')
+                      img(class="img-rounded",src='#{diary.img}')
                !{diary.content}
              if(diary.forbid == 1)
                div(class='bar') #{diary.created_user}已将日记设置为不允许任何人评论 
@@ -76,7 +76,7 @@ block content
                   div(class='row-fluid show-grid comment-item')
                       div(class='span1 comment-user') 
                           a(href='/user/profile/#{item.userpage}')
-                              img(src='#{item.avatarUrl}',alt='#{item.nick}')
+                              img(src='#{item.avatarUrl}',class="img-rounded",alt='#{item.nick}')
                       div(class='span6')
                           div(class='comment-bar') #{item.created_at} 
                               a(href='/user/profile/#{item.userpage}') #{item.nick} 
@@ -108,7 +108,7 @@ block content
                a(href='/login') 登录之后就可以评论啦！
     include ../common/footer
     if(diary.img)
-      div(class="modal hide fade",id="myPic",role="dialog",tabindex="-1",aria-labelledby="myPicLabel",aria-hidden="true")
+      div(class="modal hide fade",id="myPic",role="dialog",tabindex="-1",aria-labelledby="myPicLabel",class="img-rounded",aria-hidden="true")
         div(class="modal-body")
           img(src="#{diary.bigimg}")
   script
