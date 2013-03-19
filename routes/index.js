@@ -15,13 +15,13 @@ var index = function(req,res,next){
 
             diaries.forEach(function(item){
                 item.img = util.getpics(150,1,item.filelist);
-                item.avatarUrl = Avatar.getUrl(item.userid);
+                item.avatarUrl = Avatar.getUrl(item.pageurl);
                 item.content = item.content.length > 50 ? item.content.slice(0,50)+'...' : item.content;
                 util.setTime(item);
             });
 
             hotusers.forEach(function(item){
-                item.avatarUrl = Avatar.getUrl(item._id);
+                item.avatarUrl = Avatar.getUrl(item.id);
             });
 
             hotdiarys.forEach(function(item){

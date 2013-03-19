@@ -3,7 +3,6 @@ escape = require('jade').runtime.escape,
 pag = require('../lib/pag').pag,
 util = require('../lib/util'),
 EventProxy = require('eventproxy').EventProxy,
-Avatar = require('../lib/avatar'),
 tuerBase = require('../model/base');
 
 exports.index = function(req, res) {

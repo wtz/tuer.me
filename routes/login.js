@@ -72,7 +72,7 @@ var signsuccess = function(req, res, userdata, accounts, pwd, remember, callback
 	req.session.cookie.maxAge = config.timeout;
 	req.session.is_login = true;
 	req.session.userdata = userdata;
-    req.session.userdata.avatar = Avatar.getUrl(userdata._id);
+    req.session.userdata.avatar = Avatar.getUrl(userdata.id);
 	if (callback) callback(res);
 };
 

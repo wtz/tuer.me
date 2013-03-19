@@ -21,8 +21,8 @@ var index = function(req, res) {
 						req.session.template = 'set';
 						req.session.success = req.flash('success');
 						req.session.error = req.flash('error');
-						user.BigavatarUrl = Avatar.getArtUrl(user._id);
-						user.avatarUrl = Avatar.getUrl(user._id);
+						user.BigavatarUrl = Avatar.getArtUrl(user.id);
+						user.avatarUrl = Avatar.getUrl(user.id);
 						res.render('set/set', {
 							user: user,
                             api:api,
@@ -106,8 +106,8 @@ var avatar = function(req, res) {
 			req.session.template = 'setAvatar';
 			req.session.success = req.flash('success');
 			req.session.error = req.flash('error');
-			user.avatarUrl = Avatar.getUrl(user._id);
-			user.BigavatarUrl = Avatar.getArtUrl(user._id);
+			user.avatarUrl = Avatar.getUrl(user.id);
+			user.BigavatarUrl = Avatar.getArtUrl(user.id);
 			res.render('set/setAvatar', {
 				user: user,
 				session: req.session,
@@ -191,8 +191,8 @@ var pwd = function(req, res) {
 			req.session.template = 'setPwd';
 			req.session.success = req.flash('success');
 			req.session.error = req.flash('error');
-			user.BigavatarUrl = Avatar.getArtUrl(user._id);
-			user.avatarUrl = Avatar.getUrl(user._id);
+			user.BigavatarUrl = Avatar.getArtUrl(user.id);
+			user.avatarUrl = Avatar.getUrl(user.id);
 			res.render('set/setPwd', {
 				user: user,
 				session: req.session,
