@@ -61,9 +61,11 @@ var save = function(req, res) {
 										if (replyid && replyid != userid) tuerBase.addDiaryTips(replyid, diaryid);
 									}
 								});
-							}
+							}else{
+                            }
 						});
-					}
+					}else{
+                    }
 				});
 				res.redirect('back');
 			} else {

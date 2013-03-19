@@ -213,7 +213,6 @@ var book = function(req, res) {
 				url: '/user/' + uid + '/notebook/'+bookid
 			}).init()
 		});
-
 	};
 
 	proxy.assign('user','notebook' ,'isSelf', 'diaryCount', 'UserDiaryList', render);
@@ -304,7 +303,6 @@ var notebook = function(req, res) {
 				url: '/user/' + uid + '/notebook/'+bookid
 			}).init()
 		});
-
 	};
 
 	proxy.assign('user','notebook' ,'isSelf', 'diaryCount', 'UserDiaryList', render);

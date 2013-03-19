@@ -53,6 +53,7 @@ var index = function(req,res,next){
                 diariesCount:diariesCount,
                 todoCount:todoCount
             });
+
         };
 
     proxy.assign('diaries','usersCount','privacyCount','diariesCount','todoCount','hotusers','hotdiarys',render);

@@ -16,7 +16,6 @@ exports.finished = function(req, res) {
 	} else {
 		var proxy = new EventProxy(),
 		render = function(user, todo) {
-
 		};
 		proxy.assign('user', 'todo');
 		tuerBase.findUser(uid, function(err, user) {

@@ -16,11 +16,14 @@ var tuerBase = function(host, port) {
 		auto_reconnect: true
 	},
 	{}));
-	this.db.open(function() {});
+	this.db.open(function() {
+
+	});
 };
 
 tuerBase.prototype.getCollection = function(collection, callback) {
-	this.db.collection(collection, function(err, db) {
+	var self = this;
+	self.db.collection(collection, function(err, db) {
 		if (err) callback(err);
 		else callback(null, db);
 	});
@@ -804,13 +807,25 @@ tuerBase.prototype.getHotDiary = function(limit, callback) {
 	this.getCollection('diary', function(err, db) {
 		if (err) callback(err);
 		else {
-			var cursor = db.find({privacy:0});
+			var cursor = db.find({
+				privacy: 0
+			});
 			cursor.sort({
-                commentcount:-1
+				commentcount: - 1
 			}).limit(limit);
 			self.batchDiary(cursor, callback);
 		}
 	});
+};
+
+tuerBase.prototype.getIds = function(collection,callback){
+    var self = this;
+    this.getCollection('ids',function(err,db){
+        if(err) callback(err);
+        else{
+            db.findAndModify({"name":collection},["name","asc"],{$inc:{"id":1}},{'new':true,'upsert':true},callback);
+        }
+    });
 };
 
 module.exports = new tuerBase(config.dbhost, config.dbport);
