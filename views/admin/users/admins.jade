@@ -14,7 +14,7 @@ block content
             if(usersCount > 0)
              each item,i in users
                div(class="media")
-                  a(class="pull-left",style="margin:10px;",href="/user/profile/#{item._id}",target="_blank")
+                  a(class="pull-left",style="margin:10px;",href="/user/profile/#{item.id}",target="_blank")
                     img(class="media-object img-rounded",src="#{item.avatarUrl}")
                   div(class="media-body")
                     h6 #{item.nick}
