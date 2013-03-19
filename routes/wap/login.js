@@ -76,7 +76,7 @@ exports.cookies = function(req,res,next){
 
 exports.signin = function(req, res) {
 	if (req.session.is_login) {
-		res.redirect('/profile/'+req.session.userdata._id);
+		res.redirect('/profile/'+req.session.userdata.id);
 	} else {
 		var proxy = new EventProxy(),
 		accounts = req.body.email.trim(),
@@ -92,7 +92,7 @@ exports.signin = function(req, res) {
 				res.redirect('/');
 			} else {
 				signsuccess(req, res, data, accounts, pwd, remember, function(res) {
-					res.redirect('/profile/'+data._id);
+					res.redirect('/profile/'+data.id);
 				});
 			}
 		};

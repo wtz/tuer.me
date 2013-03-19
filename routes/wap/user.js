@@ -30,7 +30,7 @@ exports.profile = function(req, res) {
 			pag: new Pag({
 				cur: 1,
 				space: 6,
-				url: '/profile/' + user._id + '/diaries',
+				url: '/profile/' + user.id + '/diaries',
 				total: diaryCount
 			}).init()
 		});

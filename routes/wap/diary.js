@@ -24,7 +24,7 @@ exports.detail = function(req, res, next) {
 		diary.img = util.getpics(80, 1, diary.filelist);
 		diary.content = escape(diary.content).replace(/\r\n/g, '<br>');
 
-		user.avatarUrl = Avatar.getUrl(user._id);
+		user.avatarUrl = Avatar.getUrl(user.id);
 
 		comments.forEach(function(item) {
 			item.content = escape(item.content).replace(/\r\n/g, '<br>');
