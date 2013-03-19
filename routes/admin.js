@@ -42,7 +42,7 @@ exports.users = function(req, res) {
 			req.session.template = 'users';
 
             users.forEach(function(item){
-			    item.avatarUrl = Avatar.getUrl(item._id);
+			    item.avatarUrl = Avatar.getUrl(item.id);
 		        util.setDay(item);
             });
 
@@ -112,7 +112,7 @@ exports.adminusers = function(req, res) {
 			req.session.template = 'users';
 
             users.forEach(function(item){
-			    item.avatarUrl = Avatar.getUrl(item._id);
+			    item.avatarUrl = Avatar.getUrl(item.id);
 		        util.setDay(item);
             });
 
