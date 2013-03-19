@@ -8,10 +8,10 @@ EventProxy = require('eventproxy').EventProxy;
 
 exports.index = function(req, res) {
 	if (!req.session.is_login) {
-        req.session.error = req.flash('error');
+		req.session.error = req.flash('error');
 		res.render('wap/login/register', {
-            config:config,
-            session:req.session,
+			config: config,
+			session: req.session,
 			title: '注册'
 		});
 	} else {
@@ -23,7 +23,7 @@ exports.invite = function(req, res) {
 	if (req.session.is_login) {
 		res.redirect('/');
 	} else {
-        //校验。。。也没写
+		//校验。。。也没写
 		var email = req.body.email.trim(),
 		nick = req.body.nick.trim(),
 		proxy = new EventProxy(),
@@ -33,12 +33,12 @@ exports.invite = function(req, res) {
 			if (findEmail && sendMail) {
 				message = '我们已经给您的' + email + '邮箱寄了一封激活信，它的有效期为3小时，如果收件箱中没有收到，麻烦您检查您的垃圾邮件夹~，也许会有惊喜...';
 			}
-            if(findEmail === 2) message = '此email已经注册过了';
+			if (findEmail === 2) message = '此email已经注册过了';
 			util.setNoCache(res);
 			res.render('wap/login/invite', {
-                config:config,
-                title:'激活页面',
-                session:req.session,
+				config: config,
+				title: '激活页面',
+				session: req.session,
 				message: message
 			});
 		};
@@ -52,10 +52,10 @@ exports.invite = function(req, res) {
 			if (err) {
 				proxy.trigger('findEmail', false);
 				proxy.trigger('sendMail', false);
-			} else if(data){
+			} else if (data) {
 				proxy.trigger('findEmail', 2);
 				proxy.trigger('sendMail', false);
-            }else {
+			} else {
 				proxy.trigger('findEmail', true);
 				mail.send_mail({
 					to: email,
@@ -77,9 +77,9 @@ exports.active = function(req, res) {
 		var password = util.random36(10),
 		proxy = new EventProxy(),
 		activeData = util.paramUrl(base64.decode(decodeURIComponent(req.params.active)));
-        for(var i in activeData){
-            activeData[i] = decodeURIComponent(activeData[i]);    
-        }
+		for (var i in activeData) {
+			activeData[i] = decodeURIComponent(activeData[i]);
+		}
 		var render = function(args) {
 			var message, checkUrl = args[0],
 			findAccounts = args[1],
@@ -95,8 +95,8 @@ exports.active = function(req, res) {
 			}
 			res.render('wap/login/invite', {
 				title: '激活页面',
-                config:config,
-                session:req.session,
+				config: config,
+				session: req.session,
 				message: message
 			});
 		};
@@ -106,37 +106,44 @@ exports.active = function(req, res) {
 		} else if ((new Date()).getTime() - parseInt(activeData['timestamp'], 10) > 1000 * 60 * 60 * 3) {
 			proxy.immediate('render', render, [false]);
 		} else {
-            var md5 = crypto.createHash("md5");
-            md5.update(password);
-            var pwd = md5.digest("hex");
+			var md5 = crypto.createHash("md5");
+			md5.update(password);
+			var pwd = md5.digest("hex");
 			tuerBase.findOne({
 				accounts: activeData['accounts']
 			},
 			'users', function(err, user) {
-				if (err || user) proxy.immediate('render', render, [true, false]);
-				else {
-					tuerBase.save({
-						accounts: activeData['accounts'],
-						pwd: pwd,
-						nick: activeData['nick'],
-						avatar: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAACO0lEQVR42u2ZaXOCMBCG/f9/TRFw6jHO9LDlEKQqrdyF7S697UwhkEDo+OH9mOR9shuSXUZhGMKQNboA/DcAcx/ByklAtTJQzBfQ7AL0bQGqncPaTeQCOAUh3HgxTK380+jMgT+1dNJybPA+vleAxTYtjVeZ/i4NIXX7LTokHSPVBqQxwM6PmIxXQZmHuFuAlZuCjovz0sLNugOg3SpTgSMAzdcZwLXHd/c7B1hiuAcNsHBeBABAdwBXwwfIuQOQLgB1Nd9iCmHIeUqzoeNDPFQA5xjhS7MQAFDADucWDjClJ/IWhEgxc/EAqg3CAEj+88ABXD8aNsBOPEAhFODpJDiFNMEAwg9xgOUfvRx5G6fbvbOLzD9FsN7x+5wu3bxxXdyqqOcFEAQ9dSXKfg8aaKWGTwhuja37fdrYvO4UZTr23plz/Zg9Gi13nntrkSBYAIxDIhfAEd8wUzRWRwreJawXlnAAMsQCEASSAZChKeZ1Hc2wopOuvV6mUE2AuWwAtPszO6sNMMGKznuK5AAg8xOspOqa/w7B4yC3ArAPEWhWxmz+U0YGD48dXWSuH8LGi0A3UxgbOe560dz4mRSMBs2p4tx3uIbDUNxXAmy8GGbWl2lajJfx3yBQrkFr6RbBxM0BaIIxGaaJe9QYN0wxM3aAcmDP5j9EB54JgAprCqdMuvWSegD0WZzTX0TJABQ8F8fnGgAq/f6Uzfy7xkZRDTAxQVoAUlAFILN5knfW+PoBYB1i6QGu7J+f1FebMjmuZa3kQAAAAABJRU5ErkJggg==',
-						profile: 'nothing yet',
-						firends: [],
-                        notebook:0,
-                        todocount:0,
-                        tocommentcount:0,
-                        diarycount:0,
-						pageurl: ''
-					},
-					'users', function(err, data) {
-						proxy.immediate('render', render, [true, true, true]);
+				if (err || user) {
+					proxy.immediate('render', render, [true, false]);
+				} else {
+					tuerBase.getIds('users', function(err, obj) {
+						if (err) proxy.immediate('render', render, [true, false]);
+						else {
+							tuerBase.save({
+								accounts: activeData['accounts'],
+								pwd: pwd,
+								nick: activeData['nick'],
+								avatar: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAACO0lEQVR42u2ZaXOCMBCG/f9/TRFw6jHO9LDlEKQqrdyF7S697UwhkEDo+OH9mOR9shuSXUZhGMKQNboA/DcAcx/ByklAtTJQzBfQ7AL0bQGqncPaTeQCOAUh3HgxTK380+jMgT+1dNJybPA+vleAxTYtjVeZ/i4NIXX7LTokHSPVBqQxwM6PmIxXQZmHuFuAlZuCjovz0sLNugOg3SpTgSMAzdcZwLXHd/c7B1hiuAcNsHBeBABAdwBXwwfIuQOQLgB1Nd9iCmHIeUqzoeNDPFQA5xjhS7MQAFDADucWDjClJ/IWhEgxc/EAqg3CAEj+88ABXD8aNsBOPEAhFODpJDiFNMEAwg9xgOUfvRx5G6fbvbOLzD9FsN7x+5wu3bxxXdyqqOcFEAQ9dSXKfg8aaKWGTwhuja37fdrYvO4UZTr23plz/Zg9Gi13nntrkSBYAIxDIhfAEd8wUzRWRwreJawXlnAAMsQCEASSAZChKeZ1Hc2wopOuvV6mUE2AuWwAtPszO6sNMMGKznuK5AAg8xOspOqa/w7B4yC3ArAPEWhWxmz+U0YGD48dXWSuH8LGi0A3UxgbOe560dz4mRSMBs2p4tx3uIbDUNxXAmy8GGbWl2lajJfx3yBQrkFr6RbBxM0BaIIxGaaJe9QYN0wxM3aAcmDP5j9EB54JgAprCqdMuvWSegD0WZzTX0TJABQ8F8fnGgAq/f6Uzfy7xkZRDTAxQVoAUlAFILN5knfW+PoBYB1i6QGu7J+f1FebMjmuZa3kQAAAAABJRU5ErkJggg==',
+								profile: 'nothing yet',
+								firends: [],
+                                id:obj.id,
+								notebook: 0,
+								todocount: 0,
+								tocommentcount: 0,
+								diarycount: 0,
+								pageurl: ''
+							},
+							'users', function(err, data) {
+								proxy.immediate('render', render, [true, true, true]);
+								mail.send_mail({
+									to: activeData['accounts'],
+									subject: '您在兔耳的帐号已经被激活！',
+									html: '您的帐号<b>' + activeData['accounts'] + '</b>在兔耳的密码为<b>' + password + '</b>,热泪欢迎你啊……'
+								},
+								function(err, status) {});
+							});
+						}
 					});
-					mail.send_mail({
-						to: activeData['accounts'],
-						subject: '您在兔耳的帐号已经被激活！',
-						html: '您的帐号<b>' + activeData['accounts'] + '</b>在兔耳的密码为<b>' + password + '</b>,热泪欢迎你啊……'
-					},
-					function(err, status) {});
 				}
 			});
 		}

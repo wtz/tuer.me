@@ -37,6 +37,7 @@ exports.users = function(req, res) {
 		var split = page * space,
 		render = function(users, usersCount) {
 
+
 			req.session.title = '用户管理';
 			req.session.template = 'users';
 
@@ -57,6 +58,7 @@ exports.users = function(req, res) {
 					url: '/admin/users'
 				}).init()
 			});
+
 		};
 
 		proxy.assign('users', 'usersCount', render);
@@ -105,6 +107,7 @@ exports.adminusers = function(req, res) {
 		var split = page * space,
 		render = function(users, usersCount) {
 
+
 			req.session.title = '管理员列表';
 			req.session.template = 'users';
 
@@ -125,6 +128,7 @@ exports.adminusers = function(req, res) {
 					url: '/admin/admins'
 				}).init()
 			});
+
 		};
 
 		proxy.assign('users', 'usersCount', render);

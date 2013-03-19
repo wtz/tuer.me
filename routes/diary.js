@@ -56,6 +56,7 @@ var detail = function(req, res, next) {
 			comments: comments
 		});
 
+
 	};
 
 	proxy.assign('user', 'isSelf', 'diary', 'comments', render);
@@ -130,6 +131,7 @@ var list = function(req, res) {
 				url: '/diaries'
 			}).init()
 		});
+
 	};
 
 	proxy.assign('Diaries', 'DiarysCount', render);
@@ -197,6 +199,7 @@ var followedDiaries = function(req, res) {
 				url: '/followed/diaries'
 			}).init()
 		});
+
 	};
 
 	proxy.assign('Diaries', 'DiarysCount', render);
@@ -255,6 +258,7 @@ var write = function(req, res) {
 			weather: config.weather,
 			diary: {}
 		});
+
 	};
 
 	proxy.assign('user', 'books', render);
