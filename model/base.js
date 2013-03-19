@@ -118,7 +118,7 @@ tuerBase.prototype.findCommentSlice = function(id, start, end, callback) {
 									}
 								});
 								ids.forEach(function(id, index) {
-									ids[index] = db.db.bson_serializer.ObjectID.createFromHexString(id);
+									ids[index] = ObjectID.createFromHexString(id);
 								});
 								dbs.find({
 									_id: {
@@ -130,7 +130,7 @@ tuerBase.prototype.findCommentSlice = function(id, start, end, callback) {
 										if (users.length) {
 											users.forEach(function(user, index) {
 												map[user._id].forEach(function(i) {
-													comments[i]['userpage'] = !! user['pageurl'] ? user['pageurl'] : user._id;
+													comments[i]['userpage'] = !! user['pageurl'] ? user['pageurl'] : user.id;
 													comments[i]['nick'] = user['nick'];
 													comments[i]['avatar'] = user['avatar'];
 													comments[i]['profile'] = user['profile'];
@@ -157,7 +157,7 @@ tuerBase.prototype.removeById = function(id, collection, callback) {
 		if (err) callback(err);
 		else {
 			db.remove({
-				_id: db.db.bson_serializer.ObjectID.createFromHexString(id)
+				_id: ObjectID.createFromHexString(id)
 			},
 			{
 				safe: true
@@ -194,7 +194,7 @@ tuerBase.prototype.updateById = function(id, data, collection, callback) {
 			var source;
 			try {
 				source = {
-					_id: db.db.bson_serializer.ObjectID.createFromHexString(id)
+					_id: ObjectID.createFromHexString(id)
 				};
 			} catch(e) {
 				source = {
@@ -242,21 +242,20 @@ tuerBase.prototype.findOne = function(source, collection, callback) {
 };
 
 tuerBase.prototype.findUser = function(id, callback) {
-	var self = this;
-	self.findOne({
-		pageurl: id
-	},
-	'users', function(err, data) {
+	var self = this,
+    search = {};
+    if(id.length === 24){
+        search = {_id:ObjectID.createFromHexString(id.toString())};
+    }else if((/^[0-9]*$/).test(id)){
+	    search = {id:parseInt(id,10)};
+    }else if(typeof id === 'object'){
+        search = {_id:id};
+    }else{
+        search = {pageurl:id};
+    }
+	self.findOne(search, 'users', function(err, data) {
 		if (err) callback(err);
-		else {
-			if (data) callback(null, data);
-			else {
-				self.findById(id, 'users', function(err, data) {
-					if (err) callback(err);
-					else callback(null, data);
-				});
-			}
-		}
+		else callback(null, data);
 	});
 };
 
@@ -268,7 +267,7 @@ tuerBase.prototype.findById = function(id, collection, callback) {
 			var _id;
 			if (typeof id == 'string') {
 				try {
-					_id = db.db.bson_serializer.ObjectID.createFromHexString(id);
+					_id = ObjectID.createFromHexString(id);
 				} catch(err) {
 					callback(err);
 					return;
@@ -294,7 +293,7 @@ tuerBase.prototype.findFollows = function(userid, limit, callback) {
 		else {
 			db.find({
 				'firends': {
-					'$in': [db.db.bson_serializer.ObjectID.createFromHexString(userid.toString())]
+					'$in': [ObjectID.createFromHexString(userid.toString())]
 				}
 			}).toArray(function(err, list) {
 				if (err) callback(err);
@@ -409,7 +408,7 @@ tuerBase.prototype.findDiaryById = function(id, callback) {
 		if (err) callback(err);
 		else {
 			try {
-				var _id = db.db.bson_serializer.ObjectID.createFromHexString(id);
+				var _id = ObjectID.createFromHexString(id);
 			} catch(e) {
 				callback(e);
 				return;
@@ -446,7 +445,7 @@ tuerBase.prototype.batchDiary = function(cursor, callback) {
 				if (err) callback(err);
 				else {
 					map.forEach(function(id, index) {
-						map[index] = db.db.bson_serializer.ObjectID.createFromHexString(id);
+						map[index] = ObjectID.createFromHexString(id);
 					});
 					db.find({
 						_id: {
@@ -457,7 +456,7 @@ tuerBase.prototype.batchDiary = function(cursor, callback) {
 						else {
 							users.forEach(function(data, index) {
 								ids[data._id].forEach(function(i) {
-									diarys[i]['pageurl'] = !! data['pageurl'] ? data['pageurl'] : data._id;
+									diarys[i]['pageurl'] = !! data['pageurl'] ? data['pageurl'] : data.id;
 									diarys[i]['created_user'] = data['nick'];
 								});
 							});
@@ -475,7 +474,7 @@ tuerBase.prototype.batchDiary = function(cursor, callback) {
 										}
 									});
 									bookmap.forEach(function(id, index) {
-										bookmap[index] = db.db.bson_serializer.ObjectID.createFromHexString(id);
+										bookmap[index] = ObjectID.createFromHexString(id);
 									});
 									db.find({
 										_id: {
@@ -626,7 +625,7 @@ tuerBase.prototype.findFriendsByUserId = function(userid, callback) {
 					});
 					friendids = util.ov(friendids);
 					friendids.forEach(function(item, index) {
-						var id = db.db.bson_serializer.ObjectID.createFromHexString(item);
+						var id = ObjectID.createFromHexString(item);
 						friendids[index] = id;
 					});
 					self.findBy({
@@ -661,7 +660,7 @@ tuerBase.prototype.findDiaryTipsByUserId = function(userid, callback) {
 					});
 					diaryids = util.ov(diaryids);
 					diaryids.forEach(function(item, index) {
-						var id = db.db.bson_serializer.ObjectID.createFromHexString(item);
+						var id = ObjectID.createFromHexString(item);
 						diaryids[index] = id;
 					});
 					self.findBy({
@@ -686,17 +685,17 @@ tuerBase.prototype.removeFriend = function(userid, removeid, callback) {
 		if (err) callback(err);
 		else {
 			db.find({
-				_id: db.db.bson_serializer.ObjectID.createFromHexString(removeid)
+				_id: ObjectID.createFromHexString(removeid)
 			}).toArray(function(err, user) {
 				if (err) callback(err);
 				else {
 					if (user.length) {
 						db.update({
-							_id: db.db.bson_serializer.ObjectID.createFromHexString(userid)
+							_id: ObjectID.createFromHexString(userid)
 						},
 						{
 							'$pull': {
-								'firends': db.db.bson_serializer.ObjectID.createFromHexString(removeid)
+								'firends': ObjectID.createFromHexString(removeid)
 							}
 						},
 						function(err, ret) {
@@ -724,17 +723,17 @@ tuerBase.prototype.addFriends = function(userid, addid, callback) {
 		if (err) callback(err);
 		else {
 			db.find({
-				_id: db.db.bson_serializer.ObjectID.createFromHexString(addid)
+				_id: ObjectID.createFromHexString(addid)
 			}).toArray(function(err, user) {
 				if (err) callback(err);
 				else {
 					if (user.length === 1) {
 						db.update({
-							_id: db.db.bson_serializer.ObjectID.createFromHexString(addid)
+							_id: ObjectID.createFromHexString(addid)
 						},
 						{
 							'$addToSet': {
-								"firends": db.db.bson_serializer.ObjectID.createFromHexString(userid)
+								"firends": ObjectID.createFromHexString(userid)
 							}
 						},
 						{
@@ -818,14 +817,26 @@ tuerBase.prototype.getHotDiary = function(limit, callback) {
 	});
 };
 
-tuerBase.prototype.getIds = function(collection,callback){
-    var self = this;
-    this.getCollection('ids',function(err,db){
-        if(err) callback(err);
-        else{
-            db.findAndModify({"name":collection},["name","asc"],{$inc:{"id":1}},{'new':true,'upsert':true},callback);
-        }
-    });
+tuerBase.prototype.getIds = function(collection, callback) {
+	var self = this;
+	this.getCollection('ids', function(err, db) {
+		if (err) callback(err);
+		else {
+			db.findAndModify({
+				"name": collection
+			},
+			["name", "asc"], {
+				$inc: {
+					"id": 1
+				}
+			},
+			{
+				'new': true,
+				'upsert': true
+			},
+			callback);
+		}
+	});
 };
 
 module.exports = new tuerBase(config.dbhost, config.dbport);

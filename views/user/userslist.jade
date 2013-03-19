@@ -3,7 +3,7 @@ block content
   div(class='container')
     h4 #{session.title} (#{users.length})
     div(class='avatar')
-      a(href='/user/profile/#{user._id}',title='#{user.nick}')
+      a(href='/user/profile/#{user.id}',title='#{user.nick}')
         img(src='#{user.avatarUrl}',class="img-rounded",alt='#{user.nick}')
     hr
     if(users.length)
@@ -11,7 +11,7 @@ block content
         ul
           each user,i in users
             li
-              a(href='/user/profile/#{user._id}',title='#{user.nick}') 
+              a(href='/user/profile/#{user.id}',title='#{user.nick}') 
                   img(src='#{user.avatarUrl}',class="img-rounded",alt='#{user.nick}')
               span #{user.nick}
     else

@@ -27,7 +27,7 @@ exports.invite = function(req, res) {
 		var email = req.body.email.trim(),
 		nick = req.body.nick.trim(),
 		proxy = new EventProxy(),
-		activateURL = 'http://www.tuer.me/register/active/' + encodeURIComponent(base64.encode('accounts=' + encodeURIComponent(email) + '&timestamp=' + new Date().getTime() + '&nick=' + encodeURIComponent(nick)));
+		activateURL = 'http://m.tuer.me/register/active/' + encodeURIComponent(base64.encode('accounts=' + encodeURIComponent(email) + '&timestamp=' + new Date().getTime() + '&nick=' + encodeURIComponent(nick)));
 		render = function(findEmail, sendMail) {
 			var message = '发信失败了，联系下管理员小爝吧...';
 			if (findEmail && sendMail) {

@@ -62,8 +62,8 @@ block content
                         a(href='#',class='J_removeFriend btn btn-danger btn-small',target_id='#{user._id}') 解除关注
                       else if(!isSelf)
                         a(href='#',class='J_addFriend btn btn-primary btn-small',target_id='#{user._id}') 关注此人
-                  a(href="/todo/#{user._id}",class="btn btn-small",title="#{user.nick}的TODOS") TODOS
-                  a(href='/user/rss/#{user._id}',class="btn btn-small",target='_blank') RSS
+                  a(href="/todo/#{user.id}",class="btn btn-small",title="#{user.nick}的TODOS") TODOS
+                  a(href='/user/rss/#{user.id}',class="btn btn-small",target='_blank') RSS
            if(user.about)
             p(class='User-about') !{user.about}
          div(class='row Note-list')
@@ -73,27 +73,27 @@ block content
             each book,i in notebooks
              li 
               span(class='bookcover',style='background:##{book.bgcolor};')
-              a(title="#{book.name}",href="/user/#{user._id}/notebook/#{book._id}/1") #{book.name} (#{book.size})
+              a(title="#{book.name}",href="/user/#{user.id}/notebook/#{book._id}/1") #{book.name} (#{book.size})
          div(class='row Friends-list')
           h4 #{user.nick}关注的人 
-            a(href='/user/followed/#{user._id}') (#{user.firends.length})
+            a(href='/user/followed/#{user.id}') (#{user.firends.length})
           if(Followed.length)
             ul
               each follow,i in Followed
                 li
-                  a(href='/user/profile/#{follow._id}',title='#{follow.nick}') 
+                  a(href='/user/profile/#{follow.id}',title='#{follow.nick}') 
                     img(src='#{follow.avatarUrl}',class="img-rounded",alt='#{follow.nick}')
                   span #{follow.nick}
           else
              p 额，他还没有关注任何人
          div(class='row Friends-list')
           h4 关注#{user.nick}的人 
-            a(href='/user/follows/#{user._id}') (#{FollowsCount})
+            a(href='/user/follows/#{user.id}') (#{FollowsCount})
           if(Follows.length)
             ul
               each friend,i in Follows
                 li
-                  a(href='/user/profile/#{friend._id}',title='#{friend.nick}') 
+                  a(href='/user/profile/#{friend.id}',title='#{friend.nick}') 
                     img(src='#{friend.avatarUrl}',class="img-rounded",alt='#{friend.nick}')
                   span #{friend.nick}
           else

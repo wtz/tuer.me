@@ -18,8 +18,8 @@ var profile = function(req, res) {
         var bgcolor = '4d67d1';
 
 		util.setDay(user);
-		user.avatarUrl = Avatar.getArtUrl(user._id);
-		user.smallAvatar = Avatar.getUrl(user._id);
+		user.avatarUrl = Avatar.getArtUrl(user.id);
+		user.smallAvatar = Avatar.getUrl(user.id);
         user.about = user.about ? util.drawUrl(escape(user.about).replace(/\r\n/g, '<br>')) : undefined;
 		user.isFriend = function() {
 			if (!req.session.is_login) return false;
@@ -38,11 +38,11 @@ var profile = function(req, res) {
 		});
 
 		Follows[0].forEach(function(item) {
-			item.avatarUrl = Avatar.getUrl(item._id);
+			item.avatarUrl = Avatar.getUrl(item.id);
 		});
 
 		Followed.forEach(function(item) {
-			item.avatarUrl = Avatar.getUrl(item._id);
+			item.avatarUrl = Avatar.getUrl(item.id);
 		});
 
 		defulatBook.size = function() {
@@ -84,7 +84,7 @@ var profile = function(req, res) {
 			pag: new Pag({
 				cur: 1,
 				space: 6,
-				url: '/user/' + user._id + '/diaries',
+				url: '/user/' + user.id + '/diaries',
 				total: diaryCount
 			}).init()
 		});
@@ -488,10 +488,10 @@ var followusers = function(req, res) {
 		req.session.title = '关注' + user.nick + '的人';
 		req.session.template = 'userslist';
 
-		user.avatarUrl = Avatar.getUrl(user._id);
+		user.avatarUrl = Avatar.getUrl(user.id);
 
 		Follows.forEach(function(item) {
-			item.avatarUrl = Avatar.getUrl(item._id);
+			item.avatarUrl = Avatar.getUrl(item.id);
 		});
 
 		res.render('user/userslist', {
@@ -538,10 +538,10 @@ var followedusers = function(req, res) {
 		req.session.title = user.nick + '关注的人';
 		req.session.template = 'userslist';
 
-		user.avatarUrl = Avatar.getUrl(user._id);
+		user.avatarUrl = Avatar.getUrl(user.id);
 
 		Follows.forEach(function(item) {
-			item.avatarUrl = Avatar.getUrl(item._id);
+			item.avatarUrl = Avatar.getUrl(item.id);
 		});
 
 		res.render('user/userslist', {
