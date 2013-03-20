@@ -13,14 +13,14 @@ var profile = function(req, res) {
 	render = function(user, isSelf, diaryCount, userDiaryList, Follows, Followed, notebooks, defulatBook) {
 
 		if (isSelf) req.session.template = 'myprofile';
-        else req.session.template = 'profile';
+		else req.session.template = 'profile';
 
-        var bgcolor = '4d67d1';
+		var bgcolor = '4d67d1';
 
 		util.setDay(user);
 		user.avatarUrl = Avatar.getArtUrl(user.id);
 		user.smallAvatar = Avatar.getUrl(user.id);
-        user.about = user.about ? util.drawUrl(escape(user.about).replace(/\r\n/g, '<br>')) : undefined;
+		user.about = user.about ? util.drawUrl(escape(user.about).replace(/\r\n/g, '<br>')) : undefined;
 		user.isFriend = function() {
 			if (!req.session.is_login) return false;
 			var friends = req.session.userdata.firends;
@@ -34,7 +34,7 @@ var profile = function(req, res) {
 			util.setTime(item);
 			item.created_user = user.nick;
 			item.img = util.getpics(150, 1, item.filelist);
-            item.content = item.content.length > 50 ? item.content.slice(0,50)+'...' : item.content;
+			item.content = item.content.length > 50 ? item.content.slice(0, 50) + '...': item.content;
 		});
 
 		Follows[0].forEach(function(item) {
@@ -59,21 +59,21 @@ var profile = function(req, res) {
 
 		notebooks.push(defulatBook);
 
-        notebooks.forEach(function(item){
-            if(item.bgcolor == undefined) item.bgcolor = bgcolor;
-            var bgrgb = new RGBcolor('#'+item.bgcolor);
-            item.fontcolor = 'rgb('+(255 - bgrgb.r)+','+(255-bgrgb.g)+','+(255-bgrgb.b)+')';
-        });
+		notebooks.forEach(function(item) {
+			if (item.bgcolor == undefined) item.bgcolor = bgcolor;
+			var bgrgb = new RGBcolor('#' + item.bgcolor);
+			item.fontcolor = 'rgb(' + (255 - bgrgb.r) + ',' + (255 - bgrgb.g) + ',' + (255 - bgrgb.b) + ')';
+		});
 
 		req.session.title = user.nick + '的个人主页';
 		res.render('user/profile', {
 			config: config,
 			session: req.session,
 			isSelf: isSelf,
-            rss:{
-                address:req.params.id,
-                title:user.nick+'的日记'
-            },
+			rss: {
+				address: req.params.id,
+				title: user.nick + '的日记'
+			},
 			user: user,
 			diaryCount: diaryCount,
 			userDiaryList: userDiaryList,
@@ -96,7 +96,7 @@ var profile = function(req, res) {
 	var uid = req.params.id;
 
 	tuerBase.findUser(uid, function(err, user) {
-		if (err || !user) {
+		if (err || ! user) {
 			res.redirect('404');
 		} else {
 			proxy.trigger('User', user);
@@ -173,95 +173,6 @@ var profile = function(req, res) {
 	});
 };
 
-var book = function(req, res) {
-	var page = req.params.page,
-	space = 6,
-	bookid = req.params.id,
-	uid = req.params.uid;
-	if (page && isNaN(page)) {
-		res.redirect('404');
-	} else if (page == undefined || page == 1) {
-		page = 0;
-	} else {
-		page = page - 1;
-	}
-
-	var proxy = new EventProxy(),
-	render = function(user, notebook,isSelf, diaryCount, userDiaryList) {
-		userDiaryList.forEach(function(item) {
-			util.setTime(item);
-			item.created_user = user.nick;
-			item.img = util.getpics(150, 1, item.filelist);
-            item.weather = item.weather ? config.weather[item.weather].value : undefined;
-            item.mood = item.mood ? config.mood[item.mood].value : undefined;
-		});
-		req.session.title = notebook.name;
-		req.session.template = 'book';
-
-		res.render('book/index', {
-			config: config,
-            notebook:notebook,
-			session: req.session,
-			isSelf: isSelf,
-			user: user,
-			diaryCount: diaryCount,
-			userDiaryList: userDiaryList,
-			pag: new Pag({
-				cur: page + 1,
-				space: space,
-				total: diaryCount,
-				url: '/user/' + uid + '/notebook/'+bookid
-			}).init()
-		});
-	};
-
-	proxy.assign('user','notebook' ,'isSelf', 'diaryCount', 'UserDiaryList', render);
-    
-    tuerBase.findById(bookid,'notebooks',function(err,notebook){
-        if(err) res.redirect('500');
-        else{
-             proxy.trigger('notebook',notebook);
-        }
-    });    
-
-	tuerBase.findUser(uid, function(err, user) {
-		if (err) {
-			res.redirect('500');
-		} else {
-
-			proxy.trigger('user', user);
-
-			var uid = user._id.toString(),
-			isSelf = req.session.is_login ? (req.session.userdata._id.toString() == uid) : false;
-
-			proxy.trigger('isSelf', isSelf);            
-
-            var Selector ={
-                userid:uid.toString(),
-                notebook:bookid
-            };
-            if(!isSelf) Selector['privacy'] = 0;
-			tuerBase.getCount(Selector,'diary', function(err, count) {
-				if (err) {
-					res.redirect('500');
-				} else {
-					proxy.trigger('diaryCount', count);
-				}
-			});
-
-			var split = page * space;
-
-			tuerBase.findBySlice(Selector, 'diary', split, split + space, function(err, lists) {
-				if (err) {
-					res.redirect('500');
-				} else {
-					proxy.trigger('UserDiaryList', lists);
-				}
-			});
-		}
-	});
-};
-
 var notebook = function(req, res) {
 	var page = req.params.page,
 	space = 6,
@@ -276,21 +187,21 @@ var notebook = function(req, res) {
 	}
 
 	var proxy = new EventProxy(),
-	render = function(user, notebook,isSelf, diaryCount, userDiaryList) {
+	render = function(user, notebook, isSelf, diaryCount, userDiaryList) {
 		userDiaryList.forEach(function(item) {
 			util.setTime(item);
 			item.created_user = user.nick;
 			item.img = util.getpics(150, 1, item.filelist);
-            item.content = item.content.length > 50 ? item.content.slice(0,50)+'...' : item.content;
-            item.weather = item.weather ? config.weather[item.weather].value : undefined;
-            item.mood = item.mood ? config.mood[item.mood].value : undefined;
+			item.content = item.content.length > 50 ? item.content.slice(0, 50) + '...': item.content;
+			item.weather = item.weather ? config.weather[item.weather].value: undefined;
+			item.mood = item.mood ? config.mood[item.mood].value: undefined;
 		});
 		req.session.title = notebook.name;
 		req.session.template = 'diarylist';
 
 		res.render('notebook/notebooklist', {
 			config: config,
-            notebook:notebook,
+			notebook: notebook,
 			session: req.session,
 			isSelf: isSelf,
 			user: user,
@@ -300,56 +211,62 @@ var notebook = function(req, res) {
 				cur: page + 1,
 				space: space,
 				total: diaryCount,
-				url: '/user/' + uid + '/notebook/'+bookid
+				url: '/user/' + uid + '/notebook/' + bookid
 			}).init()
 		});
 	};
 
-	proxy.assign('user','notebook' ,'isSelf', 'diaryCount', 'UserDiaryList', render);
-    
-    tuerBase.findById(bookid,'notebooks',function(err,notebook){
-        if(err) res.redirect('500');
-        else{
-             proxy.trigger('notebook',notebook);
-        }
-    });    
+	proxy.assign('user', 'notebook', 'isSelf', 'diaryCount', 'UserDiaryList', render);
 
-	tuerBase.findUser(uid, function(err, user) {
-		if (err) {
-			res.redirect('500');
-		} else {
-
-			proxy.trigger('user', user);
-
-			var uid = user._id.toString(),
-			isSelf = req.session.is_login ? (req.session.userdata._id.toString() == uid) : false;
-
-			proxy.trigger('isSelf', isSelf);            
-
-            var Selector ={
-                userid:uid.toString(),
-                notebook:bookid
-            };
-            if(!isSelf) Selector['privacy'] = 0;
-			tuerBase.getCount(Selector,'diary', function(err, count) {
+	tuerBase.findById(bookid, 'notebooks', function(err, notebook) {
+		if (err) res.redirect('500');
+		else {
+			proxy.trigger('notebook', notebook);
+			tuerBase.findUser(uid, function(err, user) {
 				if (err) {
 					res.redirect('500');
 				} else {
-					proxy.trigger('diaryCount', count);
-				}
-			});
 
-			var split = page * space;
+					//判断是否是这个的日记本
+					if (user._id.toString() === notebook.owner) {
 
-			tuerBase.findBySlice(Selector, 'diary', split, split + space, function(err, lists) {
-				if (err) {
-					res.redirect('500');
-				} else {
-					proxy.trigger('UserDiaryList', lists);
+						proxy.trigger('user', user);
+
+						var uid = user._id.toString(),
+						isSelf = req.session.is_login ? (req.session.userdata._id.toString() == uid) : false;
+
+						proxy.trigger('isSelf', isSelf);
+
+						var Selector = {
+							userid: uid.toString(),
+							notebook: notebook._id.toString()
+						};
+						if (!isSelf) Selector['privacy'] = 0;
+						tuerBase.getCount(Selector, 'diary', function(err, count) {
+							if (err) {
+								res.redirect('500');
+							} else {
+								proxy.trigger('diaryCount', count);
+							}
+						});
+
+						var split = page * space;
+
+						tuerBase.findBySlice(Selector, 'diary', split, split + space, function(err, lists) {
+							if (err) {
+								res.redirect('500');
+							} else {
+								proxy.trigger('UserDiaryList', lists);
+							}
+						});
+					} else {
+						res.redirect('404');
+					}
 				}
 			});
 		}
 	});
+
 };
 
 var diaries = function(req, res, next) {
@@ -372,9 +289,9 @@ var diaries = function(req, res, next) {
 			util.setTime(item);
 			item.created_user = user.nick;
 			item.img = util.getpics(150, 1, item.filelist);
-            item.content = item.content.length > 50 ? item.content.slice(0,50)+'...' : item.content;
-            item.avatarUrl = Avatar.getUrl(item.userid);
-            item.isSelf = req.session.is_login ? item.userid == req.session.userdata._id.toString() : false;
+			item.content = item.content.length > 50 ? item.content.slice(0, 50) + '...': item.content;
+			item.avatarUrl = Avatar.getUrl(item.userid);
+			item.isSelf = req.session.is_login ? item.userid == req.session.userdata._id.toString() : false;
 		});
 
 		req.session.title = user.nick + '的日记列表页';
@@ -449,7 +366,7 @@ var rss = function(req, res) {
 			feed.item({
 				title: item.title || item.bookname,
 				description: item.content,
-				url: 'http://www.tuer.me/diary/' + item._id,
+				url: 'http://tuer.me/diary/' + item.id,
 				author: user.nick,
 				date: item.created_at
 			});
@@ -466,7 +383,7 @@ var rss = function(req, res) {
 		} else {
 			proxy.trigger('user', user);
 
-			var isSelf = req.session.is_login ? req.session.userdata._id.toString() == user._id.toString(): false;
+			var isSelf = req.session.is_login ? req.session.userdata._id.toString() == user._id.toString() : false;
 
 			tuerBase.findDiaryByUserId(user._id, isSelf, 0, 10, function(err, diaries) {
 				if (err) {
@@ -623,7 +540,6 @@ var art = function(req, res) {
 
 exports.profile = profile;
 exports.diaries = diaries;
-exports.book = book;
 exports.notebook = notebook;
 exports.rss = rss;
 exports.followusers = followusers;

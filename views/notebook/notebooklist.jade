@@ -8,16 +8,16 @@ block content
          if(!isSelf)
            ul(class='User-muen')
              li
-              a(class='gh-btn',href='/user/profile/#{user._id}') #{user.nick} 的主页
+              a(class='gh-btn',href='/user/profile/#{user.id}') #{user.nick} 的主页
          hr 
          if(userDiaryList.length)
            div(class='Diary-wrap')
              each item,i in userDiaryList 
                h5
-                 a(href="/diary/#{item._id}") #{item.created_user}的日记 
+                 a(href="/diary/#{item.id}") #{item.created_user}的日记 
                  small [#{notebook.name}]
                  if(item.title)
-                   a(href='/diary/#{item._id}') 
+                   a(href='/diary/#{item.id}') 
                      small [#{item.title}] 
                    if(item.privacy == 1)
                      small [仅自己可见] 
@@ -40,7 +40,7 @@ block content
                    form(action='/diary/remove',method='post') 
                      input(type='hidden',value='#{item._id}',name='id')
                      div(class="btn-group")
-                       a(class='btn btn-mini',href='/diary/edit/#{item._id}') Edit 
+                       a(class='btn btn-mini',href='/diary/edit/#{item.id}') Edit 
                        button(class='btn btn-mini btn-danger',type='submit') Del
            !{pag}
          else

@@ -17,7 +17,7 @@ var detail = function(req, res, next) {
 	render = function(user, isSelf, diary, comments) {
 
 		if (req.session.is_login) tuerBase.removeDiaryTips(req.session.userdata._id, diary._id);
-		if ((diary.privacy == 1 && !req.session.userdata) || (diary.privacy == 1 && user._id.toString() != req.session.userdata._id.toString())) {
+		if ((diary.privacy == 1 && ! req.session.userdata) || (diary.privacy == 1 && user._id.toString() != req.session.userdata._id.toString())) {
 			res.redirect('404');
 			return;
 		}
@@ -28,7 +28,6 @@ var detail = function(req, res, next) {
 		diary.content = util.drawUrl(escape(diary.content).replace(/\r\n/g, '<br>'));
 
 		user.avatarUrl = Avatar.getUrl(user.id);
-
 		comments.forEach(function(item) {
 			util.setTime(item);
 			item.avatarUrl = Avatar.getUrl(item.userpage);
@@ -56,7 +55,6 @@ var detail = function(req, res, next) {
 			comments: comments
 		});
 
-
 	};
 
 	proxy.assign('user', 'isSelf', 'diary', 'comments', render);
@@ -82,7 +80,7 @@ var detail = function(req, res, next) {
 					}
 				});
 
-				tuerBase.findCommentSlice(id, page * space, page * space + space, function(err, comments) {
+				tuerBase.findCommentSlice(diary._id.toString(), page * space, page * space + space, function(err, comments) {
 					if (err) {
 						res.redirect('500');
 					} else {
@@ -327,22 +325,30 @@ var save = function(req, res) {
 		if (weather) savedata['weather'] = weather;
 		if (mood) savedata['mood'] = mood;
 		if (location) savedata['location'] = location;
-		tuerBase.save(savedata, 'diary', function(err, data) {
+		tuerBase.getIds('diary', function(err, obj) {
 			if (err) {
 				req.flash('error', err);
 				res.redirect('back');
 			} else {
-				tuerBase.updateById(req.session.userdata._id, {
-					'$inc': {
-						diarycount: 1
-					}
-				},
-				'users', function(err) {
+				savedata['id'] = obj.id;
+				tuerBase.save(savedata, 'diary', function(err, data) {
 					if (err) {
 						req.flash('error', err);
 						res.redirect('back');
 					} else {
-						res.redirect('home');
+						tuerBase.updateById(req.session.userdata._id, {
+							'$inc': {
+								diarycount: 1
+							}
+						},
+						'users', function(err) {
+							if (err) {
+								req.flash('error', err);
+								res.redirect('back');
+							} else {
+								res.redirect('home');
+							}
+						});
 					}
 				});
 			}
