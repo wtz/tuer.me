@@ -8,7 +8,7 @@ block content
          if(!isSelf)
            ul(class='User-muen')
              li
-              a(class='gh-btn',href='/user/profile/#{user._id}') #{user.nick} 的主页
+              a(class='gh-btn',href='/user/profile/#{user.id}') #{user.nick} 的主页
          hr 
          div(class='Diary-wrap')
            div(class='Diary-row')
@@ -69,7 +69,7 @@ block content
                  form(action='/diary/remove',method='post') 
                    input(type='hidden',value='#{diary._id}',name='id')
                    div(class='btn-group')
-                     a(class='btn btn-mini',href='/diary/edit/#{diary._id}') Edit
+                     a(class='btn btn-mini',href='/diary/edit/#{diary.id}') Edit
                      button(class='btn btn-mini btn-danger',type='submit') Del 
              if(comments.length)
                each item,i in comments

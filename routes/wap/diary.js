@@ -15,7 +15,7 @@ exports.detail = function(req, res, next) {
 
 		if (req.session.is_login) tuerBase.removeDiaryTips(req.session.userdata._id, diary._id);
 
-		if ((diary.privacy == 1 && !req.session.userdata) || (diary.privacy == 1 && user._id.toString() != req.session.userdata._id.toString())) {
+		if ((diary.privacy == 1 && ! req.session.userdata) || (diary.privacy == 1 && user._id.toString() != req.session.userdata._id.toString())) {
 			res.redirect('404');
 			return;
 		}
@@ -75,7 +75,7 @@ exports.detail = function(req, res, next) {
 					}
 				});
 
-				tuerBase.findCommentSlice(id, page * space, page * space + space, function(err, comments) {
+				tuerBase.findCommentSlice(diary._id.toString(), page * space, page * space + space, function(err, comments) {
 					if (err) {
 						res.redirect('500');
 					} else {
@@ -270,31 +270,38 @@ exports.save = function(req, res) {
 		return;
 	}
 	var saveNote = function() {
-		tuerBase.save({
-			content: content,
-			notebook: bookid,
-			userid: req.session.userdata._id,
-			filelist: {},
-			privacy: privacy,
-			forbid: forbid,
-			commentcount: 0
-		},
-		'diary', function(err, data) {
+		tuerBase.getIds('diary', function(err, obj) {
 			if (err) {
 				req.flash('error', err);
 				res.redirect('back');
 			} else {
-				tuerBase.updateById(req.session.userdata._id, {
-					'$inc': {
-						diarycount: 1
-					}
+				tuerBase.save({
+					content: content,
+					notebook: bookid,
+					userid: req.session.userdata._id,
+					filelist: {},
+					privacy: privacy,
+					forbid: forbid,
+					commentcount: 0
 				},
-				'users', function(err) {
+				'diary', function(err, data) {
 					if (err) {
 						req.flash('error', err);
 						res.redirect('back');
 					} else {
-						res.redirect('/');
+						tuerBase.updateById(req.session.userdata._id, {
+							'$inc': {
+								diarycount: 1
+							}
+						},
+						'users', function(err) {
+							if (err) {
+								req.flash('error', err);
+								res.redirect('back');
+							} else {
+								res.redirect('/');
+							}
+						});
 					}
 				});
 			}

@@ -6,9 +6,9 @@ block content
     each diary,i in diaries
       p 
        if(diary.title)
-         a(href="/diary/#{diary._id}") #{diary.title}
+         a(href="/diary/#{diary.id}") #{diary.title}
        else
-         a(href="/diary/#{diary._id}") #{diary.bookname}
+         a(href="/diary/#{diary.id}") #{diary.bookname}
        p 
         if(diary.img)
           img(src="#{diary.img}")

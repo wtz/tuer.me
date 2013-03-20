@@ -60,33 +60,41 @@ var save = function(req, res) {
 	if (name.trim().length === 0) {
 		req.flash('error', '日记本名称不能为空');
 		res.redirect('back');
-        return;
+		return;
 	}
 
 	proxy.assign('updateUser', 'saveBook', render);
 	//增加限制个数的检测
-	tuerBase.save({
-		owner: owner,
-		name: name,
-		bgcolor: bgcolor
-	},
-	'notebooks', function(err, books) {
+	tuerBase.getIds('notebook', function(err, obj) {
 		if (err) {
 			req.flash('error', err);
 			res.redirect('back');
 		} else {
-			proxy.trigger('saveBook');
-			tuerBase.updateById(owner, {
-				'$inc': {
-					notebook: 1
-				}
+			tuerBase.save({
+				id: obj.id,
+				owner: owner,
+				name: name,
+				bgcolor: bgcolor
 			},
-			'users', function(err) {
+			'notebooks', function(err, books) {
 				if (err) {
 					req.flash('error', err);
 					res.redirect('back');
 				} else {
-					proxy.trigger('updateUser');
+					proxy.trigger('saveBook');
+					tuerBase.updateById(owner, {
+						'$inc': {
+							notebook: 1
+						}
+					},
+					'users', function(err) {
+						if (err) {
+							req.flash('error', err);
+							res.redirect('back');
+						} else {
+							proxy.trigger('updateUser');
+						}
+					});
 				}
 			});
 		}

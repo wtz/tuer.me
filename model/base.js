@@ -255,7 +255,10 @@ tuerBase.prototype.findUser = function(id, callback) {
     }
 	self.findOne(search, 'users', function(err, data) {
 		if (err) callback(err);
-		else callback(null, data);
+		else{
+            if(data) callback(null, data);
+            else callback('找不到相关数据');
+        }
 	});
 };
 
@@ -264,23 +267,19 @@ tuerBase.prototype.findById = function(id, collection, callback) {
 	this.getCollection(collection, function(err, db) {
 		if (err) callback(err);
 		else {
-			var _id;
-			if (typeof id == 'string') {
-				try {
-					_id = ObjectID.createFromHexString(id);
-				} catch(err) {
-					callback(err);
-					return;
-				}
-			} else {
-				_id = id;
+            var search = {};
+            if(id.length === 24){
+                search = {_id:ObjectID.createFromHexString(id)};
+            } else {
+                search = {id:parseInt(id,10)};
 			}
-			db.findOne({
-				_id: _id
-			},
+			db.findOne(search,
 			function(err, data) {
 				if (err) callback(err);
-				else callback(null, data);
+				else{
+                    if(data) callback(null, data);
+                    else callback('找不到相关数据');
+                }
 			});
 		}
 	});
@@ -407,18 +406,19 @@ tuerBase.prototype.findDiaryById = function(id, callback) {
 	this.getCollection('diary', function(err, db) {
 		if (err) callback(err);
 		else {
-			try {
-				var _id = ObjectID.createFromHexString(id);
-			} catch(e) {
-				callback(e);
-				return;
-			}
-			self.findDiaryBy({
-				_id: _id
-			},
+            var search = {};
+            if(id.length === 24){
+                search = {_id:ObjectID.createFromHexString(id)};
+            }else{
+                search = {id:parseInt(id,10)};
+            }
+			self.findDiaryBy(search,
 			0, 1, function(err, diarys) {
 				if (err) callback(err);
-				else callback(null, diarys[0]);
+				else{
+                    if(diarys[0]) callback(null, diarys[0]);
+                    else callback('找不到相关数据');
+                }
 			});
 		}
 	});
@@ -486,6 +486,7 @@ tuerBase.prototype.batchDiary = function(cursor, callback) {
 											notebooks.forEach(function(data, index) {
 												bookids[data._id].forEach(function(i) {
 													diarys[i]['bookname'] = data['name'];
+													diarys[i]['bookid'] = data['id'];
 												});
 											});
 											callback(null, diarys);
