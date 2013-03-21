@@ -228,7 +228,7 @@ var notebook = function(req, res) {
 				} else {
 
 					//判断是否是这个的日记本
-					if (user._id.toString() === notebook.owner) {
+					if (user._id.toString() === notebook.owner || notebook.owner === -1) {
 
 						proxy.trigger('user', user);
 
