@@ -6,10 +6,10 @@ block content
       p 
         if(item._id)
           if(item.title)
-            a(href='/diary/#{item._id}') #{item.title}
+            a(href='/diary/#{item.id}') #{item.title}
             small [#{item.bookname}]
           else
-            a(href='/diary/#{item._id}') #{item.bookname}
+            a(href='/diary/#{item.id}') #{item.bookname}
             p #{item.content}
         else
           p #{item.title}
