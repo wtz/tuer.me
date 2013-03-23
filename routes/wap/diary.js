@@ -279,6 +279,7 @@ exports.save = function(req, res) {
 					content: content,
 					notebook: bookid,
 					userid: req.session.userdata._id,
+                    id:obj.id,
 					filelist: {},
 					privacy: privacy,
 					forbid: forbid,
