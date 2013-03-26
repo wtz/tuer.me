@@ -35,9 +35,10 @@ block content
                    small [地点:#{diary.location}]
              div(class='Diary-content') 
                if(diary.img)
-                  p 
-                    a(title='点击展示大图',href='#myPic',target='_blank',data-toggle="modal") 
-                      img(class="img-rounded",src='#{diary.img}')
+                  //
+                    p 
+                      a(title='点击展示大图',href='#myPic',target='_blank',data-toggle="modal") 
+                        img(class="img-rounded",src='#{diary.img}')
                !{diary.content}
              if(diary.forbid == 1)
                div(class='bar') #{diary.created_user}已将日记设置为不允许任何人评论 
@@ -108,8 +109,9 @@ block content
                a(href='/login') 登录之后就可以评论啦！
     include ../common/footer
     if(diary.img)
-      div(class="modal hide fade",id="myPic",role="dialog",tabindex="-1",aria-labelledby="myPicLabel",aria-hidden="true")
-        div(class="modal-body")
-          img(src="#{diary.bigimg}")
+      //
+        div(class="modal hide fade",id="myPic",role="dialog",tabindex="-1",aria-labelledby="myPicLabel",aria-hidden="true")
+          div(class="modal-body")
+            img(src="#{diary.bigimg}")
   script
     seajs.use('mods/diarydetail');

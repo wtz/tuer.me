@@ -11,7 +11,8 @@ block content
          a(href="/diary/#{diary.id}") #{diary.bookname}
        p 
         if(diary.img)
-          img(src="#{diary.img}")
+          //
+            img(src="#{diary.img}")
         span #{diary.content}
      !{pag}
    else
