@@ -34,7 +34,8 @@ block content
                      small [地点:#{item.location}]
                div(class='Diary-content')
                   if(item.img)
-                      img(class="img-rounded",src='#{item.img}')
+                      //
+                        img(class="img-rounded",src='#{item.img}')
                   p #{item.content}
                div(class='bar') #{item.created_at}
                  small #{item.commentcount}回复 
