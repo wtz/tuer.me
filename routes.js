@@ -47,6 +47,8 @@ module.exports = function(app) {
 	app.get('/', index.index);
 	app.get('/index', index.index);
 
+	app.get('/oldpics', index.oldpics);
+
     app.get('/about',about.index);
     app.get('/log',log.index);
     app.get('/help',help.index);
