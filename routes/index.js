@@ -115,4 +115,15 @@ var index = function(req,res,next){
     });
 };
 
+function oldpics(req,res){
+    req.session.title = '恢复图片';
+    req.session.template = 'oldpics';
+    
+    res.render('oldpics',{
+        config:config,
+        session:req.session
+    });
+}
+
 exports.index= index;
+exports.oldpics= oldpics;

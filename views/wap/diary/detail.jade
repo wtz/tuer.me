@@ -10,8 +10,7 @@ block content
   div 
     if(diary.img)
       p 
-       //
-         img(src="#{diary.img}")
+        img(src="#{diary.img}")
     a(href="/profile/#{user.id}",title="#{user.nick}") #{user.nick}:
     div !{diary.content}
     if(isSelf)

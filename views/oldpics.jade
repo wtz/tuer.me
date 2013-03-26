@@ -1,0 +1,13 @@
+extends common/layout
+block content
+   div(class="container")
+     div(class="div-fluid show-grid")
+       div(class="row")
+         div(class="span12")
+           - var num = 375,htmls = '';
+           - for(var i=0;i<375;i++)
+             - if(i == 305) continue;
+             - src = 'http://img.tuer.me/300pics/'+i;
+             p
+               img(src=src,style="border:1px solid #ccc;margin:10px;")
+             

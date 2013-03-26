@@ -56,9 +56,8 @@ block content
             &nbsp;不允许被回复 
       div(class='control-group',id="J_files",style="display:none;")
         if(diary.img)
-          //
-            img(src='#{diary.img}')
-            a(href='javascript:void(0);',id='J_changePic') 修改图片
+          img(src='#{diary.img}')
+          a(href='javascript:void(0);',id='J_changePic') 修改图片
         else
           input(type='file',name='uploadPic',class='J_files')
       div(class='control-group')

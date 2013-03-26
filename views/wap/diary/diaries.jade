@@ -11,8 +11,7 @@ block content
             a(href="/diary/#{item.id}") #{item.bookname} 
           a(href="/profile/#{item.pageurl}") #{item.created_user}: 
           if(item.img)
-            //
-              img(src="#{item.img}") 
+            img(src="#{item.img}") 
           span #{item.content} 
      !{pag}
   else
