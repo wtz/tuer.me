@@ -8,16 +8,13 @@ var tuerBase = require('../model/base'),
 
 var index = function(req,res,next){
     var proxy = new EventProxy(),
-        render = function(diaries,usersCount,privacyCount,diariesCount,todoCount,hotusers,hotdiarys){
+        render = function(feeds,feedcount,usersCount,privacyCount,diariesCount,todoCount,hotusers,hotdiarys){
 
             req.session.title = "首页";
             req.session.template = "index";
 
-            diaries.forEach(function(item){
-                item.img = util.getpics(150,1,item.filelist);
-                item.avatarUrl = Avatar.getUrl(item.pageurl);
-                item.content = item.content.length > 50 ? item.content.slice(0,50)+'...' : item.content;
-                util.setTime(item);
+            feeds.forEach(function(item){
+               item.avatarUrl = Avatar.getUrl(item.pageurl || item.id);
             });
 
             hotusers.forEach(function(item){
@@ -27,42 +24,33 @@ var index = function(req,res,next){
             hotdiarys.forEach(function(item){
                 item.content = item.content.length > 10 ? item.content.slice(0,10)+'...' : item.content;
             });
-            /*
-            var now = new Date(),
-                year = now.getFullYear(),
-                month = now.getMonth(),
-                Day = now.getDate(),
-                head = '<tr><th colspan="7">'+year + '-' + (month + 1) + '-' + Day + ' '+config.countDownTime()+'</th></tr>',
-                monthHTML = util.monthHTML(year,month,Day,'cur',head);
-            */
+
             res.render('index',{
                 config:config,
                 session:req.session,
-                diaries:diaries,
+                feeds:feeds,
                 hotdiarys:hotdiarys,
                 hotusers:hotusers,
                 pag:new pag({
                     cur:1,
                     space:15,
-                    total:diariesCount,
-                    url:'/diaries'
+                    total:feedcount,
+                    url:'/feeds'
                 }).init(),
                 usersCount:usersCount,
-                //monthHTML:monthHTML,
                 privacyCount:privacyCount,
                 diariesCount:diariesCount,
                 todoCount:todoCount
             });
-
         };
 
-    proxy.assign('diaries','usersCount','privacyCount','diariesCount','todoCount','hotusers','hotdiarys',render);
+    proxy.assign('feeds','feedcount','usersCount','privacyCount','diariesCount','todoCount','hotusers','hotdiarys',render);
 
-    tuerBase.findAllDiary(15,function(err,diaries){
+    tuerBase.findFeeds({},0,15,function(err,feeds){
         if(err){
             res.redirect('500');
         }else{
-            proxy.trigger('diaries',diaries); 
+            proxy.trigger('feeds',feeds); 
         }
     });
 
@@ -71,6 +59,14 @@ var index = function(req,res,next){
             res.redirect('500');
         }else {
             proxy.trigger('usersCount',usersCount); 
+        }
+    });
+
+    tuerBase.getCount({},'feed',function(err,feedcount){
+        if(err){
+            res.redirect('500');
+        }else {
+            proxy.trigger('feedcount',feedcount); 
         }
     });
 

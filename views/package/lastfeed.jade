@@ -1,33 +1,78 @@
-if(diaries.length)
+if(feeds.length)
   div(class='Diary-wrap')
-    each item,i in diaries 
-      div(class='Diary-row')
-        div(class='Diary-left')
-         a(href='/user/profile/#{item.pageurl}',title='#{item.created_user}')
-           img(src='#{item.avatarUrl}',class="img-rounded",alt='#{item.created_user}')
-        div(class='Diary-right')
-         h5 
-           a(href="/diary/#{item.id}") #{item.created_user}的日记 
-           if(item.title)
-             a(href="/diary/#{item.id}") 
-               small [#{item.title}]
-             a(href="/user/#{item.pageurl}/notebook/#{item.bookid}") 
-               small [#{item.bookname}]
-           else
-             a(href="/user/#{item.pageurl}/notebook/#{item.bookid}") 
-               small [#{item.bookname}] 
-           if(item.weather)
-             small [天气:#{item.weather}] 
-           if(item.mood)
-             small [心情:#{item.mood}] 
-           if(item.location)
-             small [地点:#{item.location}]
-         div(class='Diary-content')
-            if(item.img)
-              img(class="img-rounded",src='#{item.img}')
-            p #{item.content}
-         div(class='bar') #{item.created_at} 
-            small #{item.commentcount}回复
+    each item,i in feeds 
+      - if(item.feed_type == 'diary')
+          - if(item.privacy == 0)
+            div(class='Diary-row')
+              div(class='Diary-left')
+               a(href='/user/profile/#{item.pageurl}',title='#{item.created_user}')
+                 img(src='#{item.avatarUrl}',class="img-rounded",alt='#{item.created_user}')
+              div(class='Diary-right')
+               h5 
+                 a(href="/diary/#{item.id}") #{item.created_user}的日记 
+                 if(item.title)
+                   a(href="/diary/#{item.id}") 
+                     small [#{item.title}]
+                   a(href="/user/#{item.pageurl}/notebook/#{item.bookid}") 
+                     small [#{item.bookname}]
+                 else
+                   a(href="/user/#{item.pageurl}/notebook/#{item.bookid}") 
+                     small [#{item.bookname}] 
+                 if(item.weather)
+                   small [天气:#{item.weather}] 
+                 if(item.mood)
+                   small [心情:#{item.mood}] 
+                 if(item.location)
+                   small [地点:#{item.location}]
+               div(class='Diary-content')
+                  if(item.img)
+                    img(class="img-rounded",src='#{item.img}')
+                  p #{item.content}
+               div(class='bar') #{item.created_at} 
+                  small #{item.commentcount}回复
+          - else
+            div(class='Diary-row')
+              div(class='Diary-left')
+               a(href='/user/profile/#{item.pageurl}',title='#{item.created_user}')
+                 img(src='#{item.avatarUrl}',class="img-rounded",alt='#{item.created_user}')
+              div(class='Diary-right')
+               h5 #{item.created_user}
+               div(class='Diary-content')
+                 p 
+                   small #{item.created_user}写了一篇仅自己可见的日记...
+               div(class='bar') #{item.created_at} 
+                  small #{item.commentcount}回复
+      - if(item.feed_type == 'todo')
+         div(class='Diary-row')
+           div(class='Diary-left')
+            a(href='/user/profile/#{item.pageurl}',title='#{item.created_user}')
+              img(src='#{item.avatarUrl}',class="img-rounded",alt='#{item.created_user}')
+           div(class='Diary-right')
+            h5 #{item.created_user}
+            div(class='Diary-content')
+             p #{item.created_user} 新增了一条计划: #{item.content}
+            div(class='bar') #{item.created_at} 
+      - if(item.feed_type == 'notebook')
+         div(class='Diary-row')
+           div(class='Diary-left')
+            a(href='/user/profile/#{item.pageurl}',title='#{item.created_user}')
+              img(src='#{item.avatarUrl}',class="img-rounded",alt='#{item.created_user}')
+           div(class='Diary-right')
+            h5 #{item.created_user}
+            div(class='Diary-content')
+             p #{item.created_user} 新建了一个日记本: #{item.name}
+            div(class='bar') #{item.created_at} 
+      - if(item.feed_type == 'register')
+         div(class='Diary-row')
+           div(class='Diary-left')
+            a(href='/user/profile/#{item.id}',title='#{item.nick}')
+              img(src='#{item.avatarUrl}',class="img-rounded",alt='#{item.nick}')
+           div(class='Diary-right')
+            h5 #{item.nick}
+            div(class='Diary-content')
+             p #{item.nick} 加入了兔耳日记!
+            div(class='bar') #{item.created_at} 
+        
   !{pag}
 else
   p There is nothing yet.

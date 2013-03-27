@@ -300,7 +300,14 @@ exports.save = function(req, res) {
 								req.flash('error', err);
 								res.redirect('back');
 							} else {
-								res.redirect('/');
+                                tuerBase.addFeed({
+                                    type:'diary',
+					                uid: req.session.userdata._id.toString(),
+                                    id:data[0]['_id'].toString()
+                                },function(err){
+                                    if(err) throw err;
+								    res.redirect('/');
+                                });
 							}
 						});
 					}
@@ -381,7 +388,7 @@ exports.remove = function(req, res) {
 		res.redirect('/');
 	};
 
-	proxy.assign('rmdiary', 'rmcomments', 'rmpics', 'rmcounts', render);
+	proxy.assign('rmdiary', 'rmcomments', 'rmpics', 'rmcounts', 'rmfeed',render);
 
 	tuerBase.findById(id, 'diary', function(err, diary) {
 		if (err) {
@@ -412,6 +419,10 @@ exports.remove = function(req, res) {
 				if (err) throw err;
 				else proxy.trigger('rmcounts');
 			});
+            tuerBase.removeFeed(id,function(err){
+                if(err) throw err;
+                else proxy.trigger('rmfeed');
+            });
 		} else {
 			res.redirect('404');
 		}

@@ -198,8 +198,16 @@ exports.save = function(req, res) {
 					req.flash('error', err);
 				} else {
 					req.flash('success', '新增todo成功');
+                    
 				}
 				res.redirect('back');
+                tuerBase.addFeed({
+                    type:'todo',
+                    uid:uid.toString(),
+                    id:ret[0]['_id'].toString()
+                },function(err,ret){
+                    if(err) throw err;
+                });
 			});
 		}
 	});
@@ -269,6 +277,9 @@ exports.remove = function(req, res) {
 					req.flash('success', '删除todo条目成功');
 				}
 				res.redirect('back');
+                tuerBase.removeFeed(id,function(err){
+                    if(err) throw err;
+                });
 			});
 		}
 	});

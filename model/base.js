@@ -49,7 +49,8 @@ tuerBase.prototype.findBySortSlice = function(selector, sort, collection, start,
 	this.getCollection(collection, function(err, db) {
 		if (err) callback(err);
 		else {
-			db.find(selector).skip(start).limit(end - start).sort(sort).toArray(function(err, data) {
+			var cursor = db.find(selector).skip(start).limit(end - start).sort(sort);
+            cursor.toArray(function(err, data) {
 				if (err) callback(err);
 				else callback(null, data);
 			});
@@ -243,22 +244,30 @@ tuerBase.prototype.findOne = function(source, collection, callback) {
 
 tuerBase.prototype.findUser = function(id, callback) {
 	var self = this,
-    search = {};
-    if(id.length === 24){
-        search = {_id:ObjectID.createFromHexString(id.toString())};
-    }else if((/^[0-9]*$/).test(id)){
-	    search = {id:parseInt(id,10)};
-    }else if(typeof id === 'object'){
-        search = {_id:id};
-    }else{
-        search = {pageurl:id};
-    }
+	search = {};
+	if (id.length === 24) {
+		search = {
+			_id: ObjectID.createFromHexString(id.toString())
+		};
+	} else if ((/^[0-9]*$/).test(id)) {
+		search = {
+			id: parseInt(id, 10)
+		};
+	} else if (typeof id === 'object') {
+		search = {
+			_id: id
+		};
+	} else {
+		search = {
+			pageurl: id
+		};
+	}
 	self.findOne(search, 'users', function(err, data) {
 		if (err) callback(err);
-		else{
-            if(data) callback(null, data);
-            else callback('找不到相关数据');
-        }
+		else {
+			if (data) callback(null, data);
+			else callback('找不到相关数据');
+		}
 	});
 };
 
@@ -267,19 +276,22 @@ tuerBase.prototype.findById = function(id, collection, callback) {
 	this.getCollection(collection, function(err, db) {
 		if (err) callback(err);
 		else {
-            var search = {};
-            if(id.length === 24){
-                search = {_id:ObjectID.createFromHexString(id)};
-            } else {
-                search = {id:parseInt(id,10)};
+			var search = {};
+			if (id.length === 24) {
+				search = {
+					_id: ObjectID.createFromHexString(id)
+				};
+			} else {
+				search = {
+					id: parseInt(id, 10)
+				};
 			}
-			db.findOne(search,
-			function(err, data) {
+			db.findOne(search, function(err, data) {
 				if (err) callback(err);
-				else{
-                    if(data) callback(null, data);
-                    else callback('找不到相关数据');
-                }
+				else {
+					if (data) callback(null, data);
+					else callback('找不到相关数据');
+				}
 			});
 		}
 	});
@@ -406,22 +418,64 @@ tuerBase.prototype.findDiaryById = function(id, callback) {
 	this.getCollection('diary', function(err, db) {
 		if (err) callback(err);
 		else {
-            var search = {};
-            if(id.length === 24){
-                search = {_id:ObjectID.createFromHexString(id)};
-            }else{
-                search = {id:parseInt(id,10)};
-            }
-			self.findDiaryBy(search,
-			0, 1, function(err, diarys) {
+			var search = {};
+			if (id.length === 24) {
+				search = {
+					_id: ObjectID.createFromHexString(id)
+				};
+			} else {
+				search = {
+					id: parseInt(id, 10)
+				};
+			}
+			self.findDiaryBy(search, 0, 1, function(err, diarys) {
 				if (err) callback(err);
-				else{
-                    if(diarys[0]) callback(null, diarys[0]);
-                    else callback('找不到相关数据');
-                }
+				else {
+					if (diarys[0]) callback(null, diarys[0]);
+					else callback('找不到相关数据');
+				}
 			});
 		}
 	});
+};
+
+tuerBase.prototype.batchAddUser = function(batchdata,userkey, callback) {
+	var self = this;
+	self.getCollection('users', function(err, db) {
+		if (err) callback(err);
+		else {
+			var map = [],
+			ids = {};
+			batchdata.forEach(function(item, index) {
+				if (ids[item[userkey]]) {
+					ids[item[userkey]].push(index);
+				} else {
+					ids[item[userkey]] = [index];
+					map.push(item[userkey]);
+				}
+			});
+			map.forEach(function(id, index) {
+				map[index] = ObjectID.createFromHexString(id);
+			});
+			db.find({
+				_id: {
+					$in: map
+				}
+			}).toArray(function(err, users) {
+				if (err) callback(err);
+				else {
+					users.forEach(function(data, index) {
+						ids[data._id].forEach(function(i) {
+							batchdata[i]['pageurl'] = !! data['pageurl'] ? data['pageurl'] : data.id;
+							batchdata[i]['created_user'] = data['nick'];
+						});
+					});
+					callback(null, batchdata);
+				}
+			});
+		}
+	});
+
 };
 
 tuerBase.prototype.batchDiary = function(cursor, callback) {
@@ -429,69 +483,41 @@ tuerBase.prototype.batchDiary = function(cursor, callback) {
 	cursor.toArray(function(err, diarys) {
 		if (err) callback(err);
 		else {
-			var map = [],
-			ids = {};
-			diarys.forEach(function(diary, index) {
-				if (diary.weather) diary.weather = config.weather[diary.weather]['value'];
-				if (diary.mood) diary.mood = config.mood[diary.mood]['value'];
-				if (ids[diary.userid]) {
-					ids[diary.userid].push(index);
-				} else {
-					ids[diary.userid] = [index];
-					map.push(diary.userid);
-				}
-			});
-			self.getCollection('users', function(err, db) {
+			self.batchAddUser(diarys,'userid', function(err, diarys) {
 				if (err) callback(err);
 				else {
-					map.forEach(function(id, index) {
-						map[index] = ObjectID.createFromHexString(id);
-					});
-					db.find({
-						_id: {
-							$in: map
-						}
-					}).toArray(function(err, users) {
+					self.getCollection('notebooks', function(err, db) {
 						if (err) callback(err);
 						else {
-							users.forEach(function(data, index) {
-								ids[data._id].forEach(function(i) {
-									diarys[i]['pageurl'] = !! data['pageurl'] ? data['pageurl'] : data.id;
-									diarys[i]['created_user'] = data['nick'];
-								});
+							var bookids = {},
+							bookmap = [];
+							diarys.forEach(function(diary, index) {
+				                if (diary.weather) diary.weather = config.weather[diary.weather]['value'];
+				                if (diary.mood) diary.mood = config.mood[diary.mood]['value'];
+								if (bookids[diary.notebook]) {
+									bookids[diary.notebook].push(index);
+								} else {
+									bookids[diary.notebook] = [index];
+									bookmap.push(diary.notebook);
+								}
 							});
-							self.getCollection('notebooks', function(err, db) {
+							bookmap.forEach(function(id, index) {
+								bookmap[index] = ObjectID.createFromHexString(id);
+							});
+							db.find({
+								_id: {
+									$in: bookmap
+								}
+							}).toArray(function(err, notebooks) {
 								if (err) callback(err);
 								else {
-									var bookids = {},
-									bookmap = [];
-									diarys.forEach(function(diary, index) {
-										if (bookids[diary.notebook]) {
-											bookids[diary.notebook].push(index);
-										} else {
-											bookids[diary.notebook] = [index];
-											bookmap.push(diary.notebook);
-										}
+									notebooks.forEach(function(data, index) {
+										bookids[data._id].forEach(function(i) {
+											diarys[i]['bookname'] = data['name'];
+											diarys[i]['bookid'] = data['id'];
+										});
 									});
-									bookmap.forEach(function(id, index) {
-										bookmap[index] = ObjectID.createFromHexString(id);
-									});
-									db.find({
-										_id: {
-											$in: bookmap
-										}
-									}).toArray(function(err, notebooks) {
-										if (err) callback(err);
-										else {
-											notebooks.forEach(function(data, index) {
-												bookids[data._id].forEach(function(i) {
-													diarys[i]['bookname'] = data['name'];
-													diarys[i]['bookid'] = data['id'];
-												});
-											});
-											callback(null, diarys);
-										}
-									});
+									callback(null, diarys);
 								}
 							});
 						}
@@ -500,6 +526,166 @@ tuerBase.prototype.batchDiary = function(cursor, callback) {
 			});
 		}
 	});
+};
+
+tuerBase.prototype.findFeeds = function(source, start, end, callback) {
+	var self = this;
+	self._findFeed(source, start, end, function(err, data) {
+		if (err) callback(err);
+		else {
+			//分类，再同时查找todo和diary,notebook,register，再合并返回
+            function addType(data,type){
+                for(var i=0;i<data.length;i++){
+                    var item = data[i];
+                    item['feed_type'] = type;
+                    util.setTime(item);
+                    if(type == 'diary'){
+                        item.img = util.getpics(150,1,item.filelist);
+                        item.content = item.content.length > 50 ? item.content.slice(0,50)+'...' : item.content;
+                    }
+                }
+            }
+			var proxy = new EventProxy(),
+			finish = function(todos, diarys, notebooks, registers) {
+				var feeds = [];
+                addType(todos,'todo');
+                addType(diarys,'diary');
+                addType(notebooks,'notebook');
+                addType(registers,'register');
+				feeds = feeds.concat(todos, diarys, notebooks, registers).sort(function(a, b) {
+					return b.created_at - a.created_at;
+				});
+				callback(null, feeds);
+			};
+			proxy.assign('todos', 'diarys', 'notebooks', 'registers', finish);
+			var todos = [],
+			diarys = [],
+			notebooks = [],
+			registers = [];
+			for (var i = 0; i < data.length; i++) {
+				var type = data[i]['type'],
+				id = ObjectID.createFromHexString(data[i].id);
+				if (type == 'todo') todos.push(id);
+				if (type == 'diary') diarys.push(id);
+				if (type == 'notebook') notebooks.push(id);
+				if (type == 'register') registers.push(id);
+			}
+
+			if (todos.length) {
+				self.findBySortSlice({
+					_id: {
+						$in: todos
+					}
+				},
+				{
+					created_at: - 1
+				},
+				'todos', 0, todos.length, function(err, todolist) {
+					if (err) callback(err);
+					else {
+                        self.batchAddUser(todolist,'userid',function(err,todolist){
+                            if(err) callback(err);
+                            else proxy.trigger('todos', todolist);
+                        });
+					}
+				});
+			} else {
+				proxy.trigger('todos', todos);
+			}
+
+			if (diarys.length) {
+	            self.getCollection('diary', function(err, db) {
+		            if (err) callback(err);
+		            else {
+			            var cursor = db.find({
+                            _id:{
+                                $in:diarys
+                            }
+                        }).skip(0).limit(diarys.length).sort({created_at:-1});
+                        self.batchDiary(cursor,function(err,diarylist){
+                          if(err) callback(err);
+                          else proxy.trigger('diarys', diarylist);
+                        });
+                    }
+                });
+			} else {
+				proxy.trigger('diarys', diarys);
+			}
+
+			if (notebooks.length) {
+				self.findBySortSlice({
+					_id: {
+						$in: notebooks
+					}
+				},
+				{
+					created_at: - 1
+				},
+				'notebooks', 0, notebooks.length, function(err, notebooklist) {
+					if (err) callback(err);
+					else {
+                        self.batchAddUser(notebooklist,'owner',function(err,notebooklist){
+                            if(err) callback(err);
+						    else proxy.trigger('notebooks', notebooklist);
+                        });
+					}
+				});
+			} else {
+				proxy.trigger('notebooks', notebooks);
+			}
+
+			if (registers.length) {
+				self.findBySortSlice({
+					_id: {
+						$in: registers
+					}
+				},
+				{
+					created_at: - 1
+				},
+				'users', 0, registers.length, function(err, userlist) {
+					if (err) callback(err);
+					else {
+						proxy.trigger('registers', userlist);
+					}
+				});
+			} else {
+				proxy.trigger('registers', registers);
+			}
+
+		}
+	});
+};
+
+tuerBase.prototype._findFeed = function(source, start, end, callback) {
+	var self = this;
+	this.getCollection('feed', function(err, db) {
+		if (err) callback(err);
+		else {
+			var cursor = db.find(source);
+			cursor.sort({
+				created_at: - 1
+			}).skip(start).limit(end - start).toArray(function(err, data) {
+				if (err) callback(err);
+				else {
+					callback(null, data);
+				}
+			});
+		}
+	});
+};
+
+tuerBase.prototype.addFeed = function(data, callback) {
+	var self = this;
+	self.save(data, 'feed', callback);
+};
+
+tuerBase.prototype.removeFeed = function(id, callback) {
+	var self = this;
+	self.removeBy({
+		id: id
+	},
+	'feed', callback);
 };
 
 tuerBase.prototype.findDiaryBy = function(source, start, end, callback) {

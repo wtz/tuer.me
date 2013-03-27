@@ -346,7 +346,14 @@ var save = function(req, res) {
 								req.flash('error', err);
 								res.redirect('back');
 							} else {
-								res.redirect('home');
+                                tuerBase.addFeed({
+                                    type:'diary',
+                                    uid:savedata.userid.toString(),
+                                    id:data[0]['_id'].toString()
+                                },function(err){
+                                    if(err) throw err;
+								    res.redirect('home');
+                                });
 							}
 						});
 					}
@@ -634,7 +641,7 @@ var remove = function(req, res) {
 		res.redirect('home');
 	};
 
-	proxy.assign('rmdiary', 'rmcomments', 'rmpics', 'rmcounts', render);
+	proxy.assign('rmdiary', 'rmcomments', 'rmpics', 'rmcounts','rmfeed', render);
 
 	tuerBase.findById(id, 'diary', function(err, diary) {
 		if (err) {
@@ -665,6 +672,10 @@ var remove = function(req, res) {
 				if (err) throw err;
 				else proxy.trigger('rmcounts');
 			});
+            tuerBase.removeFeed(id,function(err){
+                if(err) throw err;
+                else proxy.trigger('rmfeed');
+            });
 		} else {
 			res.redirect('404');
 		}

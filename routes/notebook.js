@@ -63,7 +63,7 @@ var save = function(req, res) {
 		return;
 	}
 
-	proxy.assign('updateUser', 'saveBook', render);
+	proxy.assign('updateUser', 'saveBook','addfeed', render);
 	//增加限制个数的检测
 	tuerBase.getIds('notebook', function(err, obj) {
 		if (err) {
@@ -95,6 +95,18 @@ var save = function(req, res) {
 							proxy.trigger('updateUser');
 						}
 					});
+                    tuerBase.addFeed({
+                        type:'notebook',
+                        uid:owner.toString(),
+                        id:books[0]._id.toString()
+                    },function(err){
+                        if(err){
+                            req.flash('error',err);
+                            res.redirect('back');
+                        }else{
+							proxy.trigger('addfeed');
+                        }
+                    });
 				}
 			});
 		}
@@ -131,7 +143,16 @@ var remove = function(req, res) {
 		req.flash('success', '删除成功');
 		res.redirect('back');
 	};
-	proxy.assign('rmbook', 'rmbooklen', 'mvDefault', render);
+	proxy.assign('rmbook', 'rmbooklen', 'mvDefault','rmfeed', render);
+    
+    tuerBase.removeFeed(bookid,function(err){
+        if(err){
+            req.flash('error',err);
+            res.redirect('back');
+        }else{
+			proxy.trigger('rmfeed');
+        }
+    });
 
 	tuerBase.removeById(bookid, 'notebooks', function(err, num) {
 		if (err) {

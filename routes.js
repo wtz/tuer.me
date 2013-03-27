@@ -8,6 +8,7 @@ forgot = require('./routes/forgot'),
 tips = require('./routes/tips'),
 user = require('./routes/user'),
 diary = require('./routes/diary'),
+feed = require('./routes/feed'),
 log = require('./routes/log'),
 todo = require('./routes/todo'),
 notebook = require('./routes/notebook'),
@@ -84,6 +85,8 @@ module.exports = function(app) {
     app.post('/diary/update',diary.update);
     app.post('/diary/remove',diary.remove);
     app.get('/followed/diaries/:page?',diary.followedDiaries);
+
+    app.get('/feeds/:page?',feed.list);
 
     app.get('/notebook',notebook.index);
     app.post('/notebook/save',notebook.save);
