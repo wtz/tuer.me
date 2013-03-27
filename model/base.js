@@ -538,7 +538,6 @@ tuerBase.prototype.findFeeds = function(source, start, end, callback) {
                 for(var i=0;i<data.length;i++){
                     var item = data[i];
                     item['feed_type'] = type;
-                    util.setTime(item);
                     if(type == 'diary'){
                         item.img = util.getpics(150,1,item.filelist);
                         item.content = item.content.length > 50 ? item.content.slice(0,50)+'...' : item.content;
@@ -555,6 +554,9 @@ tuerBase.prototype.findFeeds = function(source, start, end, callback) {
 				feeds = feeds.concat(todos, diarys, notebooks, registers).sort(function(a, b) {
 					return b.created_at - a.created_at;
 				});
+                feeds.forEach(function(item){
+                    util.setTime(item);
+                });
 				callback(null, feeds);
 			};
 			proxy.assign('todos', 'diarys', 'notebooks', 'registers', finish);
