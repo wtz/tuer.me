@@ -262,6 +262,7 @@ var write = function(req, res) {
 	proxy.assign('user', 'books', render);
 	tuerBase.findUser(uid, function(err, user) {
 		if (err) {
+            console.log(err);
 			res.redirect('500');
 		} else {
 			proxy.trigger('user', user);
@@ -272,6 +273,7 @@ var write = function(req, res) {
 			},
 			'notebooks', user.notebook + 1, function(err, books) {
 				if (err) {
+                    console.log(err);
 					res.redirect('500');
 				} else {
 					proxy.trigger('books', books);

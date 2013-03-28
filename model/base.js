@@ -50,7 +50,7 @@ tuerBase.prototype.findBySortSlice = function(selector, sort, collection, start,
 		if (err) callback(err);
 		else {
 			var cursor = db.find(selector).skip(start).limit(end - start).sort(sort);
-            cursor.toArray(function(err, data) {
+			cursor.toArray(function(err, data) {
 				if (err) callback(err);
 				else callback(null, data);
 			});
@@ -249,19 +249,20 @@ tuerBase.prototype.findUser = function(id, callback) {
 		search = {
 			_id: ObjectID.createFromHexString(id.toString())
 		};
-	} else if ((/^[0-9]*$/).test(id)) {
+	} else if ((/^[0-9]*$/).test(id) && id.toString().length < 24) {
 		search = {
 			id: parseInt(id, 10)
 		};
 	} else if (typeof id === 'object') {
 		search = {
-			_id: id
+			_id: ObjectID.createFromHexString(id.toString())
 		};
 	} else {
 		search = {
 			pageurl: id
 		};
 	}
+    console.log(search);
 	self.findOne(search, 'users', function(err, data) {
 		if (err) callback(err);
 		else {
@@ -279,11 +280,19 @@ tuerBase.prototype.findById = function(id, collection, callback) {
 			var search = {};
 			if (id.length === 24) {
 				search = {
-					_id: ObjectID.createFromHexString(id)
+					_id: ObjectID.createFromHexString(id.toString())
+				};
+	        } else if ((/^[0-9]*$/).test(id) && id.toString().length < 24) {
+				search = {
+					id: parseInt(id, 10)
+				};
+			} else if (typeof id === 'object') {
+				search = {
+					_id: ObjectID.createFromHexString(id.toString())
 				};
 			} else {
 				search = {
-					id: parseInt(id, 10)
+					pageurl: id
 				};
 			}
 			db.findOne(search, function(err, data) {
@@ -421,11 +430,19 @@ tuerBase.prototype.findDiaryById = function(id, callback) {
 			var search = {};
 			if (id.length === 24) {
 				search = {
-					_id: ObjectID.createFromHexString(id)
+					_id: ObjectID.createFromHexString(id.toString())
+				};
+	        } else if ((/^[0-9]*$/).test(id) && id.toString().length < 24) {
+				search = {
+					id: parseInt(id, 10)
+				};
+			} else if (typeof id === 'object') {
+				search = {
+					_id: ObjectID.createFromHexString(id.toString())
 				};
 			} else {
 				search = {
-					id: parseInt(id, 10)
+					pageurl: id
 				};
 			}
 			self.findDiaryBy(search, 0, 1, function(err, diarys) {
@@ -439,7 +456,7 @@ tuerBase.prototype.findDiaryById = function(id, callback) {
 	});
 };
 
-tuerBase.prototype.batchAddUser = function(batchdata,userkey, callback) {
+tuerBase.prototype.batchAddUser = function(batchdata, userkey, callback) {
 	var self = this;
 	self.getCollection('users', function(err, db) {
 		if (err) callback(err);
@@ -483,7 +500,7 @@ tuerBase.prototype.batchDiary = function(cursor, callback) {
 	cursor.toArray(function(err, diarys) {
 		if (err) callback(err);
 		else {
-			self.batchAddUser(diarys,'userid', function(err, diarys) {
+			self.batchAddUser(diarys, 'userid', function(err, diarys) {
 				if (err) callback(err);
 				else {
 					self.getCollection('notebooks', function(err, db) {
@@ -492,8 +509,8 @@ tuerBase.prototype.batchDiary = function(cursor, callback) {
 							var bookids = {},
 							bookmap = [];
 							diarys.forEach(function(diary, index) {
-				                if (diary.weather) diary.weather = config.weather[diary.weather]['value'];
-				                if (diary.mood) diary.mood = config.mood[diary.mood]['value'];
+								if (diary.weather) diary.weather = config.weather[diary.weather]['value'];
+								if (diary.mood) diary.mood = config.mood[diary.mood]['value'];
 								if (bookids[diary.notebook]) {
 									bookids[diary.notebook].push(index);
 								} else {
@@ -534,29 +551,29 @@ tuerBase.prototype.findFeeds = function(source, start, end, callback) {
 		if (err) callback(err);
 		else {
 			//分类，再同时查找todo和diary,notebook,register，再合并返回
-            function addType(data,type){
-                for(var i=0;i<data.length;i++){
-                    var item = data[i];
-                    item['feed_type'] = type;
-                    if(type == 'diary'){
-                        item.img = util.getpics(150,1,item.filelist);
-                        item.content = item.content.length > 50 ? item.content.slice(0,50)+'...' : item.content;
-                    }
-                }
-            }
+			function addType(data, type) {
+				for (var i = 0; i < data.length; i++) {
+					var item = data[i];
+					item['feed_type'] = type;
+					if (type == 'diary') {
+						item.img = util.getpics(150, 1, item.filelist);
+						item.content = item.content.length > 50 ? item.content.slice(0, 50) + '...': item.content;
+					}
+				}
+			}
 			var proxy = new EventProxy(),
 			finish = function(todos, diarys, notebooks, registers) {
 				var feeds = [];
-                addType(todos,'todo');
-                addType(diarys,'diary');
-                addType(notebooks,'notebook');
-                addType(registers,'register');
+				addType(todos, 'todo');
+				addType(diarys, 'diary');
+				addType(notebooks, 'notebook');
+				addType(registers, 'register');
 				feeds = feeds.concat(todos, diarys, notebooks, registers).sort(function(a, b) {
 					return b.created_at - a.created_at;
 				});
-                feeds.forEach(function(item){
-                    util.setTime(item);
-                });
+				feeds.forEach(function(item) {
+					util.setTime(item);
+				});
 				callback(null, feeds);
 			};
 			proxy.assign('todos', 'diarys', 'notebooks', 'registers', finish);
@@ -585,10 +602,10 @@ tuerBase.prototype.findFeeds = function(source, start, end, callback) {
 				'todos', 0, todos.length, function(err, todolist) {
 					if (err) callback(err);
 					else {
-                        self.batchAddUser(todolist,'userid',function(err,todolist){
-                            if(err) callback(err);
-                            else proxy.trigger('todos', todolist);
-                        });
+						self.batchAddUser(todolist, 'userid', function(err, todolist) {
+							if (err) callback(err);
+							else proxy.trigger('todos', todolist);
+						});
 					}
 				});
 			} else {
@@ -596,20 +613,22 @@ tuerBase.prototype.findFeeds = function(source, start, end, callback) {
 			}
 
 			if (diarys.length) {
-	            self.getCollection('diary', function(err, db) {
-		            if (err) callback(err);
-		            else {
-			            var cursor = db.find({
-                            _id:{
-                                $in:diarys
-                            }
-                        }).skip(0).limit(diarys.length).sort({created_at:-1});
-                        self.batchDiary(cursor,function(err,diarylist){
-                          if(err) callback(err);
-                          else proxy.trigger('diarys', diarylist);
-                        });
-                    }
-                });
+				self.getCollection('diary', function(err, db) {
+					if (err) callback(err);
+					else {
+						var cursor = db.find({
+							_id: {
+								$in: diarys
+							}
+						}).skip(0).limit(diarys.length).sort({
+							created_at: - 1
+						});
+						self.batchDiary(cursor, function(err, diarylist) {
+							if (err) callback(err);
+							else proxy.trigger('diarys', diarylist);
+						});
+					}
+				});
 			} else {
 				proxy.trigger('diarys', diarys);
 			}
@@ -626,10 +645,10 @@ tuerBase.prototype.findFeeds = function(source, start, end, callback) {
 				'notebooks', 0, notebooks.length, function(err, notebooklist) {
 					if (err) callback(err);
 					else {
-                        self.batchAddUser(notebooklist,'owner',function(err,notebooklist){
-                            if(err) callback(err);
-						    else proxy.trigger('notebooks', notebooklist);
-                        });
+						self.batchAddUser(notebooklist, 'owner', function(err, notebooklist) {
+							if (err) callback(err);
+							else proxy.trigger('notebooks', notebooklist);
+						});
 					}
 				});
 			} else {
