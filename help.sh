@@ -12,3 +12,5 @@ rm *.tar.gz
 tar czf $backmongodbFile my_mongodb_dump/
 rm my_mongodb_dump -rf
 /etc/init.d/tuer restart
+/usr/bin/python /usr/bin/dropbox.py stop
+/usr/bin/python /usr/bin/dropbox.py start
