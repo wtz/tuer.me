@@ -224,11 +224,11 @@ var notebook = function(req, res) {
 			proxy.trigger('notebook', notebook);
 			tuerBase.findUser(uid, function(err, user) {
 				if (err) {
-					res.redirect('500');
+					res.redirect('404');
 				} else {
 
 					//判断是否是这个的日记本
-					if (user._id.toString() === notebook.owner) {
+					if (user._id.toString() === notebook.owner || notebook.owner == -1) {
 
 						proxy.trigger('user', user);
 

@@ -39,7 +39,9 @@ if(feeds.length)
                h5 #{item.created_user}
                div(class='Diary-content')
                  p 
-                   small #{item.created_user}写了一篇仅自己可见的日记...
+                   small #{item.created_user} 在 
+                   a(href="/user/#{item.pageurl}/notebook/#{item.bookid}") #{item.bookname} 
+                   中写了一篇仅自己可见的日记...
                div(class='bar') #{item.created_at} 
                   small #{item.commentcount}回复
       - if(item.feed_type == 'todo')
@@ -60,7 +62,8 @@ if(feeds.length)
            div(class='Diary-right')
             h5 #{item.created_user}
             div(class='Diary-content')
-             p #{item.created_user} 新建了一个日记本: #{item.name}
+             p #{item.created_user} 新建了一个日记本: 
+               a(href="/user/#{item.pageurl}/notebook/#{item.id}") #{item.name} 
             div(class='bar') #{item.created_at} 
       - if(item.feed_type == 'register')
          div(class='Diary-row')
@@ -70,7 +73,9 @@ if(feeds.length)
            div(class='Diary-right')
             h5 #{item.nick}
             div(class='Diary-content')
-             p #{item.nick} 加入了兔耳日记!
+             p 
+               a(href='/user/profile/#{item.id}',title='#{item.nick}') #{item.nick} 
+               加入了兔耳日记!
             div(class='bar') #{item.created_at} 
         
   !{pag}
