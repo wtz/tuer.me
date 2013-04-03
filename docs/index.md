@@ -77,5 +77,7 @@
   * 修改todo信息 <em>授权</em>
   * 新增一条todo <em>授权</em>
   * 删除一条todo <em>授权</em>
+* token相关
+  * 刷新token值和有效期 
   
 ### 错误信息查询
