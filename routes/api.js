@@ -1,6 +1,8 @@
 var config = require('../lib/config'),
 escape = require('jade').runtime.escape,
 pag = require('../lib/pag').pag,
+mail = require('../lib/mail'),
+crypto = require('crypto'),
 util = require('../lib/util'),
 EventProxy = require('eventproxy').EventProxy,
 tuerBase = require('../model/base');
@@ -154,7 +156,6 @@ exports.update = function(req,res){
 
 	});
 
-
 };
 
 exports.save = function(req, res) {
@@ -257,6 +258,45 @@ exports.save = function(req, res) {
 		});
 
 	});
+
+};
+
+exports.pass = function(req,res){
+   var api_id = req.query.id,
+   secret = 'tuerapikey',
+   userid = req.query.userid,
+   timestamp = Date.now(),
+   createmd5 = function(str){
+        var md5= crypto.createHash("md5");
+        md5.update(str);
+        return md5.digest("hex");
+   };
+
+   //user_appkey为用户id，api_id,8位的36位随即数md5生成。
+   //user_secret为用户id，时间戳，api_id,8位的36位随机数加secret再md5生成
+    
+   var user_appkey = createmd5(userid+api_id+util.random36(8));
+   var user_secret = createmd5(userid+timestamp+api_id+util.random36(8)+secret);
+
+   console.log(user_appkey,user_secret);
+
+   tuerBase.updateById(api_id,{
+        $set:{
+            appkey:user_appkey,
+            secret:user_secret
+        } 
+   },'apis',function(){
+        res.redirect('/admin/appkey');
+        tuerBase.findUser(userid,function(err,user){
+            if(user){
+                mail.send_mail({
+                    to:user.accounts,
+                    subject:user.nick + '您在兔耳申请的appkey已经通过审核!',
+                    html:'<p><b>'+user.nick+'</b>!您在兔耳网申请的appkey已经通过审核，appkey为:'+user_appkey+',secret为:'+user_secret+',更多使用方法请参考兔耳API帮助页面!<a href="http://www.tuer.me/api/" target="_blank"></a></p>'
+                },function(){});
+            }
+        });
+   });
 
 };
 

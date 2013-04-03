@@ -213,14 +213,14 @@ tuerBase.prototype.updateById = function(id, data, collection, callback) {
 	});
 };
 
-tuerBase.prototype.update = function(source, data, collection, callback) {
+tuerBase.prototype.update = function(source, data, collection, callback,upsert) {
 	var self = this;
 	this.getCollection(collection, function(err, db) {
 		if (err) callback(err);
 		else {
-			db.update(source, data, {
-				safe: true
-			},
+            var options = {safe:true};
+            if(upsert) options['upsert'] = true;
+			db.update(source, data, options,
 			function(err, data) {
 				if (err) callback(err);
 				else callback(null, data);
@@ -262,7 +262,6 @@ tuerBase.prototype.findUser = function(id, callback) {
 			pageurl: id
 		};
 	}
-    console.log(search);
 	self.findOne(search, 'users', function(err, data) {
 		if (err) callback(err);
 		else {

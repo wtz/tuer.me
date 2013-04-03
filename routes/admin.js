@@ -37,14 +37,13 @@ exports.users = function(req, res) {
 		var split = page * space,
 		render = function(users, usersCount) {
 
-
 			req.session.title = '用户管理';
 			req.session.template = 'users';
 
-            users.forEach(function(item){
-			    item.avatarUrl = Avatar.getUrl(item.id);
-		        util.setDay(item);
-            });
+			users.forEach(function(item) {
+				item.avatarUrl = Avatar.getUrl(item.id);
+				util.setDay(item);
+			});
 
 			res.render('admin/users/index', {
 				config: config,
@@ -64,8 +63,8 @@ exports.users = function(req, res) {
 		proxy.assign('users', 'usersCount', render);
 
 		tuerBase.findBySlice({
-            isadmin:false || undefined
-        },
+			isadmin: false || undefined
+		},
 		'users', split, split + space, function(err, lists) {
 			if (err) {
 				res.redirect('500');
@@ -74,8 +73,8 @@ exports.users = function(req, res) {
 			}
 		});
 		tuerBase.getCount({
-            isadmin:false || undefined
-        },
+			isadmin: false || undefined
+		},
 		'users', function(err, count) {
 			if (err) {
 				res.redirect('500');
@@ -107,14 +106,13 @@ exports.adminusers = function(req, res) {
 		var split = page * space,
 		render = function(users, usersCount) {
 
-
 			req.session.title = '管理员列表';
 			req.session.template = 'users';
 
-            users.forEach(function(item){
-			    item.avatarUrl = Avatar.getUrl(item.id);
-		        util.setDay(item);
-            });
+			users.forEach(function(item) {
+				item.avatarUrl = Avatar.getUrl(item.id);
+				util.setDay(item);
+			});
 
 			res.render('admin/users/admins', {
 				config: config,
@@ -134,8 +132,8 @@ exports.adminusers = function(req, res) {
 		proxy.assign('users', 'usersCount', render);
 
 		tuerBase.findBySlice({
-            isadmin:true
-        },
+			isadmin: true
+		},
 		'users', split, split + space, function(err, lists) {
 			if (err) {
 				res.redirect('500');
@@ -144,8 +142,8 @@ exports.adminusers = function(req, res) {
 			}
 		});
 		tuerBase.getCount({
-            isadmin:true
-        },
+			isadmin: true
+		},
 		'users', function(err, count) {
 			if (err) {
 				res.redirect('500');
@@ -172,11 +170,55 @@ exports.todos = function(req, res) {
 };
 exports.appkey = function(req, res) {
 	if (req.session.is_login && req.session.userdata.isadmin) {
-		req.session.title = 'APPKEY管理';
-		req.session.template = 'api';
-		res.render('admin/api/index', {
-			config: config,
-			session: req.session
+		var page = req.params.page,
+		space = 15,
+		proxy = new EventProxy();
+		if (page && isNaN(page)) {
+			res.redirect('404');
+			return;
+		} else if (page == undefined || page == 1) {
+			page = 0;
+		} else {
+			page = page - 1;
+		}
+
+		var split = page * space,
+		render = function(apis, apiscount) {
+			req.session.title = 'APPKEY管理';
+			req.session.template = 'api';
+
+			res.render('admin/api/index', {
+				config: config,
+				session: req.session,
+				pag: new pag({
+					cur: page + 1,
+					space: space,
+					total: apiscount,
+					url: '/admin/appkey'
+				}).init(),
+				apis: apis,
+				apiscount: apiscount
+			});
+		};
+
+		proxy.assign('Apis', 'ApisCount', render);
+
+		tuerBase.findBySlice({},
+		'apis', split, split + space, function(err, lists) {
+			if (err) {
+				res.redirect('500');
+			} else {
+				proxy.trigger('Apis', lists);
+			}
+		});
+
+		tuerBase.getCount({},
+		'apis', function(err, count) {
+			if (err) {
+				res.redirect('500');
+			} else {
+				proxy.trigger('ApisCount', count);
+			}
 		});
 	} else {
 		res.redirect('login');

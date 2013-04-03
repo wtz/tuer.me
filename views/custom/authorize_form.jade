@@ -1,0 +1,10 @@
+extends ../common/layout
+block content
+  div(class='container')
+    form(class="form-horizontal",method="post",action="#{authorize_url}")
+      legend 是否允许XXX应用获得你的操作授权
+        div(class="control-group")
+          p
+            button(name="allow",class="btn btn-success") 允许 
+          p
+            button(name="deny",class="btn btn-danger") 拒绝

@@ -9,6 +9,7 @@ var index = function(req, res) {
 	if (req.session.is_login) {
 		res.redirect('home');
 	} else {
+        var next_url = req.query.next ? req.query.next : 'home';
 
 		req.session.title = '登陆兔耳';
 		req.session.template = 'login';
@@ -16,6 +17,7 @@ var index = function(req, res) {
 
 		res.render('login/login', {
 			config: config,
+            next_url:next_url,
 			session: req.session
 		});
 	}
@@ -122,6 +124,7 @@ var signin = function(req, res) {
 		accounts = req.body.email.trim(),
 		pwd = req.body.pwd.trim(),
 		remember = req.body.remember,
+        next_url = req.body.next_url || 'home',
 		render = function(data) {
 			var errorMap = {
 				'001': '帐号不存在',
@@ -132,7 +135,7 @@ var signin = function(req, res) {
 				res.redirect('login');
 			} else {
 				signsuccess(req, res, data, accounts, pwd, remember, function(res) {
-					res.redirect('home');
+					res.redirect(decodeURIComponent(next_url));
 				});
 			}
 		};

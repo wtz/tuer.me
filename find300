@@ -1,0 +1,23 @@
+#!/usr/local/bin/node
+
+var $hfs = require('lithe').hfs,
+    path = require('path'),
+    fs = require('fs'),
+    Canvas = require('canvas'),
+    Image = Canvas.Image,
+    exec = require('child_process').exec;
+
+var basepath = '/home/fuqiang/dev/tuerSource/';
+
+$hfs.walk(basepath+'300pics/',function(files){
+    var number = 0;
+    var buildinner = function(files){
+        var file = files.shift();
+        var filepath = path.dirname(file);
+        fs.renameSync(file,filepath+'/'+number);
+        number ++;
+        if(files.length) buildinner(files);
+    };
+    buildinner(files);
+    console.log(number);
+});

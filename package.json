@@ -10,6 +10,8 @@
   , "dependencies": {
       "express": "2.5.8"
     , "jade": ">= 0.0.1"
+    , "restify":"2.x"
+    , "serializer":">=0.0.2 < 0.1.0"
     , "oauth2-provider":"1.x"
     , "eventproxy":"0.1.2"
     , "node-dev":">=0.2.2"
