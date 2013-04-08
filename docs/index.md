@@ -43,6 +43,10 @@
 
 ### API列表
 
+  > 通用参数: 
+  > callback=abc 返回abc()的jsonp格式数据
+  > count=15 分段分页数,默认为15
+
 #### 用户相关
 * 获取用户个人信息
   
@@ -52,10 +56,19 @@
   > http://www.tuer.me/user/art/id 大图  
     
 * 获取用户关注信息 
+
+  > {id:2,followers:{data:[],count:100},followed:{data:[],count:10}}
+
 * 修改用户个人信息 <em>授权</em>
 * 关注/取消关注用户 <em>授权</em>
 * 获取兔耳活跃用户 
+
+  > {hots:[]} //只返回15个，不支持count分页 
+
 * 获取兔耳最新用户
+
+  > {news:[]} //只返回15个，不支持count分页
+
 #### Feed相关
 * 获取最新Feed信息
 * 获取某用户Feed信息
