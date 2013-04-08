@@ -1,6 +1,6 @@
 ## Tuer API 说明文档
 
-* Tuer API 依赖restify搭建，提供rest格式的API访问接口，API访问限制在1分钟内最多访问30次。
+* Tuer API 依赖restify搭建，提供rest格式的API访问接口，API访问限制在1秒钟内最多访问3次。
   
   * 一种不需要授权访问的公共API，必须使用appkey才可以访问。
   * 一种必须使用用户授权token方式获取。
