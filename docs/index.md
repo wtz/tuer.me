@@ -65,13 +65,13 @@
   
   > http://api.tuer.me/user/edit/id [nick,profile,about]  
   > 只能修改nick,profile,about这3项，post方法
-  > {success:boolean,message:""}
+  > {code:"success",message:""}
 
 * 关注/取消关注用户 <em>授权</em>
   
   > http://api.tuer.me/user/attention/id [addid|removeid]  
   > 参数为addid/removeid  
-  > {success:boolean,message:"",status:"followed/unfollowed"}
+  > {code:"success",message:"",status:"followed/unfollowed"}
 
 * 获取兔耳活跃用户 
   
