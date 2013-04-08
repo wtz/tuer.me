@@ -1,6 +1,6 @@
 ## Tuer API 说明文档
 
-* Tuer API 依赖restify搭建，提供rest格式的API访问接口，API访问限制在1分钟内最多访问30次。
+* Tuer API 依赖restify搭建，提供rest格式的API访问接口，API访问限制在1秒钟内最多访问3次。
   
   * 一种不需要授权访问的公共API，必须使用appkey才可以访问。
   * 一种必须使用用户授权token方式获取。
@@ -43,40 +43,88 @@
 
 ### API列表
 
-* 用户相关
-  * 获取用户个人信息
-  * 获取用户关注信息 
-  * 修改用户个人信息 <em>授权</em>
-  * 关注/取消关注用户 <em>授权</em>
-  * 获取兔耳活跃用户 
-  * 获取兔耳最新用户
-* Feed相关
-  * 获取最新Feed信息
-  * 获取某用户Feed信息
-* 日记相关
-  * 获取一条日记详细信息
-  * 修改日记信息 <em>授权</em>
-  * 删除日记 <em>授权</em>
-  * 写新日记 <em>授权</em>
-  * 获取用户所有公开日记列表
-  * 获取用户日记本下所有公开日记列表
-  * 获取全站最新日记列表
-  * 获取关注的人的日记列表
-* 评论相关
-  * 获取一条日记的评论信息
-  * 写评论,回复评论 <em>授权</em>
-  * 删除评论 <em>授权</em>
-* 日记本相关
-  * 获取用户所有日记本列表
-  * 新增日记本 <em>授权</em>
-  * 修改日记本 <em>授权</em>
-  * 删除日记本 <em>授权</em>
-* Todo相关
-  * 获取用户todo列表
-  * 修改todo信息 <em>授权</em>
-  * 新增一条todo <em>授权</em>
-  * 删除一条todo <em>授权</em>
-* token相关
-  * 刷新token值和有效期 
+  > 通用参数:  
+  > callback=abc 返回abc()的jsonp格式数据  
+  > count=15 分段分页数,默认为10  
+
+#### 用户相关
+* 获取用户个人信息
+  
+  > http://api.tuer.me/user/info/id  
+  > {id:2,nick:"xiaojue",pageurl:"designsor",profile:"new day!",about:""}  
+  > 头像地址为两个，可以自己通过id拼取:  
+  > http://www.tuer.me/user/avatar/id 小图  
+  > http://www.tuer.me/user/art/id 大图  
+    
+* 获取用户关注信息 
+   
+  > http://api.tuer.me/user/follow/id [count]  
+  > {id:2,followers:{data:[],count:100},followed:{data:[],count:10}}
+
+* 修改用户个人信息 <em>授权</em>
+  
+  > http://api.tuer.me/user/edit/id [nick,profile,about]  
+  > 只能修改nick,profile,about这3项，post方法
+  > {code:"success",message:""}
+
+* 关注/取消关注用户 <em>授权</em>
+  
+  > http://api.tuer.me/user/attention/id [addid|removeid]  
+  > 参数为addid/removeid  
+  > {code:"success",message:"",status:"followed/unfollowed"}
+
+* 获取兔耳活跃用户 
+  
+  > http://api.tuer.me/user/hots  
+  > {hots:[]} //只返回15个，不支持count分页 
+
+* 获取兔耳最新用户
+
+  > http://api.tuer.me/user/news  
+  > {news:[]} //只返回15个，不支持count分页
+
+#### Feed相关
+* 获取最新Feed信息
+  
+  > http://api.tuer.me/feed/news
+
+* 获取某用户Feed信息
+
+  > http://api.tuer.me/feed/user/id
+  
+#### 日记相关 
+
+* 获取一条日记详细信息
+* 修改日记信息 <em>授权</em>
+* 删除日记 <em>授权</em>
+* 写新日记 <em>授权</em>
+* 获取用户所有公开日记列表
+* 获取用户日记本下所有公开日记列表
+* 获取全站最新日记列表
+* 获取关注的人的日记列表
+
+#### 评论相关  
+
+* 获取一条日记的评论信息
+* 写评论,回复评论 <em>授权</em>
+* 删除评论 <em>授权</em>
+
+#### 日记本相关  
+
+* 获取用户所有日记本列表
+* 新增日记本 <em>授权</em>
+* 修改日记本 <em>授权</em>
+* 删除日记本 <em>授权</em>
+
+#### Todo相关  
+
+* 获取用户todo列表
+* 修改todo信息 <em>授权</em>
+* 新增一条todo <em>授权</em>
+* 删除一条todo <em>授权</em>
+
+#### token相关  
+
+* 刷新token值和有效期 
   
 ### 错误信息查询
