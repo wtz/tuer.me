@@ -43,14 +43,14 @@
 
 ### API列表
 
-  > 通用参数: 
-  > callback=abc 返回abc()的jsonp格式数据
-  > count=15 分段分页数,默认为10
+  > 通用参数:  
+  > callback=abc 返回abc()的jsonp格式数据  
+  > count=15 分段分页数,默认为10  
 
 #### 用户相关
 * 获取用户个人信息
   
-  > http://api.tuer.me/user/info/id
+  > http://api.tuer.me/user/info/id  
   > {id:2,nick:"xiaojue",pageurl:"designsor",profile:"new day!",about:""}  
   > 头像地址为两个，可以自己通过id拼取:  
   > http://www.tuer.me/user/avatar/id 小图  
@@ -58,29 +58,29 @@
     
 * 获取用户关注信息 
    
-  > http://api.tuer.me/user/follow/id [count]
+  > http://api.tuer.me/user/follow/id [count]  
   > {id:2,followers:{data:[],count:100},followed:{data:[],count:10}}
 
 * 修改用户个人信息 <em>授权</em>
   
-  > http://api.tuer.me/user/edit/id [nick,profile,about]
+  > http://api.tuer.me/user/edit/id [nick,profile,about]  
   > 只能修改nick,profile,about这3项，post方法
   > {success:boolean,message:""}
 
 * 关注/取消关注用户 <em>授权</em>
   
-  > http://api.tuer.me/user/attention/id [addid|removeid]
-  > 参数为addid/removeid
+  > http://api.tuer.me/user/attention/id [addid|removeid]  
+  > 参数为addid/removeid  
   > {success:boolean,message:"",status:"followed/unfollowed"}
 
 * 获取兔耳活跃用户 
   
-  > http://api.tuer.me/user/hots
+  > http://api.tuer.me/user/hots  
   > {hots:[]} //只返回15个，不支持count分页 
 
 * 获取兔耳最新用户
 
-  > http://api.tuer.me/user/news
+  > http://api.tuer.me/user/news  
   > {news:[]} //只返回15个，不支持count分页
 
 #### Feed相关
