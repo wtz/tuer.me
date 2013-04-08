@@ -14,81 +14,81 @@ notebook = require('./routes/apis/notebook'),
 token = require('./routes/apis/token');
 
 var paths = {
-    //user
-    'user/info/:uid':['public',user.info,'get'],  
-    'user/follow/:uid':['public',user.follow,'get'],  
-    'user/edit/:uid':['private',user.edit,'post'],  
-    'user/attention/:uid':['private',user.attention,'post'],
-    'user/hots':['public',user.hots,'get'],
-    'user/news':['public',user.news,'get'],
-    //feed
-    'feed/news':['public',feed.news,'get'],
-    'feed/user/:id':['private',feed.user,'get'],
-    //diary
-    'diary/info/:id':['public',diary.info,'get'],
-    'diary/edit/:id':['private',diary.edit,'post'],
-    'diary/del/:id':['private',diary.del,'post'],
-    'diary/save':['private',diary.save,'post'],
-    'diaries/user/:uid':['public',diary.user,'get'],
-    'diaries/notebook/:bookid':['public',diary.notebook,'get'],
-    'diaries/news':['public',diary.news,'get'],
-    'diaries/follow/:uid':['public',diary.follow,'get'],
-    //comment
-    'comment/info/:id':['public',comment.info,'get'],
-    'comment/save/:id':['private',comment.save,'post'],
-    'comment/del/:id':['private',comment.del,'post'],
-    //notebook
-    'notebook/user/:uid':['public',notebook.user,'get'],
-    'notebook/save':['private',notebook.save,'post'],
-    'notebook/edit/:id':['private',notebook.edit,'post'],
-    'notebook/del/:id':['private',notebook.del,'post'],
-    //todo
-    'todo/user/:uid':['public',todo.user,'get'],
-    'todo/edit/:id':['private',todo.edit,'post'],
-    'todo/save':['private',todo.save,'post'],
-    'todo/del/:id':['private',todo.del,'post'],
-    //token
-    'token/refresh':['private',token.refresh,'post']
+	//user
+	'user/info/:uid': ['public', user.info, 'get'],
+	'user/follow/:uid': ['public', user.follow, 'get'],
+	'user/edit/:uid': ['private', user.edit, 'post'],
+	'user/attention/:uid': ['private', user.attention, 'post'],
+	'user/hots': ['public', user.hots, 'get'],
+	'user/news': ['public', user.news, 'get'],
+	//feed
+	'feed/news': ['public', feed.news, 'get'],
+	'feed/user/:id': ['private', feed.user, 'get'],
+	//diary
+	'diary/info/:id': ['public', diary.info, 'get'],
+	'diary/edit/:id': ['private', diary.edit, 'post'],
+	'diary/del/:id': ['private', diary.del, 'post'],
+	'diary/save': ['private', diary.save, 'post'],
+	'diaries/user/:uid': ['public', diary.user, 'get'],
+	'diaries/notebook/:bookid': ['public', diary.notebook, 'get'],
+	'diaries/news': ['public', diary.news, 'get'],
+	'diaries/follow/:uid': ['public', diary.follow, 'get'],
+	//comment
+	'comment/info/:id': ['public', comment.info, 'get'],
+	'comment/save/:id': ['private', comment.save, 'post'],
+	'comment/del/:id': ['private', comment.del, 'post'],
+	//notebook
+	'notebook/user/:uid': ['public', notebook.user, 'get'],
+	'notebook/save': ['private', notebook.save, 'post'],
+	'notebook/edit/:id': ['private', notebook.edit, 'post'],
+	'notebook/del/:id': ['private', notebook.del, 'post'],
+	//todo
+	'todo/user/:uid': ['public', todo.user, 'get'],
+	'todo/edit/:id': ['private', todo.edit, 'post'],
+	'todo/save': ['private', todo.save, 'post'],
+	'todo/del/:id': ['private', todo.del, 'post'],
+	//token
+	'token/refresh': ['private', token.refresh, 'post']
 };
 
 serializer = serializer.createSecureSerializer('tuer encrytion secret', 'tuer signing secret');
 
-var utf8Charset = {'content-type':'application/json; charset=utf-8'};
-
 var server = restify.createServer({
 	name: 'tuerApi',
-	version: '0.0.1',
-    formatters:{
-        'application/json; charset=uft-8':function(req,res,body){
-            return util.inspect(body.body);
-        }
-    }
+	version: '0.0.1'
 });
 
 server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
-server.use(restify.bodyParser());
-server.use(restify.gzipResponse());
 server.use(restify.jsonp());
+server.use(restify.gzipResponse());
+server.use(restify.bodyParser({mapParams:false}));
+server.use(restify.throttle({
+	burst: 3,
+	rate: 1,
+	ip: true
+}));
 
 //全局校验
 server.use(function(req, res, next) {
-	var data, atok, user_id, client_id, grant_date, extra_data,TOKEN_TTL = 7 * 24 * 60 * 60 * 1000; //7天有效期
-
+	var data, atok, user_id, client_id, grant_date, extra_data, TOKEN_TTL = 7 * 24 * 60 * 60 * 1000; //7天有效期
 	if (req.query['access_token']) {
 		atok = req.query['access_token'];
 	} else if ((req.headers['authorization'] || '').indexOf('Bearer ') === 0) {
 		atok = req.headers['authorization'].replace('Bearer', '').trim();
-	} else if (req.query['client_id']){
-        tuerBase.findOne({'appkey':req.query['client_id']},'apis',function(err,data){
-            if(err) next(new restify.NotAuthorizedError(err));
-            else{
-                if(data) next();
-                else next(new restify.NotAuthorizedError('appkey is not exits'));
-            }
-        });
-        return;
-    } else {
+	} else if (req.query['client_id']) {
+		tuerBase.findOne({
+			'appkey': req.query['client_id']
+		},
+		'apis', function(err, data) {
+			if (err) next(new restify.NotAuthorizedError(err));
+			else {
+				if (data) next();
+				else next(new restify.NotAuthorizedError('appkey is not exits'));
+			}
+		});
+		return;
+	} else {
 		//没有atok直接干掉，转到没权限的提示
 		next(new restify.NotAuthorizedError('access_token must have'));
 		return;
@@ -111,18 +111,29 @@ server.use(function(req, res, next) {
 			for (var i = 0; i < data.tokens.length; i++) {
 				var grant = data.tokens[i];
 				if (grant.appkey == client_id && grant.token == atok) {
-                    if(grant_date.getTime() + TOKEN_TTL > Date.now()){
-                        req.authorization = {
-                            extra_data:extra_data,
-                            userdata:data,
-                            user_id:user_id,
-                            client_id:client_id,
-                            grant_date:grant_date
-                        };
-					    return next();
-                    }else{
-		                return next(new restify.NotAuthorizedError('the token has expired'));
-                    }
+					if (grant_date.getTime() + TOKEN_TTL > Date.now()) {
+						req.authorization = {
+							extra_data: extra_data,
+							userdata: data,
+							user_id: user_id,
+							client_id: client_id,
+							grant_date: grant_date
+						};
+						var url = req.url.slice(1);
+						for (var uri in paths) {
+							var route = uri.slice(0, uri.indexOf(':')),
+							matchs = url.match(new RegExp("^(" + route + ")"));
+							if (matchs) {
+								var query = querystring.parse(req.getQuery());
+								if (req.authorization || (paths[uri][0] === 'public' && query['client_id'])) return next();
+								else return next(new restify.NotAuthorizedError('not authorized'));
+								break;
+							}
+						}
+						return next();
+					} else {
+						return next(new restify.NotAuthorizedError('the token has expired'));
+					}
 				}
 			}
 		}
@@ -130,34 +141,13 @@ server.use(function(req, res, next) {
 	});
 });
 
-server.pre(function(req,res,next){
-    var url = req.url.slice(1);
-    for(var uri in paths){
-        var route = uri.slice(0,uri.indexOf(':')),
-        matchs = url.match(new RegExp("^("+route+")"));
-        if(matchs){
-            var query = querystring.parse(req.getQuery());
-            if(req.authorization || (paths[uri][0] === 'public' && query['client_id'])) return next();
-            else return next(new restify.NotAuthorizedError('not authorized'));
-            break;
-        } 
-    }
-    return next();
-});
-
-for(var pat in paths){
-    var data = paths[pat],
-        fun = data[1],
-        type = data[2];
-    server[type](pat,fun);
+for (var pat in paths) {
+	var data = paths[pat],
+	fun = data[1],
+	type = data[2];
+	server[type](pat, fun);
 }
 
-/*
-server.get('/echo/:name', function(req, res, next) {
-	res.json(req.authorization,utf8Charset);
-	return next();
-});
-*/
 server.listen(3333, function() {
 	console.log('server at 3333');
 });

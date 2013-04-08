@@ -193,13 +193,21 @@ tuerBase.prototype.updateById = function(id, data, collection, callback) {
 		if (err) callback(err);
 		else {
 			var source;
-			try {
+			if (id.length === 24) {
 				source = {
-					_id: ObjectID.createFromHexString(id)
+					_id: ObjectID.createFromHexString(id.toString())
 				};
-			} catch(e) {
+			} else if ((/^[0-9]*$/).test(id) && id.toString().length < 24) {
 				source = {
-					'pageurl': id
+					id: parseInt(id, 10)
+				};
+			} else if (typeof id === 'object') {
+				source = {
+					_id: ObjectID.createFromHexString(id.toString())
+				};
+			} else {
+				source = {
+					pageurl: id
 				};
 			}
 			db.update(source, data, {
@@ -213,15 +221,16 @@ tuerBase.prototype.updateById = function(id, data, collection, callback) {
 	});
 };
 
-tuerBase.prototype.update = function(source, data, collection, callback,upsert) {
+tuerBase.prototype.update = function(source, data, collection, callback, upsert) {
 	var self = this;
 	this.getCollection(collection, function(err, db) {
 		if (err) callback(err);
 		else {
-            var options = {safe:true};
-            if(upsert) options['upsert'] = true;
-			db.update(source, data, options,
-			function(err, data) {
+			var options = {
+				safe: true
+			};
+			if (upsert) options['upsert'] = true;
+			db.update(source, data, options, function(err, data) {
 				if (err) callback(err);
 				else callback(null, data);
 			});
@@ -281,7 +290,7 @@ tuerBase.prototype.findById = function(id, collection, callback) {
 				search = {
 					_id: ObjectID.createFromHexString(id.toString())
 				};
-	        } else if ((/^[0-9]*$/).test(id) && id.toString().length < 24) {
+			} else if ((/^[0-9]*$/).test(id) && id.toString().length < 24) {
 				search = {
 					id: parseInt(id, 10)
 				};
@@ -431,7 +440,7 @@ tuerBase.prototype.findDiaryById = function(id, callback) {
 				search = {
 					_id: ObjectID.createFromHexString(id.toString())
 				};
-	        } else if ((/^[0-9]*$/).test(id) && id.toString().length < 24) {
+			} else if ((/^[0-9]*$/).test(id) && id.toString().length < 24) {
 				search = {
 					id: parseInt(id, 10)
 				};
