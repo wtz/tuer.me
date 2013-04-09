@@ -20,6 +20,15 @@ define(function(require, exports, module) {
         $(this).parent().append(replybox(replyid,replyname,diaryid));
 		return false;
 	});
+    
+    function submitform(e){
+        if(e.ctrlKey && e.keyCode == 13){
+            $(this).closest('form').submit();
+        }
+    }
+
+    $('#J_replaybox textarea,#J_comment_textarea').live('keydown',submitform);
+
     $('button.J_replycencel').live('click',function(){
         $('#J_replaybox').remove();
         return false;
