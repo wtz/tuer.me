@@ -101,6 +101,8 @@
   > notebook -> {feed_type:'diary',id:id,name:name,created_user:created_user,bgcolor:bgcolor,pageurl:pageurl,created_at:created_at}  
   
 #### 日记相关 
+  
+  > 所有的隐私日记均不可以被获取，取得的列表均为排除了隐私日记的列表。  
 
 * 获取一条日记详细信息
 * 修改日记信息 <em>授权</em>
