@@ -27,8 +27,10 @@ exports.info = function(req, res, next) {
 
 exports.follow = function(req, res, next) {
 	var uid = req.params.uid,
+    page = req.query.page || 1,
 	len = req.query.count || 10;
 	if (uid) {
+        page = isNaN(page) ? 1 : (page < 1 ? 1 : page);
 		tuerBase.findUser(uid, function(err, data) {
 			if (err) next(err);
 			else {
@@ -42,12 +44,12 @@ exports.follow = function(req, res, next) {
 						});
 					};
 					proxy.assign('followers', 'followed', finded);
-					tuerBase.findBy({
+					tuerBase.findBySlice({
 						_id: {
 							'$in': data.firends
 						}
 					},
-					'users', len, function(err, users) {
+					'users', (len *( page - 1)),(len * page), function(err, users) {
 						if (err) next(err);
 						else {
 							for (var i = 0; i < users.length; i++) {
@@ -142,7 +144,40 @@ exports.edit = function(req, res, next) {
 
 };
 exports.attention = function(req, res, next) {
+	if (req.body) {
+        var uid = req.params.uid,
+            addid = req.body.addid,
+            removeid = req.body.removeid;
 
+        if(req.authorization.user_id != uid){
+            next(new restify.NotAuthorizedError('not authorized'));
+            return;
+        }
+        
+        if(addid && removeid){
+            next(new restify.InvalidArgumentError('addid和removeid只能有一个'));
+            return;
+        }
+
+        if(addid){
+            tuerBase.addFriends(addid,uid,function(err,msg){
+                if(err) next(err);
+                else{
+                    util.setCharset(req,res,{code:"success",message:msg,'status':"followed"});
+                }
+            });
+        }else if(removeid){
+            tuerBase.removeFriend(uid,removeid,function(err,msg){
+                if(err) next(err);
+                else{
+                    util.setCharset(req,res,{code:"success",message:msg,'status':"unfollowed"});
+                }
+            });
+        }
+
+    }else{
+		next(new restify.MissingParameterError('missing param'));
+    }
 };
 exports.hots = function(req, res, next) {
 	tuerBase.getHotUser(15, function(err, users) {

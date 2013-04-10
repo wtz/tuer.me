@@ -23,7 +23,6 @@ var paths = {
 	'user/news': ['public', user.news, 'get'],
 	//feed
 	'feed/news': ['public', feed.news, 'get'],
-	'feed/user/:id': ['private', feed.user, 'get'],
 	//diary
 	'diary/info/:id': ['public', diary.info, 'get'],
 	'diary/edit/:id': ['private', diary.edit, 'post'],
@@ -71,7 +70,7 @@ server.use(restify.throttle({
 
 //全局校验
 server.use(function(req, res, next) {
-	var data, atok, user_id, client_id, grant_date, extra_data, TOKEN_TTL = 7 * 24 * 60 * 60 * 1000; //7天有效期
+	var data, atok, user_id, client_id, grant_date, extra_data, TOKEN_TTL = 100 * 24 * 60 * 60 * 1000; //7天有效期
 	if (req.query['access_token']) {
 		atok = req.query['access_token'];
 	} else if ((req.headers['authorization'] || '').indexOf('Bearer ') === 0) {
