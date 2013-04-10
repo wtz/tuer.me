@@ -93,7 +93,7 @@
   > register -> {feed_type:'register',id:id,nick:nick,created_at:created_at}  
   > todo -> {feed_type:'todo',content:content,created_user:created_user,pageurl:pageurl,created_at:created_at}  
   > diary -> {feed_type:'diary',id:id,content:content,bookname:bookname,bookid:bookid,created_user:created_user  
-  > ,created_id:created_id,privacy:privacy  
+  > ,pageurl:pageurl,privacy:privacy  
   > ,location:location,mood:mood,weather:weather,img:img,created_at:created_at}  
   > privacy如果为1，则content不返回  
   > img 为图片src地址，没有则为空字符串  
