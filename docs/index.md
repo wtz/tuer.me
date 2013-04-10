@@ -46,6 +46,7 @@
   > 通用参数:  
   > callback=abc 返回abc()的jsonp格式数据  
   > count=15 分段分页数,默认为10  
+  > page=1 页数,默认为1  
 
 #### 用户相关
 * 获取用户个人信息
@@ -58,7 +59,7 @@
     
 * 获取用户关注信息 
    
-  > http://api.tuer.me/user/follow/id [count]  
+  > http://api.tuer.me/user/follow/id [count,page]  
   > {id:2,followers:{data:[],count:100},followed:{data:[],count:10}}
 
 * 修改用户个人信息 <em>授权</em>
@@ -86,11 +87,16 @@
 #### Feed相关
 * 获取最新Feed信息
   
-  > http://api.tuer.me/feed/news
-
-* 获取某用户Feed信息
-
-  > http://api.tuer.me/feed/user/id
+  > http://api.tuer.me/feed/news [page,count]  
+  > {data:[],count:count} data中为feed object  
+  > feed_type分为register,todo,diary,notebook类型,具体信息如下  
+  > register -> {feed_type:'register',id:id,nick:nick,created_at:created_at}  
+  > todo -> {feed_type:'todo',content:content,created_user:created_user,pageurl:pageurl,created_at:created_at}  
+  > diary -> {feed_type:'diary',id:id,content:content,bookname:bookname,bookid:bookid,created_user:created_user,created_id:created_id,privacy:privacy,location:location,mood:mood,weather:weather,img:img,created_at:created_at}  
+  > privacy如果为1，则content不返回  
+  > img 为图片src地址，没有则为空字符串  
+  > 其中心情，地点，天气如果没有，则为空字符串  
+  > notebook -> {feed_type:'diary',id:id,name:name,created_user:created_user,bgcolor:bgcolor,pageurl:pageurl,created_at:created_at}  
   
 #### 日记相关 
 
