@@ -126,12 +126,12 @@
 
 * 获取用户所有公开日记列表  
   
-  > http://api.tuer.me/diaries/user/uid [uid,page,count]
+  > http://api.tuer.me/diaries/user/uid [page,count]
   > {}
 
 * 获取用户日记本下所有公开日记列表
 
-  > http://api.tuer.me/diaries/notebook/bookid [bookid,page,count]  
+  > http://api.tuer.me/diaries/notebook/bookid [page,count]  
   > {}  
 
 * 获取全站最新日记列表
@@ -153,7 +153,7 @@
   
 * 写评论,回复评论 <em>授权</em>
 
-  > http://api.tuer.me/comment/save [diaryid,content,replyid,replyname,userid]
+  > http://api.tuer.me/comment/save [diaryid,content,replyid,replyname]
   > {}  
 
 * 删除评论 <em>授权</em>
@@ -166,58 +166,58 @@
 
 * 获取用户所有日记本列表  
 
-  > http://api.tuer.me/
+  > http://api.tuer.me/notebook/user/uid [uid,page,count]  
   > {}  
   
 * 新增日记本 <em>授权</em>
 
-  > http://api.tuer.me/
+  > http://api.tuer.me/notebook/save  [bookname,bgcolor]  
   > {}  
 
 * 修改日记本 <em>授权</em>
 
-  > http://api.tuer.me/
+  > http://api.tuer.me/notebook/edit/bookid [bookname,bgcolor]  
   > {}  
 
 * 删除日记本 <em>授权</em>
 
-  > http://api.tuer.me/
+  > http://api.tuer.me/notebook/del [bookid]  
   > {}  
 
 #### Todo相关  
 
 * 获取用户todo列表
 
-  > http://api.tuer.me/
+  > http://api.tuer.me/todo/user/uid [page,count]  
   > {}  
 
 * 修改todo信息 <em>授权</em>
 
-  > http://api.tuer.me/
+  > http://api.tuer.me/todo/edit/id [content,important]  
   > {}  
 
 * 新增一条todo <em>授权</em>
 
-  > http://api.tuer.me/
+  > http://api.tuer.me/todo/save [content,important]
   > {}  
 
 * 删除一条todo <em>授权</em>
 
-  > http://api.tuer.me/
+  > http://api.tuer.me/del [id]  
   > {}  
 
 #### tips相关  
 
-* 获取最新消息 
+* 获取提醒消息 <em>授权</em>
 
-  > http://api.tuer.me/
+  > http://api.tuer.me/tips/all    
   > {}  
 
 #### token相关  
 
 * 刷新token值和有效期 
 
-  > http://api.tuer.me/
+  > http://api.tuer.me/token/refresh [client_id,secret,oldtoken]  
   > {}  
 
 ### 错误信息查询
