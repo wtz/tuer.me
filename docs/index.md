@@ -126,8 +126,9 @@
 
 * 写新日记 <em>授权</em>  
    
-  > http://api.tuer.me/diary/save [content,bookid,privacy,forbid,location,mood,weather]  
-  > {}  
+  > http://api.tuer.me/diary/save [content,bookid,privacy,forbid,location,mood,weather] 
+  > 所有参数均为必须写入的，暂时api不支持传图  
+  > {code:'success',message:'写入日记成功'}  
 
 * 获取用户日记列表  
   
