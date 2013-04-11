@@ -121,11 +121,12 @@
 * 删除日记 <em>授权</em>  
 
   > http://api.tuer.me/diary/del [id]  
-  > {}  
+  > id为日记id,成功删除后返回  
+  > {code:'success',message:'删除成功'}    
 
 * 写新日记 <em>授权</em>  
    
-  > http://api.tuer.me/diary/save [content,bookid,privacy,location,mood,weather]  
+  > http://api.tuer.me/diary/save [content,bookid,privacy,forbid,location,mood,weather]  
   > {}  
 
 * 获取用户日记列表  
