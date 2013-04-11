@@ -105,36 +105,119 @@
   > 所有的隐私日记均不可以被获取，取得的列表均为排除了隐私日记的列表。  
 
 * 获取一条日记详细信息
-* 修改日记信息 <em>授权</em>
-* 删除日记 <em>授权</em>
-* 写新日记 <em>授权</em>
-* 获取用户所有公开日记列表
+  
+  > http://api.tuer.me/diary/info/id  
+  > {}  
+  
+* 修改日记信息 <em>授权</em>  
+  
+  > http://api.tuer.me/diary/edit/id [content,bookid,privacy,location,mood,weather]  
+  > {}  
+  
+* 删除日记 <em>授权</em>  
+
+  > http://api.tuer.me/diary/del [id]  
+  > {}  
+
+* 写新日记 <em>授权</em>  
+   
+  > http://api.tuer.me/diary/save [content,bookid,privacy,location,mood,weather]  
+  > {}  
+
+* 获取用户所有公开日记列表  
+  
+  > http://api.tuer.me/diaries/user/uid [uid,page,count]
+  > {}
+
 * 获取用户日记本下所有公开日记列表
+
+  > http://api.tuer.me/diaries/notebook/bookid [bookid,page,count]  
+  > {}  
+
 * 获取全站最新日记列表
+
+  > http://api.tuer.me/diaries/news [page,count]  
+  > {}  
+  
 * 获取关注的人的日记列表
 
+  > http://api.tuer.me/diaries/follow/uid [uid,page,count]  
+  > {}  
+  
 #### 评论相关  
 
 * 获取一条日记的评论信息
+
+  > http://api.tuer.me/comment/info/id [id,page,count]  
+  > {}  
+  
 * 写评论,回复评论 <em>授权</em>
+
+  > http://api.tuer.me/comment/save [diaryid,content,replyid,replyname,userid]
+  > {}  
+
 * 删除评论 <em>授权</em>
+
+  > http://api.tuer.me/comment/del [id]  
+  > {}  
+
 
 #### 日记本相关  
 
-* 获取用户所有日记本列表
+* 获取用户所有日记本列表  
+
+  > http://api.tuer.me/
+  > {}  
+  
 * 新增日记本 <em>授权</em>
+
+  > http://api.tuer.me/
+  > {}  
+
 * 修改日记本 <em>授权</em>
+
+  > http://api.tuer.me/
+  > {}  
+
 * 删除日记本 <em>授权</em>
+
+  > http://api.tuer.me/
+  > {}  
 
 #### Todo相关  
 
 * 获取用户todo列表
+
+  > http://api.tuer.me/
+  > {}  
+
 * 修改todo信息 <em>授权</em>
+
+  > http://api.tuer.me/
+  > {}  
+
 * 新增一条todo <em>授权</em>
+
+  > http://api.tuer.me/
+  > {}  
+
 * 删除一条todo <em>授权</em>
+
+  > http://api.tuer.me/
+  > {}  
+
+#### tips相关  
+
+* 获取最新消息 
+
+  > http://api.tuer.me/
+  > {}  
 
 #### token相关  
 
 * 刷新token值和有效期 
-  
+
+  > http://api.tuer.me/
+  > {}  
+
 ### 错误信息查询
