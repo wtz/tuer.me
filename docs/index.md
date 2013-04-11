@@ -133,8 +133,8 @@
 
 * 获取用户日记本下所有公开日记列表
 
-  > http://api.tuer.me/diaries/notebook/bookid [page,count]  
-  > get方法，bookid为日记本id，支持page和count  
+  > http://api.tuer.me/diaries/notebook/bookid [uid,page,count]  
+  > get方法，bookid为日记本id，uid为用户id,支持page和count  
   > {data:[],count:count}    
 
 * 获取全站最新日记列表
