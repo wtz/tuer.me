@@ -107,7 +107,8 @@
 * 获取一条日记详细信息
   
   > http://api.tuer.me/diary/info/id  
-  > {}  
+  > get方法，id为日记id
+  > 返回值参见feed中的diary返回值.  
   
 * 修改日记信息 <em>授权</em>  
   
@@ -127,22 +128,26 @@
 * 获取用户所有公开日记列表  
   
   > http://api.tuer.me/diaries/user/uid [page,count]
-  > {}
+  > get方法，uid为获取用户id，支持page和count  
+  > {data:[],count:count} data中为日记详细列表，格式同单条日记格式  
 
 * 获取用户日记本下所有公开日记列表
 
   > http://api.tuer.me/diaries/notebook/bookid [page,count]  
-  > {}  
+  > get方法，bookid为日记本id，支持page和count  
+  > {data:[],count:count}    
 
 * 获取全站最新日记列表
 
   > http://api.tuer.me/diaries/news [page,count]  
-  > {}  
+  > get方法,支持page和count
+  > {data:[],count:count}    
   
 * 获取关注的人的日记列表
 
-  > http://api.tuer.me/diaries/follow/uid [uid,page,count]  
-  > {}  
+  > http://api.tuer.me/diaries/follow/uid [page,count]  
+  > get方法,uid为获取人id，支持page和count
+  > {data:[],count:count}    
   
 #### 评论相关  
 
