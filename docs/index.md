@@ -125,13 +125,13 @@
   > http://api.tuer.me/diary/save [content,bookid,privacy,location,mood,weather]  
   > {}  
 
-* 获取用户所有公开日记列表  
+* 获取用户日记列表  
   
   > http://api.tuer.me/diaries/user/uid [page,count]
   > get方法，uid为获取用户id，支持page和count  
   > {data:[],count:count} data中为日记详细列表，格式同单条日记格式  
 
-* 获取用户日记本下所有公开日记列表
+* 获取用户日记本日记列表
 
   > http://api.tuer.me/diaries/notebook/bookid [uid,page,count]  
   > get方法，bookid为日记本id，uid为用户id,支持page和count  
