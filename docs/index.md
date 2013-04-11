@@ -147,7 +147,7 @@
 
   > http://api.tuer.me/diaries/follow/uid [page,count]  
   > get方法,uid为获取人id，支持page和count
-  > {data:[],count:count}    
+  > {data:[],count:count} 不返回隐私日记     
   
 #### 评论相关  
 
