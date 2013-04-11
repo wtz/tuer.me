@@ -102,39 +102,132 @@
   
 #### 日记相关 
   
-  > 所有的隐私日记均不可以被获取，取得的列表均为排除了隐私日记的列表。  
+  > 隐私日记会根据token来返回，如果不带token，则隐私日记不返回内容，如果带token，则视为用户登陆，可返回属于自己的隐私日记。  
 
 * 获取一条日记详细信息
-* 修改日记信息 <em>授权</em>
-* 删除日记 <em>授权</em>
-* 写新日记 <em>授权</em>
-* 获取用户所有公开日记列表
-* 获取用户日记本下所有公开日记列表
+  
+  > http://api.tuer.me/diary/info/id  
+  > get方法，id为日记id
+  > 返回值参见feed中的diary返回值.  
+  
+* 修改日记信息 <em>授权</em>  
+  
+  > http://api.tuer.me/diary/edit/id [content,bookid,privacy,forbid,location,mood,weather]  
+  > content为日记内容，bookid为日记本id，privacy为是否隐私，forbid是是否可以评论  
+  > location为地点，mood为心情，weather为天气，mood和weather为0,1,2,3,4形式掩码  
+  > 以上参数至少要有一个
+  > {code:'success',message:'修改成功'}  
+  
+* 删除日记 <em>授权</em>  
+
+  > http://api.tuer.me/diary/del [id]  
+  > id为日记id,成功删除后返回  
+  > {code:'success',message:'删除成功'}    
+
+* 写新日记 <em>授权</em>  
+   
+  > http://api.tuer.me/diary/save [content,bookid,privacy,forbid,location,mood,weather] 
+  > 所有参数均为必须写入的，暂时api不支持传图  
+  > {code:'success',message:'写入日记成功'}  
+
+* 获取用户日记列表  
+  
+  > http://api.tuer.me/diaries/user/uid [page,count]
+  > get方法，uid为获取用户id，支持page和count  
+  > {data:[],count:count} data中为日记详细列表，格式同单条日记格式  
+
+* 获取用户日记本日记列表
+
+  > http://api.tuer.me/diaries/notebook/bookid [uid,page,count]  
+  > get方法，bookid为日记本id，uid为用户id,支持page和count  
+  > {data:[],count:count}    
+
 * 获取全站最新日记列表
+
+  > http://api.tuer.me/diaries/news [page,count]  
+  > get方法,支持page和count
+  > {data:[],count:count}    
+  
 * 获取关注的人的日记列表
 
+  > http://api.tuer.me/diaries/follow/uid [page,count]  
+  > get方法,uid为获取人id，支持page和count
+  > {data:[],count:count} 不返回隐私日记     
+  
 #### 评论相关  
 
 * 获取一条日记的评论信息
+
+  > http://api.tuer.me/comment/info/id [id,page,count]  
+  > {}  
+  
 * 写评论,回复评论 <em>授权</em>
+
+  > http://api.tuer.me/comment/save [diaryid,content,replyid,replyname]
+  > {}  
+
 * 删除评论 <em>授权</em>
+
+  > http://api.tuer.me/comment/del [id]  
+  > {}  
+
 
 #### 日记本相关  
 
-* 获取用户所有日记本列表
+* 获取用户所有日记本列表  
+
+  > http://api.tuer.me/notebook/user/uid [uid,page,count]  
+  > {}  
+  
 * 新增日记本 <em>授权</em>
+
+  > http://api.tuer.me/notebook/save  [bookname,bgcolor]  
+  > {}  
+
 * 修改日记本 <em>授权</em>
+
+  > http://api.tuer.me/notebook/edit/bookid [bookname,bgcolor]  
+  > {}  
+
 * 删除日记本 <em>授权</em>
+
+  > http://api.tuer.me/notebook/del [bookid]  
+  > {}  
 
 #### Todo相关  
 
 * 获取用户todo列表
+
+  > http://api.tuer.me/todo/user/uid [page,count]  
+  > {}  
+
 * 修改todo信息 <em>授权</em>
+
+  > http://api.tuer.me/todo/edit/id [content,important]  
+  > {}  
+
 * 新增一条todo <em>授权</em>
+
+  > http://api.tuer.me/todo/save [content,important]
+  > {}  
+
 * 删除一条todo <em>授权</em>
+
+  > http://api.tuer.me/del [id]  
+  > {}  
+
+#### tips相关  
+
+* 获取提醒消息 <em>授权</em>
+
+  > http://api.tuer.me/tips/all    
+  > {}  
 
 #### token相关  
 
 * 刷新token值和有效期 
-  
+
+  > http://api.tuer.me/token/refresh [client_id,secret,oldtoken]  
+  > {}  
+
 ### 错误信息查询
