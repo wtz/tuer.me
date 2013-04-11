@@ -112,8 +112,11 @@
   
 * 修改日记信息 <em>授权</em>  
   
-  > http://api.tuer.me/diary/edit/id [content,bookid,privacy,location,mood,weather]  
-  > {}  
+  > http://api.tuer.me/diary/edit/id [content,bookid,privacy,forbid,location,mood,weather]  
+  > content为日记内容，bookid为日记本id，privacy为是否隐私，forbid是是否可以评论  
+  > location为地点，mood为心情，weather为天气，mood和weather为0,1,2,3,4形式掩码  
+  > 以上参数至少要有一个
+  > {code:'success',message:'修改成功'}  
   
 * 删除日记 <em>授权</em>  
 
