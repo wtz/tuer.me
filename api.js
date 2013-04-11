@@ -11,6 +11,7 @@ comment = require('./routes/apis/comment'),
 feed = require('./routes/apis/feed'),
 todo = require('./routes/apis/todo'),
 notebook = require('./routes/apis/notebook'),
+tips = require('./routes/apis/tips'),
 token = require('./routes/apis/token');
 
 var paths = {
@@ -26,7 +27,7 @@ var paths = {
 	//diary
 	'diary/info/:id': ['public', diary.info, 'get'],
 	'diary/edit/:id': ['private', diary.edit, 'post'],
-	'diary/del/:id': ['private', diary.del, 'post'],
+	'diary/del': ['private', diary.del, 'post'],
 	'diary/save': ['private', diary.save, 'post'],
 	'diaries/user/:uid': ['public', diary.user, 'get'],
 	'diaries/notebook/:bookid': ['public', diary.notebook, 'get'],
@@ -46,6 +47,8 @@ var paths = {
 	'todo/edit/:id': ['private', todo.edit, 'post'],
 	'todo/save': ['private', todo.save, 'post'],
 	'todo/del/:id': ['private', todo.del, 'post'],
+    //tips
+    'tips/all':['private',tips.all,'get'],
 	//token
 	'token/refresh': ['private', token.refresh, 'post']
 };
