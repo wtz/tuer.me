@@ -46,13 +46,14 @@ exports.info = function(req, res, next) {
 };
 
 exports.edit = function(req, res, next) {
-	var id = req.params.uid;
+	var id = req.params.id;
 	if (req.body || id) {
 		var content = req.body.content,
 		bookid = req.body.bookid,
 		privacy = req.body.privacy,
 		location = req.body.location,
 		mood = req.body.mood,
+        forbid = req.body.forbid,
 		weather = req.body.weather,
 		update = {};
 
@@ -74,6 +75,7 @@ exports.edit = function(req, res, next) {
 				next(new restify.InvalidArgumentError('隐私参数不正确'));
 				return;
 			}
+            update.privacy = privacy;
 		}
 
 		if (location) {
@@ -110,7 +112,7 @@ exports.edit = function(req, res, next) {
 		}
 
 		if (bookid) {
-			tuerBase.findById(bookid, 'notebook', function(err, notebook) {
+			tuerBase.findById(bookid, 'notebooks', function(err, notebook) {
 				if (err) next(err);
 				else {
 					update.bookid = notebook._id.toString();
@@ -125,7 +127,7 @@ exports.edit = function(req, res, next) {
 			tuerBase.findById(id, 'diary', function(err, diary) {
 				if (err) next(err);
 				else {
-					if (req.authorization.userdata._id != diary.userid.toString()) {
+					if (req.authorization.userdata._id.toString() != diary.userid.toString()) {
 						next(new restify.NotAuthorizedError('not authorized'));
 						return;
 					}
@@ -153,10 +155,11 @@ exports.edit = function(req, res, next) {
 exports.del = function(req, res, next) {
 	if (req.body) {
 		if (req.body.id) {
+            var id = req.body.id;
 			tuerBase.findById(id, 'diary', function(err, diary) {
 				if (err) next(err);
 				else {
-					if (req.authorization.userdata._id != diary.userid.toString()) {
+					if (req.authorization.userdata._id.toString() != diary.userid.toString()) {
 						next(new restify.NotAuthorizedError('not authorized'));
 						return;
 					}
@@ -217,28 +220,77 @@ exports.save = function(req, res, next) {
 		privacy = req.body.privacy || 0,
 		forbid = req.body.forbid || 0;
 
-		if (bookid || content || location || weather || mood) {
+		if (!bookid || !content || !location || !weather || !mood || !forbid) {
 			next(new restify.InvalidArgumentError('参数不全'));
 			return;
 		}
 
-		if ((privacy !== 0 && privacy != 1) || (forbid !== 0 && forbid != 1)) {
+		if ((privacy != '0' && privacy != 1) || (forbid != '0' && forbid != 1)) {
 			next(new restify.InvalidArgumentError('privacy forbid参数不正确'));
 			return;
 		}
 
+		if (content) {
+			content = content.trim();
+			if (content === '') {
+				next(new restify.InvalidArgumentError('日记内容不能为空'));
+				return;
+			}
+			if (content.length > 22000) {
+				next(new restify.InvalidArgumentError('日记内容不能超过22000字'));
+				return;
+			}
+		}
+
+		if (privacy) {
+			if (privacy != 1 && privacy != '0') {
+				next(new restify.InvalidArgumentError('隐私参数不正确'));
+				return;
+			}
+		}
+
+		if (location) {
+			location = location.trim();
+			if (location.length > 10) {
+				next(new restify.InvalidArgumentError('地点参数不能超过10个字'));
+				return;
+			}
+		}
+
+		if (mood) {
+			if (mood != '0' && mood != 1 && mood != 2 && mood != 3) {
+				next(new restify.InvalidArgumentError('心情参数不正确'));
+				return;
+			}
+		}
+
+		if (weather) {
+			if (weather != '0' && weather != 1 && weather != 2 && weather != 3 && weather != 4) {
+				next(new restify.InvalidArgumentError('心情参数不正确'));
+				return;
+			}
+		}
+
+		if (forbid) {
+			if (forbid != 1 && forbid != '0') {
+				next(new restify.InvalidArgumentError('forbid参数不正确'));
+				return;
+			}
+		}
+
 		var savedata = {
 			content: content,
-			userid: req.authorization.userdata._id,
+			userid: req.authorization.userdata._id.toString(),
 			filelist: {},
 			mood: mood,
 			weather: weather,
+            location:location,
 			privacy: privacy,
 			forbid: forbid,
 			commentcount: 0
 		};
 
-		tuerBase.findById(bookid, 'notebook', function(err, notebook) {
+		tuerBase.findById(bookid, 'notebooks', function(err, notebook) {
 			if (err) next(err);
 			else {
 				savedata.notebook = notebook._id.toString();
