@@ -168,8 +168,8 @@
 
 * 删除评论 <em>授权</em>
 
-  > http://api.tuer.me/comment/del/id [id]  
-  > {code:'success',msg:'删除成功'}  //这里的id要传入mongo id
+  > http://api.tuer.me/comment/del/id [id,diaryid]  
+  > {code:'success',msg:'删除成功'}  //这里的id要传入mongo id，为commentid
 
 
 #### 日记本相关  
