@@ -159,17 +159,17 @@
 * 获取一条日记的评论信息
 
   > http://api.tuer.me/comment/info/id [id,page,count]  
-  > {}  
+  > {data:[],count:count} //其中的_id，userid均为mongo id  
   
 * 写评论,回复评论 <em>授权</em>
 
-  > http://api.tuer.me/comment/save [diaryid,content,replyid,replyname]
-  > {}  
+  > http://api.tuer.me/comment/save/id [id,content,replyid,replyname]  
+  > {code:'success',msg:'回复成功'}  //这里的id，replyid均为mongo id
 
 * 删除评论 <em>授权</em>
 
-  > http://api.tuer.me/comment/del [id]  
-  > {}  
+  > http://api.tuer.me/comment/del/id [id,diaryid]  
+  > {code:'success',msg:'删除成功'}  //这里的id要传入mongo id，为commentid
 
 
 #### 日记本相关  
