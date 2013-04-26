@@ -176,23 +176,23 @@
 
 * 获取用户所有日记本列表  
 
-  > http://api.tuer.me/notebook/user/uid [uid,page,count]  
-  > {}  
+  > http://api.tuer.me/notebook/user/uid [uid]   
+  > {data:[],count:count}  //返回所有日记本列表信息,不支持page和count  
   
 * 新增日记本 <em>授权</em>
 
   > http://api.tuer.me/notebook/save  [bookname,bgcolor]  
-  > {}  
+  > {code:'success',msg:'新建日记本成功'}  
 
 * 修改日记本 <em>授权</em>
 
   > http://api.tuer.me/notebook/edit/bookid [bookname,bgcolor]  
-  > {}  
+  > {code:'success',msg:'修改日本成功'}  
 
 * 删除日记本 <em>授权</em>
 
   > http://api.tuer.me/notebook/del [bookid]  
-  > {}  
+  > {code:'success',msg:'删除日记本成功，该日记本日记会转移到默认日记'}  
 
 #### Todo相关  
 
