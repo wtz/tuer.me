@@ -222,6 +222,11 @@
 
   > http://api.tuer.me/tips/all    
   > {}  
+  
+* 删除提醒消息 <em>授权</em>  
+ 
+  > http://api.tuer.me/tips/del/id  
+  > {}  
 
 #### token相关  
 
