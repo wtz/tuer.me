@@ -200,12 +200,12 @@
 * 获取提醒消息 <em>授权</em>  
 
   > http://api.tuer.me/tips/all    
-  > {data:[],count:count}  //type为消息类型，content为消息内容，url需要自己拼接，_id为消息id，id为相应的userid或者dirayid  
+  > {data:[],count:count}  //type为消息类型，content为消息内容，url需要自己拼接，_id为对应的mongo id，id为相应的userid或者dirayid  
   
 * 删除提醒消息 <em>授权</em>  
  
   > http://api.tuer.me/tips/del/id  
-  > {code:'success',msg:'删除消息成功'}  //id为消息id  
+  > {code:'success',msg:'删除消息成功'}  //id为消息中的_id  
 
 #### token相关  
 
