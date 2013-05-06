@@ -194,31 +194,10 @@
   > http://api.tuer.me/notebook/del [bookid]  
   > {code:'success',msg:'删除日记本成功，该日记本日记会转移到默认日记'}  
 
-#### Todo相关  
-
-* 获取用户todo列表
-
-  > http://api.tuer.me/todo/user/uid [page,count]  
-  > {}  
-
-* 修改todo信息 <em>授权</em>
-
-  > http://api.tuer.me/todo/edit/id [content,important]  
-  > {}  
-
-* 新增一条todo <em>授权</em>
-
-  > http://api.tuer.me/todo/save [content,important]
-  > {}  
-
-* 删除一条todo <em>授权</em>
-
-  > http://api.tuer.me/del [id]  
-  > {}  
 
 #### tips相关  
 
-* 获取提醒消息 <em>授权</em>
+* 获取提醒消息 <em>授权</em>  
 
   > http://api.tuer.me/tips/all    
   > {}  
