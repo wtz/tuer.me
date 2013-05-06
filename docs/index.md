@@ -205,7 +205,7 @@
 * 删除提醒消息 <em>授权</em>  
  
   > http://api.tuer.me/tips/del/id  
-  > {code:'success',msg:'删除消息成功'}  
+  > {code:'success',msg:'删除消息成功'}  //id为消息id  
 
 #### token相关  
 
