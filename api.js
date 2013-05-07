@@ -40,9 +40,9 @@ var paths = {
 	'notebook/save': ['private', notebook.save, 'post'],
 	'notebook/edit/:id': ['private', notebook.edit, 'post'],
 	'notebook/del/:id': ['private', notebook.del, 'post'],
-    //tips
-    'tips/all':['private',tips.all,'get'],
-    'tips/del/:id':['private',tips.del,'post']
+	//tips
+	'tips/all': ['private', tips.all, 'get'],
+	'tips/del/:id': ['private', tips.del, 'post']
 };
 
 serializer = serializer.createSecureSerializer('tuer encrytion secret', 'tuer signing secret');
@@ -56,7 +56,9 @@ server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
 server.use(restify.jsonp());
 server.use(restify.gzipResponse());
-server.use(restify.bodyParser({mapParams:false}));
+server.use(restify.bodyParser({
+	mapParams: false
+}));
 server.use(restify.throttle({
 	burst: 3,
 	rate: 1,
@@ -107,7 +109,7 @@ server.use(function(req, res, next) {
 				if (grant.appkey == client_id && grant.token == atok) {
 					if (grant_date.getTime() + TOKEN_TTL > Date.now()) {
 						req.authorization = {
-                            atok:atok,
+							atok: atok,
 							extra_data: extra_data,
 							userdata: data,
 							user_id: user_id,
