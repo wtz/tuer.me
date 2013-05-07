@@ -9,10 +9,8 @@ var user = require('./routes/apis/user'),
 diary = require('./routes/apis/diary'),
 comment = require('./routes/apis/comment'),
 feed = require('./routes/apis/feed'),
-todo = require('./routes/apis/todo'),
 notebook = require('./routes/apis/notebook'),
-tips = require('./routes/apis/tips'),
-token = require('./routes/apis/token');
+tips = require('./routes/apis/tips');
 
 var paths = {
 	//user
@@ -42,15 +40,9 @@ var paths = {
 	'notebook/save': ['private', notebook.save, 'post'],
 	'notebook/edit/:id': ['private', notebook.edit, 'post'],
 	'notebook/del/:id': ['private', notebook.del, 'post'],
-	//todo
-	'todo/user/:uid': ['public', todo.user, 'get'],
-	'todo/edit/:id': ['private', todo.edit, 'post'],
-	'todo/save': ['private', todo.save, 'post'],
-	'todo/del/:id': ['private', todo.del, 'post'],
     //tips
     'tips/all':['private',tips.all,'get'],
-	//token
-	'token/refresh': ['private', token.refresh, 'post']
+    'tips/del/:id':['private',tips.del,'post']
 };
 
 serializer = serializer.createSecureSerializer('tuer encrytion secret', 'tuer signing secret');
@@ -73,7 +65,7 @@ server.use(restify.throttle({
 
 //全局校验
 server.use(function(req, res, next) {
-	var data, atok, user_id, client_id, grant_date, extra_data, TOKEN_TTL = 100 * 24 * 60 * 60 * 1000; //7天有效期
+	var data, atok, user_id, client_id, grant_date, extra_data, TOKEN_TTL = 30 * 24 * 60 * 60 * 1000; //30天有效期
 	if (req.query['access_token']) {
 		atok = req.query['access_token'];
 	} else if ((req.headers['authorization'] || '').indexOf('Bearer ') === 0) {
@@ -115,6 +107,7 @@ server.use(function(req, res, next) {
 				if (grant.appkey == client_id && grant.token == atok) {
 					if (grant_date.getTime() + TOKEN_TTL > Date.now()) {
 						req.authorization = {
+                            atok:atok,
 							extra_data: extra_data,
 							userdata: data,
 							user_id: user_id,
