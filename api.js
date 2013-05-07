@@ -10,6 +10,7 @@ diary = require('./routes/apis/diary'),
 comment = require('./routes/apis/comment'),
 feed = require('./routes/apis/feed'),
 notebook = require('./routes/apis/notebook'),
+config = require('./lib/config'),
 tips = require('./routes/apis/tips');
 
 var paths = {
