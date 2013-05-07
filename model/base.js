@@ -192,16 +192,7 @@ tuerBase.prototype.updateById = function(id, data, collection, callback) {
 	this.getCollection(collection, function(err, db) {
 		if (err) callback(err);
 		else {
-			var source;
-			try {
-				source = {
-					_id: ObjectID.createFromHexString(id)
-				};
-			} catch(e) {
-				source = {
-					'pageurl': id
-				};
-			}
+			var source = self._getIdSource(id);
 			db.update(source, data, {
 				safe: true
 			},
@@ -213,15 +204,16 @@ tuerBase.prototype.updateById = function(id, data, collection, callback) {
 	});
 };
 
-tuerBase.prototype.update = function(source, data, collection, callback) {
+tuerBase.prototype.update = function(source, data, collection, callback, upsert) {
 	var self = this;
 	this.getCollection(collection, function(err, db) {
 		if (err) callback(err);
 		else {
-			db.update(source, data, {
+			var options = {
 				safe: true
-			},
-			function(err, data) {
+			};
+			if (upsert) options['upsert'] = true;
+			db.update(source, data, options, function(err, data) {
 				if (err) callback(err);
 				else callback(null, data);
 			});
@@ -242,9 +234,8 @@ tuerBase.prototype.findOne = function(source, collection, callback) {
 	});
 };
 
-tuerBase.prototype.findUser = function(id, callback) {
-	var self = this,
-	search = {};
+tuerBase.prototype._getIdSource = function(id) {
+	var search = {};
 	if (id.length === 24) {
 		search = {
 			_id: ObjectID.createFromHexString(id.toString())
@@ -262,7 +253,12 @@ tuerBase.prototype.findUser = function(id, callback) {
 			pageurl: id
 		};
 	}
-    console.log(search);
+	return search;
+};
+
+tuerBase.prototype.findUser = function(id, callback) {
+	var self = this,
+	search = self._getIdSource(id);
 	self.findOne(search, 'users', function(err, data) {
 		if (err) callback(err);
 		else {
@@ -277,24 +273,7 @@ tuerBase.prototype.findById = function(id, collection, callback) {
 	this.getCollection(collection, function(err, db) {
 		if (err) callback(err);
 		else {
-			var search = {};
-			if (id.length === 24) {
-				search = {
-					_id: ObjectID.createFromHexString(id.toString())
-				};
-	        } else if ((/^[0-9]*$/).test(id) && id.toString().length < 24) {
-				search = {
-					id: parseInt(id, 10)
-				};
-			} else if (typeof id === 'object') {
-				search = {
-					_id: ObjectID.createFromHexString(id.toString())
-				};
-			} else {
-				search = {
-					pageurl: id
-				};
-			}
+			var search = self._getIdSource(id);
 			db.findOne(search, function(err, data) {
 				if (err) callback(err);
 				else {
@@ -427,24 +406,7 @@ tuerBase.prototype.findDiaryById = function(id, callback) {
 	this.getCollection('diary', function(err, db) {
 		if (err) callback(err);
 		else {
-			var search = {};
-			if (id.length === 24) {
-				search = {
-					_id: ObjectID.createFromHexString(id.toString())
-				};
-	        } else if ((/^[0-9]*$/).test(id) && id.toString().length < 24) {
-				search = {
-					id: parseInt(id, 10)
-				};
-			} else if (typeof id === 'object') {
-				search = {
-					_id: ObjectID.createFromHexString(id.toString())
-				};
-			} else {
-				search = {
-					pageurl: id
-				};
-			}
+			var search = self._getIdSource(id);
 			self.findDiaryBy(search, 0, 1, function(err, diarys) {
 				if (err) callback(err);
 				else {
@@ -892,18 +854,14 @@ tuerBase.prototype.removeFriend = function(userid, removeid, callback) {
 	this.getCollection('users', function(err, db) {
 		if (err) callback(err);
 		else {
-			db.find({
-				_id: ObjectID.createFromHexString(removeid)
-			}).toArray(function(err, user) {
+			self.findUser(removeid,function(err, user) {
 				if (err) callback(err);
 				else {
-					if (user.length) {
-						db.update({
-							_id: ObjectID.createFromHexString(userid)
-						},
-						{
+					if (user) {
+						var update = self._getIdSource(userid);
+						db.update(update, {
 							'$pull': {
-								'firends': ObjectID.createFromHexString(removeid)
+								'firends': user._id
 							}
 						},
 						function(err, ret) {
@@ -912,7 +870,9 @@ tuerBase.prototype.removeFriend = function(userid, removeid, callback) {
 								if (err) callback(err);
 								else {
 									callback(null, '删除好友成功');
-									self.removeFriendsTips(userid, removeid);
+                                    self.findUser(userid,function(err,data){
+									    self.removeFriendsTips(user._id.toString(),data._id.toString());
+                                    });
 								}
 							}
 						});
@@ -930,28 +890,32 @@ tuerBase.prototype.addFriends = function(userid, addid, callback) {
 	this.getCollection('users', function(err, db) {
 		if (err) callback(err);
 		else {
-			db.find({
-				_id: ObjectID.createFromHexString(addid)
-			}).toArray(function(err, user) {
+			self.findUser(addid,function(err, adduser) {
 				if (err) callback(err);
 				else {
-					if (user.length === 1) {
-						db.update({
-							_id: ObjectID.createFromHexString(addid)
-						},
-						{
-							'$addToSet': {
-								"firends": ObjectID.createFromHexString(userid)
-							}
-						},
-						{
-							safe: true
-						},
-						function(err, ret) {
+					if (adduser) {
+						self.findUser(userid, function(err, user) {
 							if (err) callback(err);
 							else {
-								callback(null, '添加好友成功');
-								self.addFriendsTips(userid, addid);
+								if (user) {
+									db.update(self._getIdSource(addid), {
+										'$addToSet': {
+											"firends": user._id
+										}
+									},
+									{
+										safe: true
+									},
+									function(err, ret) {
+										if (err) callback(err);
+										else {
+											callback(null, '添加好友成功');
+											self.addFriendsTips(user._id.toString(), adduser._id.toString());
+										}
+									});
+								} else {
+									callback('用户不存在');
+								}
 							}
 						});
 					} else {

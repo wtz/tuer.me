@@ -6,6 +6,7 @@ var express = require('express'),
 config = require('./lib/config'),
 rootdir = config.rootdir,
 RedisStore = require('connect-redis')(express);
+var myOAP = require('./lib/OAP');
 var app = express.createServer();
 var wap = express.createServer();
 
@@ -30,6 +31,8 @@ function Configuration(app, rootdir) {
 	app.use(express.favicon(__dirname + '/public/favicon.ico'), {
 		maxAge: 2592000000
 	});
+	app.use(myOAP.oauth());
+	app.use(myOAP.login());
 	app.use(app.router);
 }
 
@@ -45,7 +48,6 @@ function production(app) {
 }
 
 exports.start = function(conf) {
-
 	if (conf) {
 		for (var i in conf) {
 			if (config.hasOwnProperty(i)) config[i] = conf[i];
@@ -80,8 +82,8 @@ exports.start = function(conf) {
 
 	app.listen(config.port);
 	wap.listen(config.mport);
-	//console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 	console.log('app server on ' + config.host);
 	console.log('wap server on ' + config.mhost);
+
 };
 

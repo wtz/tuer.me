@@ -6,8 +6,30 @@ block content
         div(class="span2")
             ul(class="nav nav-pills nav-stacked")
                 li(class="active")
-                    a(href="/admin") 管理首页
+                    a(href="/admin") API管理
         div(class="span10") 
-            h5 管理首页
-            p #{session.userdata.nick} 欢迎您噢,木哈哈！
+            h5 API管理
+            hr
+            if(apis.length)
+              ul(class="media-list")
+                each item,i in apis
+                  li(class="media")
+                    div(class="media-body")
+                      h4(class="media-heading") #{item.appname}
+                      div(class="media") 
+                        p 应用介绍: #{item.appabout}
+                        p 应用地址: #{item.appaddress}
+                        p 应用类型: #{item.type} 
+                          if(item.appkey == null)
+                            span(class="label label-important") 审核中 
+                          else
+                            span(class="label label-success") AppKey: #{item.appkey}
+                        p
+                          a(href="/user/profile/#{item.userid}",class="label label-info") 开发者信息
+                        p
+                          if(item.appkey == null)
+                            a(href="/api/pass?id=#{item._id}&userid=#{item.userid}",class="btn btn-mini") 通过审核
+              !{pag}
+            else
+              p 目前还没有人申请过app key...
     include ../../common/adminfooter

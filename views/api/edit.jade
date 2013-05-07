@@ -26,6 +26,14 @@ block content
                   label(class="control-label",for="J_appCallback") 回调地址: 
                   div(class='controls')
                     input(id="J_appCallback",type="text",placeholder="回调地址",name="appcallback",value="#{api.appcallback}")
+              if(api.appkey)
+                div(class="control-group")
+                    label(class="control-label") app key: 
+                    div(class='controls') #{api.appkey}
+              if(api.secret)
+                div(class="control-group")
+                    label(class="control-label") app secret: 
+                    div(class='controls') #{api.secret}
               div(class="control-group")
                   label(class="control-label") 应用类型: 
                   div(class='controls')
