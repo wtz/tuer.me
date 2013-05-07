@@ -105,7 +105,9 @@ block content
                        div(class='controls')
                           button(class='btn btn-primary',type='submit',id='J_comment_submit') 回复
              else
-               a(href='/login') 登录之后就可以评论啦！
+               a(href='#',id="loginIn") 登录之后就可以评论啦！
+               script 
+                 $('#loginIn').attr('href','/login?next='+encodeURIComponent(location.href));
     include ../common/footer
     if(diary.img)
       div(class="modal hide fade",id="myPic",role="dialog",tabindex="-1",aria-labelledby="myPicLabel",aria-hidden="true")
