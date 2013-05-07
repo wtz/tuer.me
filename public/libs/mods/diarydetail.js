@@ -3,7 +3,7 @@ define(function(require, exports, module) {
         return '<form class="form-horizontal reply" method="post" action="/comment/save" id="J_replaybox">'+
                 '<textarea class="input" name="content" rows="3"></textarea>'+
                 '<div class="reply-btn-box">'+
-                '<button class="btn" type="submit">回复</button>'+
+                '<button class="btn J_replysubmit" type="submit">回复</button>'+
                 '<button class="btn J_replycencel" type="button">取消</button>'+
                 '</div>'+
                 '<input type="hidden" name="replyid" value="'+replyid+'">'+
@@ -32,6 +32,10 @@ define(function(require, exports, module) {
     $('button.J_replycencel').live('click',function(){
         $('#J_replaybox').remove();
         return false;
+    });
+
+    $('form[action="/comment/save"]').bind('submit',function(){
+       $('#J_comment_submit,.J_replysubmit').attr('disabled',true).addClass('disabled'); 
     });
 });
 
