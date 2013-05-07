@@ -11,9 +11,11 @@ NODE=/usr/local/bin/node
 test -x $NODE || exit 0
 function start_app {
     forever start "$DIR/index.js" -l "$DIR/logs/tuer.log" -o "$DIR/logs/tuer.out.log" -e "$DIR/logs/tuer.err.log"
+    forever start "$DIR/api.js" -l "$DIR/logs/tuer-api.log" -o "$DIR/logs/tuer-api.out.log" -e "$DIR/logs/tuer-api.err.log"
 }
 function stop_app {
     forever stop "$DIR/index.js"
+    forever stop "$DIR/api.js"
 }
 case $1 in
     start)
