@@ -7,7 +7,7 @@
   
   > 用户授权方式的API访问，必须在get参数中传递授权token，或者在http header中使用Authorization方式验证。
   
-  > token的有效期默认为7天，过期后需要重新引导用户进行授权,也可以在应用中每次登陆都访问刷新token的API保持一直登陆状态。
+  > token的有效期默认为30天，过期后需要重新引导用户进行授权。
 
 ### 申请APPKEY
 
@@ -207,11 +207,5 @@
   > http://api.tuer.me/tips/del/id  
   > {code:'success',msg:'删除消息成功'}  //id为消息中的_id  
 
-#### token相关  
 
-* 刷新token值和有效期 
-
-  > http://api.tuer.me/token/refresh [client_id,secret,oldtoken]  
-  > {}  
-
-### 错误信息查询
+### 错误信息查询  
