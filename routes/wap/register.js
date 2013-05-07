@@ -141,6 +141,13 @@ exports.active = function(req, res) {
 									html: '您的帐号<b>' + activeData['accounts'] + '</b>在兔耳的密码为<b>' + password + '</b>,热泪欢迎你啊……'
 								},
 								function(err, status) {});
+                                tuerBase.addFeed({
+                                    type:'register',
+                                    id:data[0]._id.toString(),
+                                    uid:data[0]._id.toString()
+                                },function(err){
+                                    if(err) throw err;
+                                });
 							});
 						}
 					});
