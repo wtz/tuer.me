@@ -38,7 +38,7 @@
   
   > {access_token:"xxxxx",tuer_uid:"user_id"} // tuer_uid为此用户id
 
-* 授权结束，这个时候就可以带着这个token值访问到该id的授权API，如果token过期则需要重新引导授权，默认为7天有效期。
+* 授权结束，这个时候就可以带着这个token值访问到该id的授权API，如果token过期则需要重新引导授权，默认为30天有效期。
 * 如果想一直保持登陆状态，则可以使用token值通过访问刷新token值接口，重新获取token和增长有效期，详细见API列表。
 
 ### API列表
