@@ -1,11 +1,11 @@
 var tuerBase = require('../model/base'),
 fs = require('fs'),
 path = require('path'),
-rootdir = require('../lib/config').rootdir,
 util = require('../lib/util'),
 Avatar = require('../lib/avatar'),
 pag = require('../lib/pag').pag,
 config = require('../lib/config'),
+rootdir = config.rootdir,
 escape = require('jade').runtime.escape,
 EventProxy = require('eventproxy').EventProxy;
 
