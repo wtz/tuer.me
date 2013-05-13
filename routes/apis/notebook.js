@@ -46,10 +46,11 @@ exports.save = function(req, res, next) {
 		var bookname = req.body.bookname,
 		owner = req.authorization.userdata._id.toString(),
 		proxy = new EventProxy(),
-		finded = function() {
+		finded = function(id) {
 			util.setCharset(req, res, {
 				code: 'success',
-				msg: '新建日记本成功'
+				msg: '新建日记本成功',
+                id:id
 			});
 		},
 		bgcolor = req.body.bgcolor || '4d67d1';
@@ -61,7 +62,7 @@ exports.save = function(req, res, next) {
 			next(new restify.InvalidArgumentError('bgcolor not invalid'));
 			return;
 		}
-		proxy.assign('updateUser', 'saveBook', 'addfeed', finded);
+		proxy.assign('saveBook','updateUser','addfeed', finded);
 		//增加限制个数的检测
 		tuerBase.getIds('notebook', function(err, obj) {
 			if (err) {
@@ -77,7 +78,7 @@ exports.save = function(req, res, next) {
 					if (err) {
 						next(err);
 					} else {
-						proxy.trigger('saveBook');
+						proxy.trigger('saveBook',obj.id);
 						tuerBase.updateById(owner, {
 							'$inc': {
 								notebook: 1

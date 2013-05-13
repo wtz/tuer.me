@@ -324,7 +324,8 @@ exports.save = function(req, res, next) {
 										else {
 											util.setCharset(req, res, {
 												code: 'success',
-												message: '日记写入成功'
+												message: '日记写入成功',
+                                                id:obj.id
 											});
 										}
 									});

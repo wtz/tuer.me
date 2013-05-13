@@ -59,6 +59,7 @@ exports.info = function(req, res, next) {
 exports.save = function(req, res, next) {
 	if (req.body) {
 		var diaryid = req.params.id,
+        intid = req.params.id,
 		content = req.body.content,
 		replyid = req.body.replyid,
 		replyname = req.body.replyname,
@@ -116,7 +117,8 @@ exports.save = function(req, res, next) {
 										if (replyid && replyid != userid) tuerBase.addDiaryTips(replyid, diaryid);
 										util.setCharset(req, res, {
 											code: 'success',
-											msg: '回复成功'
+											msg: '回复成功',
+                                            diaryid:intid
 										});
 									} else {
 										next(err);
