@@ -82,6 +82,7 @@ exports.signin = function(req, res) {
 		accounts = req.body.email.trim(),
 		pwd = req.body.pwd.trim(),
 		remember = req.body.remember,
+        next_url = req.body.next_url || '/diaries',
 		render = function(data) {
 			var errorMap = {
 				'001': '帐号不存在',
@@ -92,7 +93,7 @@ exports.signin = function(req, res) {
 				res.redirect('/');
 			} else {
 				signsuccess(req, res, data, accounts, pwd, remember, function(res) {
-					res.redirect('/profile/'+data.id);
+					res.redirect(decodeURIComponent(next_url));
 				});
 			}
 		};
