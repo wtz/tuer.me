@@ -3,6 +3,7 @@ block content
   if(session.error.length)
     p(class="error") #{session.error}
   form(class="warp",action="/login",method="post")
+    input(type='hidden',value="#{next_url}",name="next_url")
     p 
      label(for="accounts") Email
     p 
