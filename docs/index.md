@@ -24,7 +24,7 @@
 * 用户登陆兔耳帐号，之后带到相应app的授权页面。
 * 允许授权后，网站会带着一个code值如<em>http://myapp.foo/?code=xxxx</em>跳到你的redirect_uri填写地址，此地址必须要和申请appkey时一致。
 * 阻止授权后会跳转到 <em>http://myapp.foo/?error=access_denied</em> 地址，需要开发者自己处理。
-* 当用户允许授权并回传给应用code值时，应用程序应该把code值，通过post的方式来兔耳换取token值。
+* 当用户允许授权并回传给应用code值时，应用程序应该把code值，通过post的方式来兔耳的 /oauth/access_token 换取token值。
   
   * post需要传递的几个值为如下 
   
