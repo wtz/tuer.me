@@ -7,6 +7,7 @@ config = require('./lib/config'),
 rootdir = config.rootdir,
 RedisStore = require('connect-redis')(express);
 var myOAP = require('./lib/OAP');
+var toobusy = require('toobusy');
 var app = express.createServer();
 var wap = express.createServer();
 
@@ -31,6 +32,13 @@ function Configuration(app, rootdir) {
 	app.use(express.favicon(__dirname + '/public/favicon.ico'), {
 		maxAge: 2592000000
 	});
+    app.use(function(req,res,next){
+        if(toobusy()){
+            res.send(503,"兔耳开小差了，请稍后访问，或手动刷新");
+        }else{
+            next();
+        }
+    });
 	app.use(myOAP.oauth());
 	app.use(myOAP.login());
 	app.use(app.router);
@@ -80,8 +88,15 @@ exports.start = function(conf) {
 	require('./routes')(app);
 	require('./wapRoutes')(wap);
 
-	app.listen(config.port);
+	server = app.listen(config.port);
 	wap.listen(config.mport);
+
+    process.on('SIGINT',function(){
+        server.close();
+        toobusy.shutdown();
+        process.exit();
+    });
+
 	console.log('app server on ' + config.host);
 	console.log('wap server on ' + config.mhost);
 
