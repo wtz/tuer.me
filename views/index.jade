@@ -29,16 +29,8 @@ block content
             div(class='hot')
               h5 API已上线
               p 兔耳API已上线，更多详细请参考网站页脚API链接。
-              h5 图片服务已恢复
-              p 图片已经找回，之前的所有日记图都被洗掉了，大家可以重新编辑自己的日记，重新上传图片。之前全站375张图：
-                a(href='oldpics',target="_blank") 查看地址 
-                真的很对不住大家，明天开始做好各种备份工作，十分抱歉！
-              p 
-                small 2013年03月26日
             include package/hot
     include common/footer
-    script
-      seajs.use('mods/radio.js?t=20130204');
   if(session.is_login)
     script
       seajs.use('mods/index.js?t=20130320');
