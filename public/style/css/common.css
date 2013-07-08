@@ -354,3 +354,6 @@ section{
     position:absolute;
     right:0px;
 }
+.navbar .nav > li > a:hover{
+    background-color:#45AEEA\0;
+}

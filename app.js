@@ -41,6 +41,19 @@ function Configuration(app, rootdir) {
     });
 	app.use(myOAP.oauth());
 	app.use(myOAP.login());
+
+	app.use(function(req, res, next) {
+		//判断ie版本
+		var sys = {};
+		var s;
+		var ua = req.headers['user-agent'].toLowerCase();
+        var host = req.headers['host'];
+		if (!((/^m.tuer.me/).test(host)) && (s = ua.match(/msie ([\d.]+)/)) && parseInt(s[1], 10) <= 7) {
+            res.render('custom/ie',{version:s[1]});
+		} else {
+			next();
+		}
+	});
 	app.use(app.router);
 }
 
