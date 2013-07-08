@@ -1,7 +1,7 @@
 var tuer = require('./app'),
 Log = require('log'),
 fs = require('fs'),
-logpath = '/home/tuer2.0/error.log',
+logpath = __dirname+'/error.log',
 old = fs.readFileSync(logpath,'utf-8'),
 stream = fs.createWriteStream(logpath),
 log = new Log('error',stream);
@@ -13,7 +13,7 @@ process.on('uncaughtException',function(err){
 });
 
 tuer.start({
-    rootdir:'/home/tuer2.0/',
+    rootdir:__dirname,
     port:3000,
     mport:3030,
     cookiepath:'tuer.me',
