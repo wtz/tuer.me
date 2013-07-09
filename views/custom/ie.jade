@@ -57,7 +57,7 @@ html
     div(class="wrap")
       div(class="header")
         h1 兔耳日记 
-          small 留住身边的美好，让生活慢下来
+          small 留住身边的美好，让生活慢下来，一个记录生活的小清新日记网站
       div(class="main")
         h2 干掉你电脑中的IE#{version}吧,
         p 1.为了您的隐私和数据安全，
@@ -107,3 +107,13 @@ html
             p 在这个软硬件飞速更新的时代，IE#{version}的速度和效率极慢极低，在开发人员中已经久负盛名。
           div(class="clear")
         div(class="update_foot")  兔耳日记 &copy; 2012-2022 Tuer.me
+        script
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-33569930-1']);
+          _gaq.push(['_setDomainName', 'tuer.me']);
+          _gaq.push(['_trackPageview']);
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
