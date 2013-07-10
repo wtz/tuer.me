@@ -24,39 +24,6 @@ define(function(require, exports, module) {
 		message: "最多10个字符，还不能带特殊标点~"
 	});
 
-	window.imgforbase64 = function(str,name) {
-		var id = 'J_preview',
-        ext = name.substring(name.lastIndexOf('.')+1,name.length),
-		img;
-		if (!document.getElementById(id)) {
-			img = document.createElement('img');
-			img.id = id;
-			img.src = 'data:image/'+ext+';base64,' + str;
-			document.body.appendChild(img);
-		} else {
-			img = document.getElementById(id);
-			img.src = 'data:image/'+ext+';base64,' + str;
-		}
-        $('#J_avatar').val(img.src);
-	};
-
-	swfobject.embedSWF('http://assest.tuer.me/libs/imgforbase64/imgforbase64.swf?v=20120803', 'avatar', 104, 24, '9.0.0', 'http://www.adobe.com/cfusion/knowledgebase/index.cfm?id=6a253b75', {
-		width: 104,
-		height: 24,
-		outwidth: 150,
-		outheight: 150
-	},
-	{
-		loop: false,
-		menu: false,
-		allowScriptAccess: 'always',
-		allowFullScreen: 'false',
-		quality: 'best',
-		bgcolor: '#fff',
-		wmode: 'transparent'
-	});
-
-
 	$('#J_Change_Avatar').click(function() {
 		return false;
 	});
