@@ -39,6 +39,13 @@ function Configuration(app, rootdir) {
             next();
         }
     });
+	app.use(function(req,res,next){
+		res.header("Access-Control-Allow-Origin","*");
+		res.header("Access-Control-Allow-Headers","X-Requested-With");
+		res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+		res.header("X-Powered-By","3.2.1");
+		next();
+	});
 	app.use(myOAP.oauth());
 	app.use(myOAP.login());
 
@@ -53,13 +60,6 @@ function Configuration(app, rootdir) {
 		} else {
 			next();
 		}
-	});
-	app.all('*',function(req,res,next){
-		res.header("Access-Control-Allow-Origin","*");
-		res.header("Access-Control-Allow-Headers","X-Requested-With");
-		res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
-		res.header("X-Powered-By","3.2.1");
-		next();
 	});
 	app.use(app.router);
 }
