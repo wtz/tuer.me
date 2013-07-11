@@ -33,19 +33,17 @@ function Configuration(app, rootdir) {
 		maxAge: 2592000000
 	});
     app.use(function(req,res,next){
+	res.header("Access-Control-Allow-Origin","*");
+	res.header("Access-Control-Allow-Headers","X-Requested-With");
+	res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+	res.header("X-Powered-By","3.2.1");
         if(toobusy()){
             res.send(503,"兔耳开小差了，请稍后访问，或手动刷新");
         }else{
             next();
         }
     });
-	app.use(function(req,res,next){
-		res.header("Access-Control-Allow-Origin","*");
-		res.header("Access-Control-Allow-Headers","X-Requested-With");
-		res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
-		res.header("X-Powered-By","3.2.1");
-		next();
-	});
+
 	app.use(myOAP.oauth());
 	app.use(myOAP.login());
 
@@ -54,9 +52,9 @@ function Configuration(app, rootdir) {
 		var sys = {};
 		var s;
 		var ua = req.headers['user-agent'].toLowerCase();
-        var host = req.headers['host'];
+        	var host = req.headers['host'];
 		if (!((/^m.tuer.me/).test(host)) && (s = ua.match(/msie ([\d.]+)/)) && parseInt(s[1], 10) <= 7) {
-            res.render('custom/ie',{version:s[1]});
+            		res.render('custom/ie',{version:s[1]});
 		} else {
 			next();
 		}
