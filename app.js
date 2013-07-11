@@ -36,7 +36,6 @@ function Configuration(app, rootdir) {
 	res.header("Access-Control-Allow-Origin","*");
 	res.header("Access-Control-Allow-Headers","X-Requested-With");
 	res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
-	res.header("X-Powered-By","3.2.1");
         if(toobusy()){
             res.send(503,"兔耳开小差了，请稍后访问，或手动刷新");
         }else{
