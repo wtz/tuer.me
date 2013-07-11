@@ -65,6 +65,14 @@ server.use(restify.throttle({
 	ip: true
 }));
 
+server.use(function(req,res,next){
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+    res.header("X-Powered-By",' 3.2.1')
+    next();
+});
+
 //全局校验
 server.use(function(req, res, next) {
 	var data, atok, user_id, client_id, grant_date, extra_data, TOKEN_TTL = 30 * 24 * 60 * 60 * 1000; //30天有效期
