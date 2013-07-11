@@ -491,9 +491,6 @@ var followedusers = function(req, res) {
 var avatar = function(req, res) {
 	var uid = req.params.id;
 	Avatar.getAvatar(uid, 48, 48, function(err, buf, lastMod) {
-		console.log(err);
-		console.log(buf);
-		console.log(lastMod);
 		if (err) res.redirect('500');
 		else {
 			var ifModifiedSince = 'if-modified-since',

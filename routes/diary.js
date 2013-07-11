@@ -39,6 +39,8 @@ var detail = function(req, res, next) {
 		req.session.title = user.nick + '的日记 ' + '<<' + (diary.title || diary.bookname) + '>>';
 		req.session.error = req.flash('error');
 		req.session.template = 'diarydetail';
+        //res.send(user.nick + user.id + user.avatarUrl);
+        
 		res.render('diary/diarydetail', {
 			config: config,
 			session: req.session,
@@ -54,7 +56,7 @@ var detail = function(req, res, next) {
 			}).init(),
 			comments: comments
 		});
-
+        
 	};
 
 	proxy.assign('user', 'isSelf', 'diary', 'comments', render);

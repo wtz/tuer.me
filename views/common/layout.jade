@@ -20,9 +20,9 @@ html
       link(rel="alternate",type="application/rss+xml",href="http://#{config.host}/user/rss/#{rss.address}",title="#{rss.title}")
     each js,i in config.scripts
       script(src='http://#{config.jshost}/#{js}')
-    script
+    script.
       seajs.config({'base':'http://#{config.jshost}/libs/'});
-    script
+    script.
       seajs.use('mods/common.js?v=20121022');
   body(data-spy="scroll",data-target=".bs-docs-sidebar")
     include topbar
