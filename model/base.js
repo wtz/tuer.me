@@ -474,7 +474,7 @@ tuerBase.prototype.batchDiary = function(cursor, callback) {
                                 var weather = diary.weather,
                                     mood = diary.mood;
 								if (weather){
-                                    if(isNaN(weather) || !config.mood[mood]) diary.weather = weather;
+                                    if(isNaN(weather) || !config.weather[weather]) diary.weather = weather;
                                     else diary.weather = config.weather[weather]['value'];
                                 }
 								if (mood){
