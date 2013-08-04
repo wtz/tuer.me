@@ -208,7 +208,7 @@ input[type="radio"]:checked {
   background: #fff;
 }
 input[type="checkbox"]:checked::after {
-  content: url(../img/checkmark.png);
+  content: url(http://css.tuer.me/bootstrap/img/checkmark.png);
   display: block;
   position: absolute;
   top: -6px;
@@ -372,7 +372,7 @@ select:focus:required:invalid:focus {
 .dropdown-menu > .active > a > [class*=" icon-"],
 .dropdown-submenu:hover > a > [class^="icon-"],
 .dropdown-submenu:hover > a > [class*=" icon-"] {
-  background-image: url("../img/glyphicons-halflings.png");
+  background-image: url("http://css.tuer.me/bootstrap/img/glyphicons-halflings.png");
 }
 .dropdown-menu {
   position: absolute;
