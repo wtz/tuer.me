@@ -541,9 +541,9 @@ var update = function(req, res) {
 			privacy: privacy,
 			notebook: bookid
 		};
-		if (weather) updatedata['weather'] = weather;
-		if (mood) updatedata['mood'] = mood;
-		if (location) updatedata['location'] = location;
+		if (weather !== undefined) updatedata['weather'] = weather;
+		if (mood !== undefined) updatedata['mood'] = mood;
+		if (location !== undefined) updatedata['location'] = location;
 
 		tuerBase.updateById(diaryid, {
 			$set: updatedata

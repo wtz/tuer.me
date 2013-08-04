@@ -18,6 +18,7 @@ block content
                 option(value="#{item._id}") #{item.name}
           a(href="/notebook",title="管理我的日记本") &nbsp;&nbsp;管理我的日记本 
       div(class="control-group")
+         //
            each item,i in mood
              label(class="inline")
                if(item.value == diary.mood)
@@ -25,7 +26,14 @@ block content
                else
                  input(type="radio",value="#{item._id}",name="mood") 
                span #{item.value} 
+         label(class="inline")
+           span 心情: 
+             if(diary.mood)
+               input(style="width:90px;",type="text",value="#{diary.mood}",name="mood",placeholder="喜,怒,哀,乐...",maxlength="10")
+             else
+               input(style="width:90px;",type="text",value="",name="mood",placeholder="喜,怒,哀,乐...",maxlength="10")
       div(class="control-group")
+         //
            each item,i in weather
              label(class="inline")
                if(item.value == diary.weather)
@@ -33,6 +41,12 @@ block content
                else
                  input(type="radio",value="#{item._id}",name="weather") 
                span #{item.value} 
+         label(class="inline")
+           span 天气: 
+             if(diary.weather)
+               input(style="width:90px;",type="text",value="#{diary.weather}",name="weather",placeholder="阴,晴,雨,风...",maxlength="10")
+             else
+               input(style="width:90px;",type="text",value="",name="weather",placeholder="阴,晴,雨,风...",maxlength="10")
       div(class="control-group")
             label 地点: 
               if(diary.location)

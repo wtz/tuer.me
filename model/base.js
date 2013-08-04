@@ -471,8 +471,16 @@ tuerBase.prototype.batchDiary = function(cursor, callback) {
 							var bookids = {},
 							bookmap = [];
 							diarys.forEach(function(diary, index) {
-								if (diary.weather) diary.weather = config.weather[diary.weather]['value'];
-								if (diary.mood) diary.mood = config.mood[diary.mood]['value'];
+                                var weather = diary.weather,
+                                    mood = diary.mood;
+								if (weather){
+                                    if(isNaN(weather) || !config.mood[mood]) diary.weather = weather;
+                                    else diary.weather = config.weather[weather]['value'];
+                                }
+								if (mood){
+                                    if(isNaN(mood) || !config.mood[mood]) diary.mood = mood;
+                                    else diary.mood = config.mood[mood]['value'];
+                                }
 								if (bookids[diary.notebook]) {
 									bookids[diary.notebook].push(index);
 								} else {
