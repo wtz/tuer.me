@@ -11,6 +11,8 @@
       "express": "2.5.8"
     , "jade": ">= 0.0.1"
     , "log": "1.4.0"
+    , "lithe":"0.1.5"
+    , "yuicompressor":"2.4.8"
     , "toobusy":"0.2.2"
     , "restify":"2.3.5"
     , "serializer":">=0.0.2 < 0.1.0"
