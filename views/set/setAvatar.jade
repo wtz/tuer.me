@@ -1,8 +1,7 @@
 extends ../common/layout
 block content
-  script(src='http://#{config.jshost}/libs/imgforbase64/swfobject.js');
   link(rel='stylesheet',href='http://#{config.csshost}/libs/Jcrop/css/jquery.Jcrop.min.css');
-  script(src='http://#{config.jshost}/libs/Jcrop/js/jquery.Jcrop.js');
+  script(src='http://#{config.jshost}/??libs/imgforbase64/swfobject.js,libs/Jcrop/js/jquery.Jcrop.min.js');
   div(class='container')
     form(id='avatarSave',class='form-horizontal',action='/set/avatarSave',method='post')
       legend 设置头像
