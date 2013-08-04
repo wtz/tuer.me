@@ -4,5 +4,8 @@
 [submodule "Jcrop"]
     path = public/libs/Jcrop
     url = https://github.com/xiaojue/Jcrop.git
+[submodule "lithe"]
+    path = public/lithe
+    url = https://github.com/xiaojue/lithe.git
 
 
