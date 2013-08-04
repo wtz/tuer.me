@@ -16,11 +16,9 @@ html
     link(rel='stylesheet', href='http://#{config.csshost}/??bootstrap/css/bootstrap.min.css,bootstrap/css/todc-bootstrap.css,style/css/common.css?v=201304021030')
     if(session.template == 'profile' || session.template == 'myprofile')
       link(rel="alternate",type="application/rss+xml",href="http://#{config.host}/user/rss/#{rss.address}",title="#{rss.title}")
-    script(src='http://#{config.jshost}/??seajs/sea.js,jquery/jquery-1.7.2.min.js,bootstrap/js/bootstrap.min.js')
+    script(data-path="http://js.tuer.me/libs/",src='http://#{config.jshost}/??lithe/lithe-min.js,jquery/jquery-1.7.2.min.js,bootstrap/js/bootstrap.min.js')
     script.
-      seajs.config({'base':'http://#{config.jshost}/libs/'});
-    script.
-      seajs.use('mods/common.js?v=20121022');
+      lithe.use('mods/common.js?v=20121022');
   body(data-spy="scroll",data-target=".bs-docs-sidebar")
     include topbar
     block content

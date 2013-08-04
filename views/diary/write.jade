@@ -79,7 +79,7 @@ block content
       div(class='control-group')
           button(type='submit',class='btn btn-primary') #{session.title}
     include ../common/footer
-    script
+    script.
       $("#J_changePic").click(function(){
          $("#J_files").html('<input type="file" name="uploadPic" class="J_files">'); 
       });
