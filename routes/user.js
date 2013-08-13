@@ -193,8 +193,8 @@ var notebook = function(req, res) {
 			item.created_user = user.nick;
 			item.img = util.getpics(150, 1, item.filelist);
 			item.content = item.content.length > 50 ? item.content.slice(0, 50) + '...': item.content;
-			item.weather = item.weather ? config.weather[item.weather].value: undefined;
-			item.mood = item.mood ? config.mood[item.mood].value: undefined;
+			item.weather = item.weather ? (config.weather[item.weather] ? config.weather[item.weather].value : item.weather ): undefined;
+			item.mood = item.mood ? (config.mood[item.mood] ? config.mood[item.mood].value : item.mood): undefined;
 		});
 		req.session.title = notebook.name;
 		req.session.template = 'diarylist';
