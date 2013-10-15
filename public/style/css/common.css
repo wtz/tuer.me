@@ -91,6 +91,9 @@ ul{
 .delete-comment{
     display:inline;
 }
+.comment-content{
+    word-wrap:break-word;
+}
 
 /* comment reply */
 form.reply textarea.input {
