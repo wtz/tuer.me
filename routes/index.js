@@ -33,7 +33,7 @@ var index = function(req,res,next){
                 hotusers:hotusers,
                 pag:new pag({
                     cur:1,
-                    space:15,
+                    space:25,
                     total:feedcount,
                     url:'/feeds'
                 }).init(),
@@ -46,7 +46,7 @@ var index = function(req,res,next){
 
     proxy.assign('feeds','feedcount','usersCount','privacyCount','diariesCount','todoCount','hotusers','hotdiarys',render);
 
-    tuerBase.findFeeds({},0,15,function(err,feeds){
+    tuerBase.findFeeds({},0,25,function(err,feeds){
         if(err){
             res.redirect('500');
         }else{

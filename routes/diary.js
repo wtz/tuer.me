@@ -117,7 +117,7 @@ var list = function(req, res) {
 			util.setTime(item);
 			item.img = util.getpics(150, 1, item.filelist);
 			item.avatarUrl = Avatar.getUrl(item.pageurl);
-			item.content = item.content.length > 50 ? item.content.slice(0, 50) + '...': item.content;
+			item.content = item.content.length > 150 ? item.content.slice(0, 150) + '...': item.content;
 		});
 
 		res.render('diary/diaries', {
@@ -185,7 +185,7 @@ var followedDiaries = function(req, res) {
 			util.setTime(item);
 			item.img = util.getpics(150, 1, item.filelist);
 			item.avatarUrl = Avatar.getUrl(item.pageurl);
-			item.content = item.content.length > 50 ? item.content.slice(0, 50) + '...': item.content;
+			item.content = item.content.length > 150 ? item.content.slice(0, 150) + '...': item.content;
 		});
 
 		res.render('diary/diaries', {

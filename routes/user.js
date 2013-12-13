@@ -34,7 +34,7 @@ var profile = function(req, res) {
 			util.setTime(item);
 			item.created_user = user.nick;
 			item.img = util.getpics(150, 1, item.filelist);
-			item.content = item.content.length > 50 ? item.content.slice(0, 50) + '...': item.content;
+			item.content = item.content.length > 150 ? item.content.slice(0, 150) + '...': item.content;
 		});
 
 		Follows[0].forEach(function(item) {
@@ -83,7 +83,7 @@ var profile = function(req, res) {
 			notebooks: notebooks,
 			pag: new Pag({
 				cur: 1,
-				space: 6,
+				space: 20,
 				url: '/user/' + user.id + '/diaries',
 				total: diaryCount
 			}).init()
@@ -113,7 +113,7 @@ var profile = function(req, res) {
 				}
 			});
 
-			tuerBase.findDiaryByUserId(uid, isSelf, 0, 6, function(err, lists) {
+			tuerBase.findDiaryByUserId(uid, isSelf, 0, 20, function(err, lists) {
 				if (err) {
 					res.redirect('500');
 				} else {
@@ -192,7 +192,7 @@ var notebook = function(req, res) {
 			util.setTime(item);
 			item.created_user = user.nick;
 			item.img = util.getpics(150, 1, item.filelist);
-			item.content = item.content.length > 50 ? item.content.slice(0, 50) + '...': item.content;
+			item.content = item.content.length > 150 ? item.content.slice(0, 150) + '...': item.content;
 			item.weather = item.weather ? (config.weather[item.weather] ? config.weather[item.weather].value : item.weather ): undefined;
 			item.mood = item.mood ? (config.mood[item.mood] ? config.mood[item.mood].value : item.mood): undefined;
 		});
@@ -289,7 +289,7 @@ var diaries = function(req, res, next) {
 			util.setTime(item);
 			item.created_user = user.nick;
 			item.img = util.getpics(150, 1, item.filelist);
-			item.content = item.content.length > 50 ? item.content.slice(0, 50) + '...': item.content;
+			item.content = item.content.length > 150 ? item.content.slice(0, 150) + '...': item.content;
 			item.avatarUrl = Avatar.getUrl(item.userid);
 			item.isSelf = req.session.is_login ? item.userid == req.session.userdata._id.toString() : false;
 		});

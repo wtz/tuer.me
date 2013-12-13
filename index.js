@@ -1,17 +1,17 @@
-var tuer = require('./app'),
+var tuer = require('./app');
+/*
 Log = require('log'),
 fs = require('fs'),
 logpath = __dirname+'/error.log',
 old = fs.readFileSync(logpath,'utf-8'),
 stream = fs.createWriteStream(logpath),
 log = new Log('error',stream);
-
 process.on('uncaughtException',function(err){
     stream.write(old,'utf-8',function(){
         log.error(err); 
     });    
 });
-
+*/
 tuer.start({
     rootdir:__dirname,
     port:3000,
@@ -26,4 +26,3 @@ tuer.start({
     dbport:10001,
     mhost:'m.tuer.me'
 });
-
