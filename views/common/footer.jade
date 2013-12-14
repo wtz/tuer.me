@@ -8,7 +8,9 @@ footer
  p
    each item,i in config.footer
      a(href='#{item.href}') #{item.text} 
-   script(src="http://s96.cnzz.com/stat.php?id=5598883&web_id=5598883&online=2",language="JavaScript")
+   script.
+    var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    document.write(unescape("%3Cspan id='cnzz_stat_icon_5598883'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s96.cnzz.com/stat.php%3Fid%3D5598883%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));
  div
    iframe(src="http://ghbtns.com/github-btn.html?user=xiaojue&repo=tuer.me&type=watch&count=true",allowtransparency="true",frameborder="0",scrolling="0",width="90",height="20")
    iframe(src="http://ghbtns.com/github-btn.html?user=xiaojue&repo=tuer.me&type=fork&count=true",allowtransparency="true",frameborder="0",scrolling="0",width="90",height="20")
