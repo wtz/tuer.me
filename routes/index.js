@@ -10,7 +10,7 @@ var index = function(req,res,next){
     var proxy = new EventProxy(),
         render = function(feeds,feedcount,usersCount,privacyCount,diariesCount,todoCount,hotusers,hotdiarys){
 
-            req.session.title = "首页";
+            req.session.title = "首页 - 总有一些不经意的时光，需要被镌刻";
             req.session.template = "index";
 
             feeds.forEach(function(item){
