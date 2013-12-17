@@ -650,7 +650,7 @@ var remove = function(req, res) {
 	tuerBase.findById(id, 'diary', function(err, diary) {
 		if (err) {
 			res.redirect('500');
-		} else if (diary.userid == req.session.userdata._id.toString()) {
+		} else if (req.session.userdata.isadmin || diary.userid == req.session.userdata._id.toString()) {
 			var filelist = diary['filelist'] || {};
 			tuerBase.removeById(id, 'diary', function(err, ret) {
 				if (err) throw err;

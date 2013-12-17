@@ -61,11 +61,9 @@ var save = function(req, res) {
 										if (replyid && replyid != userid) tuerBase.addDiaryTips(replyid, diaryid);
 									}
 								});
-							}else{
-                            }
+							}
 						});
-					}else{
-                    }
+					}
 				});
 				res.redirect('back');
 			} else {
@@ -84,7 +82,7 @@ var remove = function(req, res) {
 		diaryid = req.body.diaryid,
 		proxy = new EventProxy(),
 		removeComment = function(comment, diary) {
-			if (comment.related_id == userid || diary.userid == userid || comment.userid == userid) {
+			if (req.session.userdata.isadmin || comment.related_id == userid || diary.userid == userid || comment.userid == userid) {
 				deletecomment(commentid, diary._id, comment);
 			} else {
 				res.redirect('500');

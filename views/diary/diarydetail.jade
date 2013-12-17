@@ -65,12 +65,15 @@ block content
                     document.write('<iframe allowTransparency="true" frameborder="0" scrolling="no" src="http://hits.sinajs.cn/A1/weiboshare.html?' + temp.join('&') + '" width="'+ _w+'" height="'+_h+'"></iframe>')
                    })()
              div(class='bar') #{diary.created_at} #{diary.created_user} #{diary.commentcount}回应  
-               if(isSelf)
+               if(isSelf || session.userdata.isadmin)
                  form(action='/diary/remove',method='post') 
                    input(type='hidden',value='#{diary._id}',name='id')
                    div(class='btn-group')
-                     a(class='btn btn-mini',href='/diary/edit/#{diary.id}') Edit
-                     button(class='btn btn-mini btn-danger',type='submit') Del 
+                     if(session.userdata.isadmin)
+                       button(class='btn btn-mini btn-danger',type='submit') Del 
+                     else
+                       a(class='btn btn-mini',href='/diary/edit/#{diary.id}') Edit
+                       button(class='btn btn-mini btn-danger',type='submit') Del 
              if(comments.length)
                each item,i in comments
                   div(class='row-fluid show-grid comment-item')
@@ -81,7 +84,7 @@ block content
                           div(class='comment-bar') #{item.created_at} 
                               a(href='/user/profile/#{item.userpage}') #{item.nick} 
                               small (#{item.profile}) 
-                              if(item.del)
+                              if(item.del || session.userdata.isadmin)
                                 form(class='delete-comment',action='/comment/remove',method='post')
                                   input(value='#{item._id}',type='hidden',name='commentid')
                                   input(value='#{diary._id}',type='hidden',name='diaryid')
