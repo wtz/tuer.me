@@ -8,10 +8,17 @@ var tuerBase = require('../model/base'),
 
 var index = function(req,res,next){
     var proxy = new EventProxy(),
-        render = function(feeds,feedcount,usersCount,privacyCount,diariesCount,todoCount,hotusers,hotdiarys){
+        render = function(feeds,usersCount,privacyCount,diariesCount,diaries,todoCount,hotusers,hotdiarys){
 
             req.session.title = "首页 - 总有一些不经意的时光，需要被镌刻";
             req.session.template = "index";
+
+	    	diaries.forEach(function(item) {
+	    		util.setTime(item);
+	    		item.img = util.getpics(150, 1, item.filelist);
+	    		item.avatarUrl = Avatar.getUrl(item.pageurl);
+	    		item.content = item.content.length > 150 ? item.content.slice(0, 150) + '...': item.content;
+	    	});
 
             feeds.forEach(function(item){
                item.avatarUrl = Avatar.getUrl(item.pageurl || item.id);
@@ -29,12 +36,13 @@ var index = function(req,res,next){
                 config:config,
                 session:req.session,
                 feeds:feeds,
+                diaries:diaries,
                 hotdiarys:hotdiarys,
                 hotusers:hotusers,
                 pag:new pag({
                     cur:1,
                     space:25,
-                    total:feedcount,
+                    total:diaries,
                     url:'/feeds'
                 }).init(),
                 usersCount:usersCount,
@@ -44,9 +52,17 @@ var index = function(req,res,next){
             });
         };
 
-    proxy.assign('feeds','feedcount','usersCount','privacyCount','diariesCount','todoCount','hotusers','hotdiarys',render);
+    proxy.assign('feeds','usersCount','privacyCount','diariesCount','diaries','todoCount','hotusers','hotdiarys',render);
 
-    tuerBase.findFeeds({},0,25,function(err,feeds){
+	tuerBase.findDiarySlice(0, 25, function(err, lists) {
+		if (err) {
+			res.redirect('500');
+		} else {
+			proxy.trigger('diaries', lists);
+		}
+	});
+
+    tuerBase.findFeeds({},0,10,function(err,feeds){
         if(err){
             res.redirect('500');
         }else{
@@ -59,14 +75,6 @@ var index = function(req,res,next){
             res.redirect('500');
         }else {
             proxy.trigger('usersCount',usersCount); 
-        }
-    });
-
-    tuerBase.getCount({},'feed',function(err,feedcount){
-        if(err){
-            res.redirect('500');
-        }else {
-            proxy.trigger('feedcount',feedcount); 
         }
     });
 

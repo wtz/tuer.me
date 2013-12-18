@@ -624,7 +624,6 @@ tuerBase.prototype.findFeeds = function(source, start, end, callback) {
 			} else {
 				proxy.trigger('notebooks', notebooks);
 			}
-
 			if (registers.length) {
 				self.findBySortSlice({
 					_id: {
@@ -643,7 +642,6 @@ tuerBase.prototype.findFeeds = function(source, start, end, callback) {
 			} else {
 				proxy.trigger('registers', registers);
 			}
-
 		}
 	});
 };

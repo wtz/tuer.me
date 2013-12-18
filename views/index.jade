@@ -9,9 +9,41 @@ block content
                 h4 总有一些不经意的时光，需要被镌刻.
                 h5 此时已有#{usersCount}位朋友写下了#{diariesCount}件小事，#{privacyCount}个秘密，#{todoCount}条心愿
             div(class='row')
-              h4 最新动态
+              h4 最新日记
               hr 
-              include package/lastfeed
+              if(diaries.length)
+                div(class='Diary-wrap')
+                  each item,i in diaries 
+                    div(class='Diary-row')
+                      div(class='Diary-left')
+                       a(href='/user/profile/#{item.pageurl}',title='#{item.created_user}')
+                         img(src='#{item.avatarUrl}',class="img-rounded",alt='#{item.created_user}')
+                      div(class='Diary-right')
+                       h5 
+                         a(href="/diary/#{item.id}") #{item.created_user}的日记
+                         if(item.title)
+                           a(href="/diary/#{item.id}") 
+                             small [#{item.title}]
+                           a(href="/user/#{item.pageurl}/notebook/#{item.bookid}") 
+                             small [#{item.bookname}] 
+                         else
+                           a(href="/user/#{item.pageurl}/notebook/#{item.bookid}") 
+                             small [#{item.bookname}] 
+                         if(item.weather)
+                           small [天气:#{item.weather}] 
+                         if(item.mood)
+                           small [心情:#{item.mood}] 
+                         if(item.location)
+                           small [地点:#{item.location}] 
+                       div(class='Diary-content')
+                          if(item.img)
+                           img(class="img-rounded",src='#{item.img}')
+                          p #{item.content}
+                       div(class='bar') #{item.created_at} 
+                         small #{item.commentcount}回复 
+                 !{pag}
+              else
+                p There is nothing yet.
           div(class='span4') 
             if(session.is_login)
               h4 欢迎回来,#{session.userdata.nick}!
@@ -26,7 +58,7 @@ block content
               div(class='well')
                 include package/smallLogin
             div(class='hot')
-              h5 公告 
+              h4 公告 
               p  
                 a(href="http://www.tuer.me/diary/2474",target="_blank") 举报非法或广告日记。
               p  
