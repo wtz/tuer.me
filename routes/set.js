@@ -71,6 +71,10 @@ var update = function(req, res) {
 			proxy.trigger('msg', '唯一地址最好少于是个字节和不带标点的噢');
 			return;
 		}
+        if(pageurl && (!isNaN(pageurl))){
+			proxy.trigger('msg', '唯一地址不能全是数字');
+			return;
+        }
 
 		var updateDB = {
 			nick: nick,
