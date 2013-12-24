@@ -25,7 +25,7 @@ block content
     each item,i in comments
       p 
         a(href="/profile/#{item.userpage}") #{item.nick}:
-        span #{item.content} 
+        span !{item.content} 
         if(item.del)
           form(action="/comment/remove",method="post")
             input(value='#{item._id}',type='hidden',name='commentid')

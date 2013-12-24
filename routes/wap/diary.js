@@ -22,12 +22,12 @@ exports.detail = function(req, res, next) {
 
 		util.setTime(diary);
 		diary.img = util.getpics(80, 1, diary.filelist);
-		diary.content = escape(diary.content).replace(/\r\n/g, '<br>');
+		diary.content = util.drawUrl(escape(diary.content).replace(/\r\n/g, '<br>'));
 
 		user.avatarUrl = Avatar.getUrl(user.id);
 
 		comments.forEach(function(item) {
-			item.content = escape(item.content).replace(/\r\n/g, '<br>');
+		    item.content = util.drawUrl(escape(item.content).replace(/\r\n/g, '<br>'));
 			if (req.session.is_login && (diary.userid == req.session.userdata._id.toString() || item.userid == req.session.userdata._id.toString())) item.del = true;
 		});
 
