@@ -9,6 +9,8 @@ block content
                     a(href="/admin/users") 普通用户管理
                 li(class="active")
                     a(href="/admin/admins") 管理员列表
+                li
+                    a(href="/admin/black") 黑名单列表
         div(class="span10")
             h5 管理员列表
             if(usersCount > 0)
@@ -24,7 +26,7 @@ block content
                       span(class="label label-success",style="margin-right:5px;") #{item.about}
                     if(item.profile !== 'nothing yet')
                       span(class="label label-inverse",style="margin-right:5px;") #{item.profile}
-                    a(class="label label-warning",href="#") 取消管理员
+                    a(class="label label-warning",href="/admin/remove/#{item.id}") 取消管理员
              !{pag}
             else
              p 暂时还没有管理员.

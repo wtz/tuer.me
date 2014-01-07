@@ -24,7 +24,7 @@ block content
                       span(class="label label-success",style="margin-right:5px;") #{item.about}
                     if(item.profile !== 'nothing yet')
                       span(class="label label-inverse",style="margin-right:5px;") #{item.profile}
-                    a(class="label label-warning",href="#") 设置成管理员
+                    a(class="label label-warning",href="/admin/add/#{item.id}") 设置成管理员
              !{pag}
             else
              p 暂时还没有用户.
