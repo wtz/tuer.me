@@ -2,7 +2,7 @@ if(feeds.length)
   div(class='Diary-wrap')
     each item,i in feeds 
       - if(item.feed_type == 'diary')
-          - if(item.privacy == 0)
+          - if(item.privacy === 0)
             div(class='Diary-row')
               div(class='Diary-left')
                a(href='/user/profile/#{item.pageurl}',title='#{item.created_user}')
