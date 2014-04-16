@@ -12,6 +12,7 @@ function batchDiary(data, isSelf) {
 	if (data['location'] === null) data['location'] = '';
 	if (data.img === false) data.img = '';
 	if (data.created_at) data.created_at = new Date(data.created_at).valueOf();
+	if (data.content) data.content.length > 150 ? data.content.slice(0, 150) + '...': data.content;
 	if (data.privacy == 1) {
 		if (!isSelf) delete data['content'];
 		data.privacy = 1;

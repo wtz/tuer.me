@@ -5,7 +5,7 @@ mail = require('../../lib/mail'),
 util = require('../../lib/util'),
 querystring = require('querystring');
 
-var commentout = ['_id', 'related_id', 'userpage', 'nick', 'profile', 'content', 'userid', 'created_at','commentcount'];
+var commentout = ['_id', 'related_id', 'userpage', 'nick', 'profile', 'content', 'userid', 'created_at'];
 
 exports.info = function(req, res, next) {
 	var id = req.params.id;
@@ -63,7 +63,11 @@ exports.save = function(req, res, next) {
 		content = req.body.content,
 		replyid = req.body.replyid,
 		replyname = req.body.replyname,
-		userid = req.authorization.userdata._id.toString();
+		userid = req.authorization.userdata._id.toString(),
+		saveData = {
+	        content: content,
+		    userid: userid
+	    };
 		//校验
 		if (!diaryid || ! content) {
 			next(new restify.InvalidArgumentError('diaryid content为必选'));
@@ -75,7 +79,7 @@ exports.save = function(req, res, next) {
 		}
 
 		if (replyid && replyname) {
-			saveData['content'] = '@' + replyname + ' ' + content;
+			saveData['content'] = '@' + replyname + ' ' + saveData['content'];
 		}
 
 		tuerBase.findById(diaryid, 'diary', function(err, diarydata) {
@@ -85,11 +89,7 @@ exports.save = function(req, res, next) {
 					return;
 				}
 				diaryid = diarydata._id.toString();
-				var saveData = {
-					content: content,
-					related_id: diaryid,
-					userid: userid
-				};
+                saveData['related_id'] = diaryid;
 				tuerBase.save(saveData, 'comment', function(err, data) {
 					if (err) {
 						next(err);
