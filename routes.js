@@ -37,6 +37,18 @@ module.exports = function(app) {
 	app.redirect('500', '/500');
 
 
+	app.get('*', function(req,res,next){
+       if(req.session.usrdata){
+            if(req.session.userdata.is_black){
+                res.redirect('500'); 
+            }else{
+                next();     
+            } 
+       }else{
+            next();     
+       } 
+    });
+
 	app.get('*', login.cookies);
 
 	app.get('/login', login.index);

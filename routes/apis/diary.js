@@ -4,13 +4,14 @@ EventProxy = require('eventproxy').EventProxy,
 util = require('../../lib/util'),
 querystring = require('querystring');
 
-var diaryout = ['id', 'content', 'bookname', 'bookid', 'created_user', 'pageurl', 'privacy', 'location', 'mood', 'weather', 'img', 'created_at'];
+var diaryout = ['id', 'content', 'bookname', 'bookid', 'created_user', 'pageurl', 'privacy', 'location', 'mood', 'weather', 'img', 'created_at','commentcount'];
 
 function batchDiary(data, isSelf) {
 	if (data.mood === null) data.mood = '';
 	if (data.weather === null) data.weather = '';
 	if (data['location'] === null) data['location'] = '';
 	if (data.img === false) data.img = '';
+	if (data.created_at) data.created_at = new Date(data.created_at).valueOf();
 	if (data.privacy == 1) {
 		if (!isSelf) delete data['content'];
 		data.privacy = 1;
@@ -97,7 +98,7 @@ exports.edit = function(req, res, next) {
 
 		if (weather) {
 			if (weather != '0' && weather != 1 && weather != 2 && weather != 3 && weather != 4) {
-				next(new restify.InvalidArgumentError('心情参数不正确'));
+				next(new restify.InvalidArgumentError('天气参数不正确'));
 				return;
 			}
 			update.weather = weather;
@@ -266,7 +267,7 @@ exports.save = function(req, res, next) {
 
 		if (weather) {
 			if (weather != '0' && weather != 1 && weather != 2 && weather != 3 && weather != 4) {
-				next(new restify.InvalidArgumentError('心情参数不正确'));
+				next(new restify.InvalidArgumentError('天气参数不正确'));
 				return;
 			}
 		}

@@ -28,7 +28,7 @@ exports.news = function(req, res, next) {
             for(var i=0;i<feeds.length;i++){
                 var feed = feeds[i],filter = [];
                 if(feed.feed_type == 'diary'){
-                    filter = ['id','content','bookname','bookid','created_user','pageurl','privacy','location','mood','weather','img','created_at'];
+                    filter = ['id','content','bookname','bookid','created_user','pageurl','privacy','location','mood','weather','img','created_at','commentcount'];
                 }
                 if(feed.feed_type == 'todo'){
                     filter = ['content','created_user','pageurl','created_at'];

@@ -5,7 +5,7 @@ mail = require('../../lib/mail'),
 util = require('../../lib/util'),
 querystring = require('querystring');
 
-var commentout = ['_id', 'related_id', 'userpage', 'nick', 'profile', 'content', 'userid', 'created_at'];
+var commentout = ['_id', 'related_id', 'userpage', 'nick', 'profile', 'content', 'userid', 'created_at','commentcount'];
 
 exports.info = function(req, res, next) {
 	var id = req.params.id;
