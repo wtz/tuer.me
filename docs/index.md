@@ -5,9 +5,13 @@
   * 一种不需要授权访问的公共API，必须使用appkey才可以访问。
   * 一种必须使用用户授权token方式获取。
   
-  > 用户授权方式的API访问，必须在get参数中传递授权token，或者在http header中使用Authorization方式验证。
+  > 用户授权方式的API访问，必须在get参数中传递授权token，强烈推荐在http header中使用Authorization方式验证。
+
+  > authorization:Bearer xxxxxxxxx
   
   > token的有效期默认为30天，过期后需要重新引导用户进行授权。
+  
+  > 写入接口，如增改删，都为post方法。
 
 ### 申请APPKEY
 
