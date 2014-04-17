@@ -241,7 +241,7 @@ var notebook = function(req, res) {
 							userid: uid.toString(),
 							notebook: notebook._id.toString()
 						};
-						if (!isSelf) Selector['privacy'] = 0;
+	                    if (!isSelf) Selector['privacy'] = {$ne:'1'};
 						tuerBase.getCount(Selector, 'diary', function(err, count) {
 							if (err) {
 								res.redirect('500');

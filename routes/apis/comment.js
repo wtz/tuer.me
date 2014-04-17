@@ -15,7 +15,9 @@ exports.info = function(req, res, next) {
 		proxy = new EventProxy(),
 		finded = function(comments, count) {
 			for (var i = 0; i < comments.length; i++) {
+				var isSelf = req.authorization ? req.authorization.userdata._id.toString() == comments[i].userid: false;
 				comments[i] = util.filterJson(comments[i], commentout);
+                comments[i].isSelf = isSelf;
 			}
 			util.setCharset(req, res, {
 				data: comments,

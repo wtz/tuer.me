@@ -2,7 +2,21 @@ if(feeds.length)
   div(class='Diary-wrap')
     each item,i in feeds 
       - if(item.feed_type == 'diary')
-          - if(item.privacy === 0)
+          - if(item.privacy == 1)
+            div(class='Diary-row')
+              div(class='Diary-left')
+               a(href='/user/profile/#{item.pageurl}',title='#{item.created_user}')
+                 img(src='#{item.avatarUrl}',class="img-rounded",alt='#{item.created_user}')
+              div(class='Diary-right')
+               h5 #{item.created_user}
+               div(class='Diary-content')
+                 p 
+                   small #{item.created_user} 在 
+                   a(href="/user/#{item.pageurl}/notebook/#{item.bookid}") #{item.bookname} 
+                   中写了一篇仅自己可见的日记...
+               div(class='bar') #{item.created_at} 
+                  small #{item.commentcount}回复
+          - else
             div(class='Diary-row')
               div(class='Diary-left')
                a(href='/user/profile/#{item.pageurl}',title='#{item.created_user}')
@@ -28,20 +42,6 @@ if(feeds.length)
                   if(item.img)
                     img(class="img-rounded",src='#{item.img}')
                   p #{item.content}
-               div(class='bar') #{item.created_at} 
-                  small #{item.commentcount}回复
-          - else
-            div(class='Diary-row')
-              div(class='Diary-left')
-               a(href='/user/profile/#{item.pageurl}',title='#{item.created_user}')
-                 img(src='#{item.avatarUrl}',class="img-rounded",alt='#{item.created_user}')
-              div(class='Diary-right')
-               h5 #{item.created_user}
-               div(class='Diary-content')
-                 p 
-                   small #{item.created_user} 在 
-                   a(href="/user/#{item.pageurl}/notebook/#{item.bookid}") #{item.bookname} 
-                   中写了一篇仅自己可见的日记...
                div(class='bar') #{item.created_at} 
                   small #{item.commentcount}回复
       - if(item.feed_type == 'todo')

@@ -86,7 +86,7 @@ tuerBase.prototype.findAll = function(collection, limit, callback) {
 
 tuerBase.prototype.findAllDiary = function(limit, callback) {
 	this.findDiaryBy({
-		privacy: 0
+		privacy: {$ne:'1'}
 	},
 	0, limit, callback);
 };
@@ -372,7 +372,7 @@ tuerBase.prototype.findDiaryCount = function(id, isSelf, callback) {
 			var searchdata = {
 				userid: id.toString()
 			};
-			if (!isSelf) searchdata['privacy'] = 0;
+			if (!isSelf) searchdata['privacy'] = {$ne:'1'};
 			var cursor = db.find(searchdata);
 			cursor.count(function(err, count) {
 				if (err) callback(err);
@@ -397,7 +397,7 @@ tuerBase.prototype.findDiaryByUsers = function(ids, isSelf, start, end, callback
 			'$in': ids
 		}
 	};
-	if (!isSelf) searchdata['privacy'] = 0;
+	if (!isSelf) searchdata['privacy'] = {$ne:'1'};
 	self.findDiaryBy(searchdata, start, end, callback);
 };
 
@@ -694,7 +694,9 @@ tuerBase.prototype.findDiaryBy = function(source, start, end, callback) {
 tuerBase.prototype.findDiarySlice = function(start, end, callback) {
 	var self = this;
 	self.findDiaryBy({
-		privacy: 0
+		privacy: {
+            $ne:'1'
+        }
 	},
 	start, end, callback);
 };
@@ -843,7 +845,7 @@ tuerBase.prototype.findDiaryTipsByUserId = function(userid, callback) {
 						_id: {
 							'$in': diaryids
 						},
-						privacy: 0
+		                privacy: {$ne:'1'}
 					},
 					'diary', diaryids.length, function(err, data) {
 						if (err) callback(err);
@@ -985,7 +987,7 @@ tuerBase.prototype.getHotDiary = function(limit, callback) {
 		if (err) callback(err);
 		else {
 			var cursor = db.find({
-				privacy: 0
+		        privacy: {$ne:'1'}
 			});
 			cursor.sort({
 				commentcount: - 1
