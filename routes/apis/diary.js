@@ -4,7 +4,7 @@ EventProxy = require('eventproxy').EventProxy,
 util = require('../../lib/util'),
 querystring = require('querystring');
 
-var diaryout = ['id', 'content', 'bookname', 'bookid', 'created_user', 'pageurl', 'privacy', 'location', 'mood', 'weather', 'img', 'created_at','commentcount'];
+var diaryout = ['id', 'content', 'bookname', 'bookid', 'created_user', 'pageurl', 'privacy', 'location', 'mood', 'weather', 'img', 'created_at','commentcount','userid'];
 
 function batchDiary(data, isSelf) {
 	data.isSelf = isSelf;
