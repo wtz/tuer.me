@@ -7,6 +7,7 @@ querystring = require('querystring');
 var diaryout = ['id', 'content', 'bookname', 'bookid', 'created_user', 'pageurl', 'privacy', 'location', 'mood', 'weather', 'img', 'created_at','commentcount'];
 
 function batchDiary(data, isSelf) {
+	data.isSelf = isSelf;
 	if (data.mood === null) data.mood = '';
 	if (data.weather === null) data.weather = '';
 	if (data['location'] === null) data['location'] = '';
