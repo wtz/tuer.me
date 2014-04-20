@@ -69,7 +69,7 @@ server.use(function(req,res,next){
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
-    res.header("X-Powered-By",' 3.2.1')
+    res.header("X-Powered-By",' 3.2.1');
     next();
 });
 
@@ -97,20 +97,22 @@ server.use(function(req, res, next) {
 		next(new restify.NotAuthorizedError('access_token must have'));
 		return;
 	}
-
+    console.log(atok);
 	try {
 		data = serializer.parse(atok);
 		user_id = data[0];
 		client_id = data[1];
 		grant_date = new Date(data[2]);
 		extra_data = data[3];
-	} catch(e) {
+	} catch(e) {	
 		next(new restify.NotAuthorizedError(e.message));
 		return;
 	}
+    console.log(data);
 	tuerBase.findUser(user_id, function(err, data) {
 		//对上面的user_id,client_id,grant_data,extra_data进行校验，ok则可获取api
 		if (err) return next(new restify.NotAuthorizedError(err));
+        console.log(data);
 		if (data && data.tokens) {
 			for (var i = 0; i < data.tokens.length; i++) {
 				var grant = data.tokens[i];
@@ -141,8 +143,8 @@ server.use(function(req, res, next) {
 					}
 				}
 			}
-		}
-		return next(new restify.InvalidArgumentError('this token not exits'));
+        }
+	    return next(new restify.InvalidArgumentError('this token not exits'));
 	});
 });
 
