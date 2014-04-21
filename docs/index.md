@@ -24,7 +24,7 @@
      
 ### 用户授权过程
   
-* 引导用户访问 <em>http://tuer.me/oauth/authorize?client_id=appkey&redirect_uri=callback_url</em> 进行登陆授权。
+* 引导用户访问 <em>http://tuer.me/oauth/authorize?client_id=appkey&redirect_uri=callback_url</em> 进行登陆授权。(移动应用可带着&type=h5的参数，访问到简版自适应的授权页和登陆页)
 * 用户登陆兔耳帐号，之后带到相应app的授权页面。
 * 允许授权后，网站会带着一个code值如<em>http://myapp.foo/?code=xxxx</em>跳到你的redirect_uri填写地址，此地址必须要和申请appkey时一致。
 * 阻止授权后会跳转到 <em>http://myapp.foo/?error=access_denied</em> 地址，需要开发者自己处理。
