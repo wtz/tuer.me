@@ -1,0 +1,51 @@
+!!! 5
+html
+  head
+    title
+      兔耳日记 | #{session.title} 
+    meta(content='text/html;charset=utf-8',http-equiv='Content-Type')
+    meta(name="description",content="兔耳日记，记录精彩每一天")
+    meta(name="author",content="小爝")
+    meta(name="viewport",content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0")
+    meta(content="yes",name="apple-mobile-web-app-capable")
+    meta(content="telephone=no",name="format-detection")
+    link(rel='shortcut icon',href='http://#{config.csshost}/favicon.ico',type='image/x-icon')
+    link(rel='icon',href='http://#{config.csshost}/favicon.ico',type='image/x-icon')
+    if(session.template == 'Invite')
+      meta(http-equiv="pragma",content="no-cache")
+      meta(http-equiv="cache-control",content="no-cache,must-revalidate,private,no-store")
+      meta(http-equiv="expires",content="Sun, 6 Mar 2005 01:00:00 GMT")
+      meta(http-equiv="expires",content="0")
+    link(rel='stylesheet', href='http://#{config.csshost}/??bootstrap/css/bootstrap.min.css,bootstrap/css/todc-bootstrap.min.css,style/css/common.min.css?v=201304021030')
+    if(session.template == 'profile' || session.template == 'myprofile')
+      link(rel="alternate",type="application/rss+xml",href="http://#{config.host}/user/rss/#{rss.address}",title="#{rss.title}")
+    script(data-path="http://js.tuer.me/libs/",src='http://#{config.jshost}/??lithe/lithe-min.js,jquery/jquery-1.7.2.min.js,bootstrap/js/bootstrap.min.js')
+    script.
+      lithe.use('mods/common.min.js?v=20121022');
+    style
+      .form-horizontal .control-label{
+        width:15%;   
+      }
+      .form-horizontal .controls{
+        margin-left:20%;   
+      }
+      .input-xlarge{
+        width:200px;   
+      }
+  body(data-spy="scroll",style="padding-top:10px;",data-target=".bs-docs-sidebar")
+    if(error == false)
+      form(class="form-horizontal",method="post",action="#{authorize_url}",style="width:100%;text-align:center;padding-top:10px;")
+        legend 是否允许 #{api.appname} 获得你的操作授权
+          div(class="control-group")
+            p 
+              small #{api.appabout}
+            p
+              button(name="allow",class="btn btn-success") 允许
+              &nbsp; 
+              button(name="deny",class="btn btn-danger") 拒绝
+            p
+              a(href="/") 返回兔耳
+    else
+      p(style="text-align:center;") #{error}
+      p(style="text-align:center;") 
+        a(href="/") 返回兔耳

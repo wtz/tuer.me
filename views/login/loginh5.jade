@@ -1,0 +1,72 @@
+!!! 5
+html
+  head
+    title
+      兔耳日记 | #{session.title} 
+    meta(content='text/html;charset=utf-8',http-equiv='Content-Type')
+    meta(name="description",content="兔耳日记，记录精彩每一天")
+    meta(name="author",content="小爝")
+    meta(name="viewport",content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0")
+    meta(content="yes",name="apple-mobile-web-app-capable")
+    meta(content="telephone=no",name="format-detection")
+    link(rel='shortcut icon',href='http://#{config.csshost}/favicon.ico',type='image/x-icon')
+    link(rel='icon',href='http://#{config.csshost}/favicon.ico',type='image/x-icon')
+    if(session.template == 'Invite')
+      meta(http-equiv="pragma",content="no-cache")
+      meta(http-equiv="cache-control",content="no-cache,must-revalidate,private,no-store")
+      meta(http-equiv="expires",content="Sun, 6 Mar 2005 01:00:00 GMT")
+      meta(http-equiv="expires",content="0")
+    link(rel='stylesheet', href='http://#{config.csshost}/??bootstrap/css/bootstrap.min.css,bootstrap/css/todc-bootstrap.min.css,style/css/common.min.css?v=201304021030')
+    if(session.template == 'profile' || session.template == 'myprofile')
+      link(rel="alternate",type="application/rss+xml",href="http://#{config.host}/user/rss/#{rss.address}",title="#{rss.title}")
+    script(data-path="http://js.tuer.me/libs/",src='http://#{config.jshost}/??lithe/lithe-min.js,jquery/jquery-1.7.2.min.js,bootstrap/js/bootstrap.min.js')
+    script.
+      lithe.use('mods/common.min.js?v=20121022');
+    style
+      .form-horizontal .control-label{
+        width:15%;   
+      }
+      .form-horizontal .controls{
+        margin-left:20%;   
+      }
+      .input-xlarge{
+        width:200px;   
+      }
+  body(data-spy="scroll",style="padding-top:10px;",data-target=".bs-docs-sidebar")
+     form(class='form-horizontal',method='post',action='/login',style="width:100%;margin:0 auto;")
+       input(type='hidden',value="#{next_url}",name="next_url")
+       legend(style="text-align:center;padding-bottom:20px;") 登陆兔耳
+       if(session.error.length)
+         div(class='alert alert-error') #{session.error}
+           a(class='close',data-dismiss='alert') &times;
+       div(class='control-group validation-container')
+         label(class='control-label',for='J_email') 邮箱
+         div(class='controls')
+           input(id='J_email',type='text',class='input-xlarge',placeholder='Email',name='email')
+       div(class='control-group validation-container')
+         label(class='control-label',for='J_pwd') 密码
+         div(class='controls')
+           input(id='J_pwd',type='password',class='input-xlarge',placeholder='Password',name='pwd')
+       div(class='control-group')
+         div(class='controls')
+           p
+             a(href='/forgot/') 忘记密码 &nbsp;
+             a(href='/register/') 注册 
+           label(class='checkbox') 记住我
+             input(type='checkbox',name='remember')
+           button(type='submit',class='btn btn-primary') 登入
+       hr
+     footer(style="width:100%;margin:0 auto;text-align:center;")
+      p 网站基于Nodejs开发 版权所有 &copy; 2012-2022 Tuer.me 
+     script.
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-33569930-1']);
+        _gaq.push(['_setDomainName', 'tuer.me']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+     script
+       lithe.use('mods/login.min.js');

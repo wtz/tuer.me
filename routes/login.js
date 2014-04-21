@@ -10,12 +10,18 @@ var index = function(req, res) {
 		res.redirect('home');
 	} else {
         var next_url = req.query.next ? req.query.next : 'home';
+        var type = req.query.type ? req.query.type : 'pc';
+        var template;
 
 		req.session.title = '登陆兔耳';
 		req.session.template = 'login';
 		req.session.error = req.flash('error');
-
-		res.render('login/login', {
+        if(type == 'pc'){
+           template = 'login/login';
+        }else if(type == 'h5'){
+           template = 'login/loginh5';
+        }
+		res.render(template, {
 			config: config,
             next_url:next_url,
 			session: req.session
