@@ -4,7 +4,7 @@ EventProxy = require('eventproxy').EventProxy,
 util = require('../../lib/util'),
 querystring = require('querystring');
 
-var userout = ['id', 'nick', 'pageurl', 'profile', 'about', 'created_at'];
+var userout = ['id', 'nick', 'pageurl', 'profile', 'about', 'created_at','friends'];
 
 exports.info = function(req, res, next) {
 	var uid = req.params.uid;
