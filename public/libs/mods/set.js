@@ -5,8 +5,8 @@
 define(function(require, exports, module) {
 
 	$('#J_nick').validate({
-		expression: "if (VAL!=='' && VAL && VAL.length<10) return true; else return false;",
-		message: "昵称小于10个字节就好啦~"
+		expression: "if (VAL!=='' && VAL && VAL.length<=10) return true; else return false;",
+		message: "昵称别超过10个字节就好啦~"
 	});
 
 	$('#J_pwd').validate({
