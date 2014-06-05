@@ -9,6 +9,7 @@ user = require('./routes/wap/user'),
 GoogleAnalytics = require('ga'),
 UA = "UA-33569930-1",
 Host = "m.tuer.me",
+cnzzTrackPageId = '5598883',
 login = require('./routes/wap/login');
 
 module.exports = function(app) {
