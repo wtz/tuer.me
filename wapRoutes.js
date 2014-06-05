@@ -10,7 +10,9 @@ GoogleAnalytics = require('ga'),
 UA = "UA-33569930-1",
 Host = "m.tuer.me",
 cnzzTrackPageId = '5598883',
-login = require('./routes/wap/login');
+cnzz_wap = require('cnzz-wap-nodejs'),
+login = require('./routes/wap/login'),
+cnzz = new cnzz_wap(5598883,'http');
 
 module.exports = function(app) {
 
@@ -22,6 +24,7 @@ module.exports = function(app) {
 
     app.get('*',function(req,res,next){
         ga.trackPage(req.url);
+        cnzz.trackPage(req.headers['referer'] || '');
         if(!req.accepts("html") && req.accepts("application/xhtml+xml")){
             res.charset = 'UTF-8';
             res.header('Content-Type', 'application/xhtml+xml');
