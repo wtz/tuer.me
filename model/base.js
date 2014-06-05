@@ -296,7 +296,7 @@ tuerBase.prototype.findFollows = function(userid, limit, callback) {
 				}
 			}).toArray(function(err, list) {
 				if (err) callback(err);
-				else callback(null, list.slice(0, limit), list.length);
+				else callback(null, list.slice(0, limit || list.length), list.length);
 			});
 		}
 	});

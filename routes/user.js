@@ -428,18 +428,14 @@ var followusers = function(req, res) {
 			proxy.trigger('user', user);
 			var len = user.firends.length;
 			if (len) {
-				tuerBase.findBy({
-					_id: {
-						'$in': user.firends
-					}
-				},
-				'users', len, function(err, users) {
-					if (err) {
-						res.redirect('500');
-					} else {
-						proxy.trigger('Follows', users);
-					}
-				});
+			var suid = user._id.toString();
+			tuerBase.findFollows(suid, null, function(err, users,count) {
+				if (err) {
+					res.redirect('500');
+				} else {
+					proxy.trigger('Follows', users);
+				}
+			});
 			} else {
 				proxy.trigger('Follows', []);
 			}
@@ -477,7 +473,12 @@ var followedusers = function(req, res) {
 		} else {
 			proxy.trigger('user', user);
 			var uid = user._id;
-			tuerBase.findFollows(uid, user.firends.length, function(err, users) {
+			tuerBase.findBy({
+				_id: {
+					'$in': user.firends
+				}
+			},
+			'users', user.firends.length, function(err, users) {
 				if (err) {
 					res.redirect('500');
 				} else {
