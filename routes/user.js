@@ -3,6 +3,7 @@ config = require('../lib/config'),
 util = require('../lib/util'),
 Rss = require('rss'),
 Pag = require('../lib/pag').pag,
+xss = require('xss'),
 RGBcolor = require('../lib/RGBcolor'),
 escape = require('jade').runtime.escape,
 Avatar = require('../lib/avatar'),
@@ -34,6 +35,9 @@ var profile = function(req, res) {
 			util.setTime(item);
 			item.created_user = user.nick;
 			item.img = util.getpics(150, 1, item.filelist);
+			var img = util.getImgs(item.content)[0];
+			item.img = img ? img+'?imageView2/1/w/150' : item.img;
+			item.content = xss(item.content,{whiteList:{},stripIgnoreTag:true});
 			item.content = item.content.length > 150 ? item.content.slice(0, 150) + '...': item.content;
 		});
 
@@ -192,6 +196,10 @@ var notebook = function(req, res) {
 			util.setTime(item);
 			item.created_user = user.nick;
 			item.img = util.getpics(150, 1, item.filelist);
+			var img = util.getImgs(item.content)[0];
+			item.img = img ? img+'?imageView2/1/w/150' : item.img;
+			item.content = xss(item.content,{whiteList:{},stripIgnoreTag:true});
+			item.content = xss(item.content,{whiteList:{},stripIgnoreTag:true});
 			item.content = item.content.length > 150 ? item.content.slice(0, 150) + '...': item.content;
 			item.weather = item.weather ? (config.weather[item.weather] ? config.weather[item.weather].value : item.weather ): undefined;
 			item.mood = item.mood ? (config.mood[item.mood] ? config.mood[item.mood].value : item.mood): undefined;
@@ -289,6 +297,9 @@ var diaries = function(req, res, next) {
 			util.setTime(item);
 			item.created_user = user.nick;
 			item.img = util.getpics(150, 1, item.filelist);
+			var img = util.getImgs(item.content)[0];
+			item.img = img ? img+'?imageView2/1/w/150' : item.img;
+			item.content = xss(item.content,{whiteList:{},stripIgnoreTag:true});
 			item.content = item.content.length > 150 ? item.content.slice(0, 150) + '...': item.content;
 			item.avatarUrl = Avatar.getUrl(item.userid);
 			item.isSelf = req.session.is_login ? item.userid == req.session.userdata._id.toString() : false;
@@ -365,7 +376,7 @@ var rss = function(req, res) {
 		diaries.forEach(function(item) {
 			feed.item({
 				title: item.title || item.bookname,
-				description: item.content,
+				description:xss(item.content,{whiteList:{},stripIgnoreTag:true}),
 				url: 'http://tuer.me/diary/' + item.id,
 				author: user.nick,
 				date: item.created_at

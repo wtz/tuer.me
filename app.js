@@ -6,8 +6,8 @@ var express = require('express'),
 config = require('./lib/config'),
 rootdir = config.rootdir,
 RedisStore = require('connect-redis')(express);
-var myOAP = require('./lib/OAP');
-var toobusy = require('toobusy');
+//var myOAP = require('./lib/OAP');
+//var toobusy = require('toobusy');
 var app = express.createServer();
 var wap = express.createServer();
 
@@ -32,28 +32,30 @@ function Configuration(app, rootdir) {
 	app.use(express.favicon(__dirname + '/public/favicon.ico'), {
 		maxAge: 2592000000
 	});
-    app.use(function(req,res,next){
-	res.header("Access-Control-Allow-Origin","*");
-	res.header("Access-Control-Allow-Headers","X-Requested-With");
-	res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
-        if(toobusy()){
-            res.send(503,"兔耳开小差了，请稍后访问，或手动刷新");
-        }else{
-            next();
-        }
-    });
-
+	/*
+	app.use(function(req, res, next) {
+		res.header("Access-Control-Allow-Origin", "*");
+		res.header("Access-Control-Allow-Headers", "X-Requested-With");
+		res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+		if (toobusy()) {
+			res.send(503, "兔耳开小差了，请稍后访问，或手动刷新");
+		} else {
+			next();
+		}
+	});
 	app.use(myOAP.oauth());
 	app.use(myOAP.login());
-
+	*/
 	app.use(function(req, res, next) {
 		//判断ie版本
 		var sys = {};
 		var s;
 		var ua = req.headers['user-agent'].toLowerCase();
-        	var host = req.headers['host'];
-		if (!((/^m.tuer.me/).test(host)) && (s = ua.match(/msie ([\d.]+)/)) && parseInt(s[1], 10) <= 7) {
-            		res.render('custom/ie',{version:s[1]});
+		var host = req.headers['host'];
+		if (! ((/^m.tuer.me/).test(host)) && (s = ua.match(/msie ([\d.]+)/)) && parseInt(s[1], 10) <= 7) {
+			res.render('custom/ie', {
+				version: s[1]
+			});
 		} else {
 			next();
 		}
@@ -108,11 +110,11 @@ exports.start = function(conf) {
 	server = app.listen(config.port);
 	wap.listen(config.mport);
 
-    process.on('SIGINT',function(){
-        server.close();
-        toobusy.shutdown();
-        process.exit();
-    });
+	process.on('SIGINT', function() {
+		server.close();
+		//toobusy.shutdown();
+		process.exit();
+	});
 
 	console.log('app server on ' + config.host);
 	console.log('wap server on ' + config.mhost);

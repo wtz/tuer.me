@@ -10,6 +10,8 @@
   , "dependencies": {
       "express": "2.5.8"
     , "cnzz-wap-nodejs":"*"
+	, "xss":"*"
+	, "node-uuid":"*"
     , "jade": ">= 0.0.1"
     , "log": "1.4.0"
     , "lithe":"0.1.5"

@@ -2,7 +2,7 @@ var tuerBase = require('../model/base'),
 Avatar = require('../lib/avatar'),
 pag = require('../lib/pag').pag,
 config = require('../lib/config'),
-EventProxy = require('eventproxy').EventProxy;
+EventProxy = require('eventproxy').EventProxy,
 util = require('../lib/util');
 
 var list = function(req, res) {

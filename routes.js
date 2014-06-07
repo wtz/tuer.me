@@ -94,6 +94,8 @@ module.exports = function(app) {
 	app.get('/diaries/:page?', diary.list);
 	app.get('/diary/:id', diary.detail);
 	app.get('/diary/write', diary.write);
+	app.get('/getqiniutoken', diary.getqiniutoken);
+	app.get('/qiniucallback', diary.qiniucallback);
 	app.get('/diary/edit/:id', diary.edit);
 	app.post('/diary/save', diary.save);
 	app.post('/diary/update', diary.update);

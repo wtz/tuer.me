@@ -1,8 +1,12 @@
 var tuerBase = require('../model/base'),
+base64 = require('../lib/base64'),
 fs = require('fs'),
+uuid = require('node-uuid'),
 path = require('path'),
 util = require('../lib/util'),
+token = require('../lib/token'),
 Avatar = require('../lib/avatar'),
+xss = require('xss'),
 pag = require('../lib/pag').pag,
 config = require('../lib/config'),
 rootdir = config.rootdir,
@@ -25,7 +29,7 @@ var detail = function(req, res, next) {
 		util.setTime(diary);
 		diary.img = util.getpics(150, 1, diary.filelist);
 		diary.bigimg = util.getpics(500, 1, diary.filelist);
-		diary.content = util.drawUrl(escape(diary.content).replace(/\r\n/g, '<br>'));
+		diary.content = diary.content.replace(/\r\n/g, '<br>');
 
 		user.avatarUrl = Avatar.getUrl(user.id);
 		comments.forEach(function(item) {
@@ -117,6 +121,9 @@ var list = function(req, res) {
 			util.setTime(item);
 			item.img = util.getpics(150, 1, item.filelist);
 			item.avatarUrl = Avatar.getUrl(item.pageurl);
+			var img = util.getImgs(item.content)[0];
+			item.img = img ? img+'?imageView2/1/w/150' : item.img;
+			item.content = xss(item.content,{whiteList:{},stripIgnoreTag:true});
 			item.content = item.content.length > 150 ? item.content.slice(0, 150) + '...': item.content;
 		});
 
@@ -184,7 +191,10 @@ var followedDiaries = function(req, res) {
 		Diaries.forEach(function(item) {
 			util.setTime(item);
 			item.img = util.getpics(150, 1, item.filelist);
+			var img = util.getImgs(item.content)[0];
+			item.img = img ? img+'?imageView2/1/w/150' : item.img;
 			item.avatarUrl = Avatar.getUrl(item.pageurl);
+			item.content = xss(item.content,{whiteList:{},stripIgnoreTag:true});
 			item.content = item.content.length > 150 ? item.content.slice(0, 150) + '...': item.content;
 		});
 
@@ -233,6 +243,55 @@ var followedDiaries = function(req, res) {
 	});
 };
 
+var getqiniutoken = function(req,res){
+	if (!req.session.is_login) {
+		res.redirect('login');
+		return;
+	}
+	var uid = req.session.userdata._id;
+	var extname = req.query.extname;
+	extname = extname.replace('image/','');
+	tuerBase.findUser(uid, function(err, user) {
+		if (err) {
+            console.log(err);
+			res.redirect('500');
+		} else {
+			var qiniuHost = 'http://tuer.qiniudn.com/@';
+			var date = new Date();
+			var currentToken = token('9G2Ym4i4dP08jgCl82o2wo0qk4bLrsd6Zn2GyxWO','4Z0ydknVSCmQrCfPhuKtdo3KO0CYxbVDZcYPra1k',{
+				scope:'tuer',
+				savekey:'/userupload/'+	date.getYear()+date.getMonth() + '/'+ uuid.v1() + '.'+extname,
+				deadline:parseInt((Date.now() + (60 * 60 * 1000)) / 1000,10),
+				returnBody:JSON.stringify({
+					"url":qiniuHost + "$(key)",
+					"uid":user.id
+				}),
+				returnUrl:'http://www.tuer.me/qiniucallback',
+				mimeLimit:'image/*',
+				fsizeLimit:1024*1024
+			});	
+			res.json({token:currentToken});
+		}
+	});
+};
+
+var qiniucallback = function(req,res){
+	if (!req.session.is_login) {
+		res.redirect('login');
+		return;
+	}
+	var ret = req.query.upload_ret;
+	var error = req.query.error;
+	if(!error){
+		//保存用户和图片的关联
+		ret = JSON.parse(base64.decode(ret));
+		tuerBase.save({uid:ret.uid,url:ret.url},'images',function(err,data){});
+		res.send('<script>window.top.uploadSucces('+JSON.stringify(ret)+')</script>');
+	}else{
+		res.send('<script>window.top.uploadSucces('+JSON.stringify({error:error})+')</script>');
+	}
+};
+
 var write = function(req, res) {
 
 	if (!req.session.is_login) {
@@ -243,6 +302,8 @@ var write = function(req, res) {
 	var uid = req.session.userdata._id,
 	proxy = new EventProxy(),
 	render = function(user, books) {
+		var date = new Date();
+		//生成页面当前token,有效期1小时
 
 		req.session.title = '写日记';
 		req.session.template = 'write';
@@ -297,6 +358,7 @@ var save = function(req, res) {
 	mood = req.body.mood,
 	privacy = req.body.privacy || 0,
 	forbid = req.body.forbid || 0,
+	/*
 	uploadPic = req.files.uploadPic,
 	temp_path = uploadPic.path,
 	type = function() {
@@ -311,15 +373,28 @@ var save = function(req, res) {
 	filename = path.basename(temp_path),
 	picname = filename + type,
 	target_path = rootdir + '/public/images/' + picname,
+	*/
 	proxy = new EventProxy(),
 	saveNote = function(removeTemp, pic_path) {
-		var filelist = {};
-		if (pic_path) filelist['pic_path'] = picname;
+		//var filelist = {};
+		//if (pic_path) filelist['pic_path'] = picname;
+		content = xss(content,{whiteList:{
+			p:[],	
+			a:['href','target'],
+			img:['src'],
+			b:[],
+			i:[],
+			u:[],
+			strike:[],
+			blockquote:[],
+			pre:[],
+			hr:[]
+		},stripIgnoreTag:true});
 		var savedata = {
 			content: content,
 			notebook: bookid,
 			userid: req.session.userdata._id,
-			filelist: filelist,
+		//	filelist: filelist,
 			mood: mood,
 			weather: weather,
 			privacy: privacy,
@@ -365,30 +440,31 @@ var save = function(req, res) {
 			}
 		});
 	};
-	proxy.assign('removeTemp', 'pic_path', saveNote);
+	//proxy.assign('removeTemp', 'pic_path', saveNote);
 
 	//增加校验
 	if ((!bookid || ! content) || ((privacy !== 0 && privacy != 1) || (forbid !== 0 && forbid != 1))) {
 		req.flash('error', '非法操作');
-		util.remove_temp(proxy, 'removeTemp', temp_path);
+		//util.remove_temp(proxy, 'removeTemp', temp_path);
 		res.redirect('back');
 		return;
 	}
 
 	if (location.trim().length > 10) {
 		req.flash('error', '地点最多10个字');
-		util.remove_temp(proxy, 'removeTemp', temp_path);
+		//util.remove_temp(proxy, 'removeTemp', temp_path);
 		res.redirect('back');
 		return;
 	}
 
 	if (content.trim().length > 22000) {
 		req.flash('error', '日记字数最多22000字');
-		util.remove_temp(proxy, 'removeTemp', temp_path);
+		//util.remove_temp(proxy, 'removeTemp', temp_path);
 		res.redirect('back');
 		return;
 	}
-
+	saveNote();
+	/*
 	if (uploadPic.size) {
 		if (!type.match(/jpg|png|jpeg|gif/gi)) {
 			req.flash('error', '只能上传图片文件');
@@ -422,6 +498,7 @@ var save = function(req, res) {
 		util.remove_temp(proxy, 'removeTemp', temp_path);
 		proxy.trigger('pic_path', false);
 	}
+	*/
 };
 
 var edit = function(req, res) {
@@ -507,6 +584,7 @@ var update = function(req, res) {
 	diaryid = req.body.id,
 	privacy = req.body.privacy || 0,
 	forbid = req.body.forbid || 0;
+	/*
 	if (req.files.hasOwnProperty('uploadPic')) {
 		var uploadPic = req.files.uploadPic,
 		temp_path = uploadPic.path,
@@ -523,20 +601,33 @@ var update = function(req, res) {
 		picname = filename + type,
 		target_path = rootdir + '/public/images/' + picname;
 	}
-	updateNote = function(removeTemp, pic_path, diary) {
+	*/
+	updateNote = function(diary) {
 
 		if (req.session.userdata._id.toString() != diary.userid) {
 			res.redirect('404');
 			return;
 		}
-
+		/*
 		var files = pic_path ? {
 			'pic_path': picname
 		}: diary.filelist;
-
+		*/
+		content = xss(content,{whiteList:{
+			p:[],	
+			a:['href','target'],
+			img:['src'],
+			b:[],
+			i:[],
+			u:[],
+			strike:[],
+			blockquote:[],
+			pre:[],
+			hr:[]
+		},stripIgnoreTag:true});
 		var updatedata = {
 			content: content,
-			filelist: files,
+			//filelist: files,
 			forbid: forbid,
 			privacy: privacy,
 			notebook: bookid
@@ -553,38 +644,40 @@ var update = function(req, res) {
 				res.redirect('500');
 			} else {
 				res.redirect('home');
+				/*
 				if (pic_path) {
 					//删除编辑之前的图片
 					util.removePic(diary.filelist, function(err) {
 						if (err) throw err;
 					});
 				}
+				*/
 			}
 		});
 	};
-	proxy.assign('removeTemp', 'pic_path', 'diary', updateNote);
+	proxy.assign('diary', updateNote);
 
 	if ((!bookid || ! content) || ((privacy !== 0 && privacy != 1) || (forbid !== 0 && forbid != 1))) {
 		req.flash('error', '非法操作');
-		if (temp_path) util.remove_temp(proxy, 'removeTemp', temp_path);
+		//if (temp_path) util.remove_temp(proxy, 'removeTemp', temp_path);
 		res.redirect('back');
 		return;
 	}
 
 	if (location.trim().length > 10) {
 		req.flash('error', '地点最多10个字');
-		if (temp_path) util.remove_temp(proxy, 'removeTemp', temp_path);
+		//if (temp_path) util.remove_temp(proxy, 'removeTemp', temp_path);
 		res.redirect('back');
 		return;
 	}
 
 	if (content.trim().length > 22000) {
 		req.flash('error', '日记字数最多22000字');
-		if (temp_path) util.remove_temp(proxy, 'removeTemp', temp_path);
+		//if (temp_path) util.remove_temp(proxy, 'removeTemp', temp_path);
 		res.redirect('back');
 		return;
 	}
-
+	/*
 	if (req.files.hasOwnProperty('uploadPic')) {
 		if (uploadPic.size) {
 			if (!type.match(/jpg|png|jpeg|gif/gi)) {
@@ -623,6 +716,7 @@ var update = function(req, res) {
 		proxy.trigger('pic_path', false);
 		proxy.trigger('removeTemp');
 	}
+	*/
 
 	tuerBase.findById(diaryid, 'diary', function(err, diary) {
 		if (err) {
@@ -694,4 +788,5 @@ exports.edit = edit;
 exports.update = update;
 exports.remove = remove;
 exports.followedDiaries = followedDiaries;
-
+exports.getqiniutoken = getqiniutoken;
+exports.qiniucallback = qiniucallback;

@@ -3,6 +3,7 @@ tuerBase = require('../../model/base'),
 util = require('../../lib/util'),
 Avatar = require('../../lib/avatar'),
 pag = require('../../lib/pag').pag,
+xss = require('xss'),
 escape = require('jade').runtime.escape,
 EventProxy = require('eventproxy').EventProxy;
 
@@ -22,7 +23,10 @@ exports.detail = function(req, res, next) {
 
 		util.setTime(diary);
 		diary.img = util.getpics(80, 1, diary.filelist);
-		diary.content = util.drawUrl(escape(diary.content).replace(/\r\n/g, '<br>'));
+		var img = util.getImgs(diary.content)[0];
+		diary.img = img ? img+'?imageView2/1/w/100' : diary.img;
+		diary.content = xss(diary.content,{whiteList:{},stripIgnoreTag:true});
+		diary.content = diary.content.replace(/\r\n/g, '<br>');
 
 		user.avatarUrl = Avatar.getUrl(user.id);
 
@@ -105,6 +109,9 @@ exports.list = function(req, res) {
 
 		Diaries.forEach(function(item) {
 			item.img = util.getpics(80, 1, item.filelist);
+			var img = util.getImgs(item.content)[0];
+			item.img = img ? img+'?imageView2/1/w/100' : item.img;
+			item.content = xss(item.content,{whiteList:{},stripIgnoreTag:true});
 			item.content = item.content.length > 50 ? item.content.slice(0, 50) + '...': item.content;
 		});
 

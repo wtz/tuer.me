@@ -2,6 +2,7 @@ var config = require('../../lib/config'),
 util = require('../../lib/util'),
 Pag = require('../../lib/pag').pag,
 tuerBase = require('../../model/base'),
+xss = require('xss'),
 EventProxy = require('eventproxy').EventProxy;
 
 exports.profile = function(req, res) {
@@ -16,6 +17,9 @@ exports.profile = function(req, res) {
 
 		userDiaryList.forEach(function(item) {
 			item.img = util.getpics(80, 1, item.filelist);
+			var img = util.getImgs(item.content)[0];
+			item.img = img ? img+'?imageView2/1/w/100' : item.img;
+			item.content = xss(item.content,{whiteList:{},stripIgnoreTag:true});
 			item.content = item.content.length > 50 ? item.content.slice(0, 50) + '...': item.content;
 		});
 		res.render('wap/user/profile', {

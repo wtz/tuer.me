@@ -1,5 +1,70 @@
 extends ../common/layout
 block content
+  link(href="/jquery.qeditor/font-awesome.min.css",rel="stylesheet")
+  link(href="/jquery.qeditor/jquery.qeditor.css",rel="stylesheet")
+  script(src="/jquery.qeditor/jquery.qeditor.js")
+  script.
+    window.FileAPI = {staticPath:'/FileAPI/dist/'};
+  script(src="/FileAPI/dist/FileAPI.min.js")
+  style.
+    .b-button {
+      display: inline-block;
+      *display: inline;
+      *zoom: 1;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      padding: 4px 15px;
+      vertical-align: middle;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      background-color: #f5f5f5;
+      background: -moz-linear-gradient(top, #fff 0%, #f5f5f5 49%, #ececec 50%, #eee 100%);
+      background: -webkit-linear-gradient(top, #fff 0%,#f5f5f5 49%,#ececec 50%,#eee 100%);
+      background: -o-linear-gradient(top, #fff 0%,#f5f5f5 49%,#ececec 50%,#eee 100%);
+      background: linear-gradient(to bottom, #fff 0%,#f5f5f5 49%,#ececec 50%,#eee 100%);
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+      .b-button_hover {
+        border-color: #fa0;
+        box-shadow: 0 0 2px #fa0;
+      }
+
+      .b-button__text {
+      }
+
+      .b-button__input {
+        cursor: pointer;
+        opacity: 0;
+        filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+        top: -10px;
+        right: -40px;
+        font-size: 50px;
+        position: absolute;
+      } 
+    .textarea {
+        background-color: #ffffff;
+        border: 1px solid #cccccc;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        -webkit-transition: border linear .2s, box-shadow linear .2s;
+        -moz-transition: border linear .2s, box-shadow linear .2s;
+        -o-transition: border linear .2s, box-shadow linear .2s;
+        transition: border linear .2s, box-shadow linear .2s;
+        padding: 4px 6px;
+        font-size: 14px;
+        line-height: 20px;
+        color: #555555;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+        vertical-align: middle;
+        outline: none;
+        height: 400px;
+      }
   div(class='container')
     h2 #{session.title}
     hr
@@ -18,14 +83,6 @@ block content
                 option(value="#{item._id}") #{item.name}
           a(href="/notebook",title="管理我的日记本") &nbsp;&nbsp;管理我的日记本 
       div(class="control-group")
-         //
-           each item,i in mood
-             label(class="inline")
-               if(item.value == diary.mood)
-                 input(type="radio",value="#{item._id}",name="mood",checked="true") 
-               else
-                 input(type="radio",value="#{item._id}",name="mood") 
-               span #{item.value} 
          label(class="inline")
            span 心情: 
              if(diary.mood)
@@ -33,14 +90,6 @@ block content
              else
                input(style="width:90px;",type="text",value="",name="mood",placeholder="喜,怒,哀,乐...",maxlength="10")
       div(class="control-group")
-         //
-           each item,i in weather
-             label(class="inline")
-               if(item.value == diary.weather)
-                 input(type="radio",value="#{item._id}",name="weather",checked="true") 
-               else
-                 input(type="radio",value="#{item._id}",name="weather") 
-               span #{item.value} 
          label(class="inline")
            span 天气: 
              if(diary.weather)
@@ -54,7 +103,7 @@ block content
               else
                 input(type="text",name="location",placeholder="写日记的地点")
       div(class='control-group')
-          textarea(class='input-xlarge',style='width:90%;',id='content',name='content',rows='15') #{diary.content}
+        textarea(placeholder="日记内容",class="textarea",id='content',name='content',rows='15') #{diary.content}
       div(class='control-group')
           label(class="inline") 
             if(diary.privacy == 1)
@@ -68,18 +117,84 @@ block content
             else
               input(name='forbid',type='checkbox',value='1') 
             &nbsp;不允许被回复 
-      div(class='control-group',id="J_files")
-        if(diary.img)
-          img(src='#{diary.img}')
-          a(href='javascript:void(0);',id='J_changePic') 修改图片
-        else
-          input(type='file',name='uploadPic',class='J_files')
       div(class='control-group')
-          p 日记最多可写2200个字.
+        p 日记最多可写2200个字.
       div(class='control-group')
           button(type='submit',class='btn btn-primary') #{session.title}
     include ../common/footer
+    div(id="uploadpic",role="dialog",class="modal hide fade",tabindex="-1",aria-hidden="true",aria-labelledby="uploadpic")
+      div(class="modal-header")
+        h3 选择上传图片
+      div(class="modal-body")
+        div(class="b-button",id="btn-body",style="margin-right:10px;")
+          div(class="b-button__txt") 选择文件
+          input(class="b-button__input",id="choose",name="file",type="file")
+        button(class="btn btn-primary",type="button",id="upbtn") 上传并插入
+        p(id="log",style="margin-top:10px;color:green;")
+        div(id="images")
+      div(class="modal-footer")
+        button(class="btn",data-dismiss="modal",aria-hidden="true") 取消
     script.
-      $("#J_changePic").click(function(){
-         $("#J_files").html('<input type="file" name="uploadPic" class="J_files">'); 
+      var editor = $('#content').qeditor({});
+      function uploadSucces(ret){
+        var input = $('#choose')[0];
+        $('#btn-body').append(input);
+        clear(input);
+        if(ret.error){
+          alert(ret.error);
+        }else{
+          QEditor.action(editor,'insertimage',ret.url+'?imageView2/0/w/600/interlace/1');
+          $('#uploadpic').modal('hide');
+        }
+      }
+      var filetype;
+      function clear(input){
+        FileAPI.reset(input);
+        $('#uploadForm').remove(); 
+        $('#log').html('');
+        $('#images').html('');
+      }
+      $('#upbtn').click(function(){
+            if(filetype){
+              $.ajax({
+                url:'/getqiniutoken',
+                dataType:'json',
+                success:function(json){
+                  var iframe = $('<iframe name="qiniu">');
+                  var form = $('<form id="uploadForm" target="qiniu" method="post" action="http://up.qiniu.com/" enctype="multipart/form-data"></form>');
+                  form.append('<input name="token" type="hidden" value="'+json.token+'">');
+                  form.append(iframe);
+                  form.append($('#choose'));
+                  $('body').append(form);
+                  form.submit();
+                  $('#log').html('正在上传中...');
+                },
+                data:{
+                  extname:filetype
+                }
+              });
+            }else{
+                alert('请先选择一张图片');
+            }
+      });
+      $('#choose').change(function(evt){
+          filetype = null;
+          FileAPI.filterFiles(FileAPI.getFiles(evt), function (file/**Object*/, info/**Object*/){
+            if(/^image/.test(file.type) && file.size < 1 * FileAPI.MB){
+                return true;
+            }
+            return false;
+          }, function (list/**Array*/, other/**Array*/){
+              if( list.length ){
+                var file = list[0];
+                FileAPI.getInfo(file,function(err,info){
+                  filetype = file.type;
+                  FileAPI.Image(file).preview(200,200).get(function (err, img){
+                    $('#images').html(img);
+                  });
+                });
+              }else{
+                alert('请选择小于1MB的图片文件上传');
+              }
+          });
       });

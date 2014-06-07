@@ -3,6 +3,7 @@
  */
 
 var Db = require('mongodb').Db;
+var xss = require('xss');
 var Connection = require('mongodb').Connection;
 var config = require('../lib/config');
 var Server = require('mongodb').Server;
@@ -527,6 +528,9 @@ tuerBase.prototype.findFeeds = function(source, start, end, callback) {
 					item['feed_type'] = type;
 					if (type == 'diary') {
 						item.img = util.getpics(150, 1, item.filelist);
+						var img = util.getImgs(item.content)[0];
+						item.img = img ? img+'?imageView2/1/w/150' : item.img;
+						item.content = xss(item.content,{whiteList:{},stripIgnoreTag:true});
 						item.content = item.content.length > 150 ? item.content.slice(0, 150) + '...': item.content;
 					}
 				}
