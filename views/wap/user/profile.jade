@@ -26,7 +26,7 @@ block content
        p 
         if(diary.img)
           img(src="#{diary.img}")
-        span #{diary.content}
+        span !{diary.content}
      !{pag}
    else
      p 他还啥都没有写过

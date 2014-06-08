@@ -122,7 +122,7 @@ var list = function(req, res) {
 			item.img = util.getpics(150, 1, item.filelist);
 			item.avatarUrl = Avatar.getUrl(item.pageurl);
 			var img = util.getImgs(item.content)[0];
-			item.img = img ? img+'?imageView2/1/w/150' : item.img;
+			item.img = img ? img+'?w=150&h=150' : item.img;
 			item.content = xss(item.content,{whiteList:{},stripIgnoreTag:true});
 			item.content = item.content.length > 150 ? item.content.slice(0, 150) + '...': item.content;
 		});
@@ -192,7 +192,7 @@ var followedDiaries = function(req, res) {
 			util.setTime(item);
 			item.img = util.getpics(150, 1, item.filelist);
 			var img = util.getImgs(item.content)[0];
-			item.img = img ? img+'?imageView2/1/w/150' : item.img;
+			item.img = img ? img+'?w=150&h=150' : item.img;
 			item.avatarUrl = Avatar.getUrl(item.pageurl);
 			item.content = xss(item.content,{whiteList:{},stripIgnoreTag:true});
 			item.content = item.content.length > 150 ? item.content.slice(0, 150) + '...': item.content;

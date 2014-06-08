@@ -143,7 +143,7 @@ block content
         if(ret.error){
           alert(ret.error);
         }else{
-          QEditor.action(editor,'insertimage',ret.url+'?imageView2/0/w/600/interlace/1');
+          QEditor.action(editor,'insertimage',ret.url+'?w=600&h=600');
           $('#uploadpic').modal('hide');
         }
       }
@@ -156,23 +156,13 @@ block content
       }
       $('#upbtn').click(function(){
             if(filetype){
-              $.ajax({
-                url:'/getqiniutoken',
-                dataType:'json',
-                success:function(json){
-                  var iframe = $('<iframe name="qiniu">');
-                  var form = $('<form id="uploadForm" target="qiniu" method="post" action="http://up.qiniu.com/" enctype="multipart/form-data"></form>');
-                  form.append('<input name="token" type="hidden" value="'+json.token+'">');
-                  form.append(iframe);
-                  form.append($('#choose'));
-                  $('body').append(form);
-                  form.submit();
-                  $('#log').html('正在上传中...');
-                },
-                data:{
-                  extname:filetype
-                }
-              });
+               var iframe = $('<iframe name="qiniu">');
+               var form = $('<form id="uploadForm" target="qiniu" method="post" action="/images/upload" enctype="multipart/form-data"></form>');
+               form.append(iframe);
+               form.append($('#choose'));
+               $('body').append(form);
+               form.submit();
+               $('#log').html('正在上传中...');
             }else{
                 alert('请先选择一张图片');
             }

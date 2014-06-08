@@ -1,5 +1,6 @@
 var login = require('./routes/login'),
 config = require('./lib/config'),
+images = require('./routes/images'),
 index = require('./routes/index'),
 register = require('./routes/register'),
 about = require('./routes/about'),
@@ -157,6 +158,8 @@ module.exports = function(app) {
 	app.get('/404', error.notFound);
 	app.get('/500', error.proError);
 	app.get('*', error.notFound);
+
+	app.post('/images/upload', images.upload);
 
 };
 

@@ -24,8 +24,8 @@ exports.detail = function(req, res, next) {
 		util.setTime(diary);
 		diary.img = util.getpics(80, 1, diary.filelist);
 		var img = util.getImgs(diary.content)[0];
-		diary.img = img ? img+'?imageView2/1/w/100' : diary.img;
-		diary.content = xss(diary.content,{whiteList:{},stripIgnoreTag:true});
+		diary.img = img ? img+'?w=100&h=100' : diary.img;
+		//diary.content = xss(diary.content,{whiteList:{},stripIgnoreTag:true});
 		diary.content = diary.content.replace(/\r\n/g, '<br>');
 
 		user.avatarUrl = Avatar.getUrl(user.id);

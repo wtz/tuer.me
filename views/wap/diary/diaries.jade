@@ -12,7 +12,7 @@ block content
           a(href="/profile/#{item.pageurl}") #{item.created_user}: 
           if(item.img)
             img(src="#{item.img}") 
-          span #{item.content} 
+          span !{item.content} 
      !{pag}
   else
      p 还没有日记

@@ -19,7 +19,7 @@ function Configuration(app, rootdir) {
 		layout: false
 	});
 	app.use(express.bodyParser({
-		uploadDir: rootdir + '/public/images/'
+		uploadDir: rootdir + '/public/simg/'
 	}));
 	app.use(express.cookieParser());
 	app.use(express.query());

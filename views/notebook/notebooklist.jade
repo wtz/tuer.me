@@ -33,7 +33,7 @@ block content
                div(class='Diary-content')
                   if(item.img)
                       img(src='#{item.img}')
-                  p #{item.content}
+                  p !{item.content}
                div(class='bar') #{item.created_at} 
                  small #{item.commentcount}回复 
                  if(isSelf)

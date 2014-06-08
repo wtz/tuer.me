@@ -36,7 +36,7 @@ var profile = function(req, res) {
 			item.created_user = user.nick;
 			item.img = util.getpics(150, 1, item.filelist);
 			var img = util.getImgs(item.content)[0];
-			item.img = img ? img+'?imageView2/1/w/150' : item.img;
+			item.img = img ? img+'?w=150&h=150' : item.img;
 			item.content = xss(item.content,{whiteList:{},stripIgnoreTag:true});
 			item.content = item.content.length > 150 ? item.content.slice(0, 150) + '...': item.content;
 		});
@@ -197,7 +197,7 @@ var notebook = function(req, res) {
 			item.created_user = user.nick;
 			item.img = util.getpics(150, 1, item.filelist);
 			var img = util.getImgs(item.content)[0];
-			item.img = img ? img+'?imageView2/1/w/150' : item.img;
+			item.img = img ? img+'?w=150&h=150' : item.img;
 			item.content = xss(item.content,{whiteList:{},stripIgnoreTag:true});
 			item.content = xss(item.content,{whiteList:{},stripIgnoreTag:true});
 			item.content = item.content.length > 150 ? item.content.slice(0, 150) + '...': item.content;
@@ -298,7 +298,7 @@ var diaries = function(req, res, next) {
 			item.created_user = user.nick;
 			item.img = util.getpics(150, 1, item.filelist);
 			var img = util.getImgs(item.content)[0];
-			item.img = img ? img+'?imageView2/1/w/150' : item.img;
+			item.img = img ? img+'?w=150&h=150' : item.img;
 			item.content = xss(item.content,{whiteList:{},stripIgnoreTag:true});
 			item.content = item.content.length > 150 ? item.content.slice(0, 150) + '...': item.content;
 			item.avatarUrl = Avatar.getUrl(item.userid);

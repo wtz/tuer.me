@@ -1,48 +1,52 @@
 {
-    "name": "tuer"
-  , "version": "0.3.2"
-  , "author":"xiaojue"
-  , "keywords":[
+  "name": "tuer",
+  "version": "0.3.2",
+  "author": "xiaojue",
+  "keywords": [
     "cms",
     "diray web site",
     "express site"
-  ]
-  , "dependencies": {
-      "express": "2.5.8"
-    , "cnzz-wap-nodejs":"*"
-	, "xss":"*"
-	, "node-uuid":"*"
-    , "jade": ">= 0.0.1"
-    , "log": "1.4.0"
-    , "lithe":"0.1.5"
-    , "yuicompressor":"2.4.8"
-    , "toobusy":"0.2.2"
-    , "restify":"2.3.5"
-    , "serializer":">=0.0.2 < 0.1.0"
-    , "oauth2-provider":"1.x"
-    , "eventproxy":"0.1.2"
-    , "node-dev":">=0.2.2"
-    , "mongodb":"1.1.4"
-    , "canvas":"1.0.3"
-    , "rss":"0.0.3"
-    , "imagemagick":"0.1.2"
-    , "connect-redis":"1.3.0"
-    , "calendar":"0.1.0"
-    , "nodemailer":"0.3.12"
-    , "xml2js":"0.2.0"
-    , "ga":"0.0.2"
-    , "punycode":"1.2.0"
-  }
-  , "scripts":{
-       "ls":"node ./checkService.js",
-       "start":"node ./index.js"
-   }
-  ,"contributors":[ "xiaojue" ,"JokerQyou"]
-  ,"homepage":"http://www.tuer.me"
-  ,"description":"tuer.me,a diary web site"
-  ,"main":"app.js"
-  ,"engines":{
-    "node":">=0.8"
+  ],
+  "dependencies": {
+    "calendar": "0.1.0",
+    "canvas": "1.0.3",
+    "cnzz-wap-nodejs": "*",
+    "connect-redis": "1.3.0",
+    "eventproxy": "0.1.2",
+    "express": "2.5.8",
+    "fs-extra": "^0.9.1",
+    "ga": "0.0.2",
+    "imagemagick": "0.1.2",
+    "jade": ">= 0.0.1",
+    "lithe": "0.1.5",
+    "log": "1.4.0",
+    "mongodb": "1.1.4",
+    "node-dev": ">=0.2.2",
+    "node-uuid": "*",
+    "nodemailer": "0.3.12",
+    "oauth2-provider": "1.x",
+    "punycode": "1.2.0",
+    "restify": "2.3.5",
+    "rss": "0.0.3",
+    "serializer": ">=0.0.2 < 0.1.0",
+    "toobusy": "0.2.2",
+    "xml2js": "0.2.0",
+    "xss": "*",
+    "yuicompressor": "2.4.8"
   },
-  "license":"BSD"
+  "scripts": {
+    "ls": "node ./checkService.js",
+    "start": "node ./index.js"
+  },
+  "contributors": [
+    "xiaojue",
+    "JokerQyou"
+  ],
+  "homepage": "http://www.tuer.me",
+  "description": "tuer.me,a diary web site",
+  "main": "app.js",
+  "engines": {
+    "node": ">=0.8"
+  },
+  "license": "BSD"
 }
