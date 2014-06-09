@@ -1,12 +1,15 @@
 extends ../common/layout
 block content
-  link(href="/jquery.qeditor/font-awesome.min.css",rel="stylesheet")
-  link(href="/jquery.qeditor/jquery.qeditor.css",rel="stylesheet")
-  script(src="/jquery.qeditor/jquery.qeditor.js")
+  link(href="http://css.tuer.me/jquery.qeditor/font-awesome.min.css",rel="stylesheet")
+  link(href="http://css.tuer.me/jquery.qeditor/jquery.qeditor.css",rel="stylesheet")
+  script(src="http://js.tuer.me/jquery.qeditor/jquery.qeditor.js")
   script.
     window.FileAPI = {staticPath:'/FileAPI/dist/'};
-  script(src="/FileAPI/dist/FileAPI.min.js")
+  script(src="http://js.tuer.me/FileAPI/dist/FileAPI.min.js")
   style.
+    .clearfix:before,.clearfix:after{
+      content:none;   
+    }
     .b-button {
       display: inline-block;
       *display: inline;
@@ -102,7 +105,10 @@ block content
                 input(type="text",name="location",placeholder="写日记的地点",value="#{diary.location}")
               else
                 input(type="text",name="location",placeholder="写日记的地点")
-      div(class='control-group')
+      div(class='control-group info')
+        span(style="margin:0 0 10px 0;padding:0px;",class="help-inline")
+          i(class="icon-info-sign") 
+          强烈推荐使用chrome或safari浏览器发布日记~
         textarea(placeholder="日记内容",class="textarea",id='content',name='content',rows='15') #{diary.content}
       div(class='control-group')
           label(class="inline") 

@@ -1,6 +1,10 @@
 extends ../common/layout
 block content
   style.
+    .Diary-content img{
+      border:#ccc solid 1px;
+      float:none;
+    }
     .Diary-content p{
         clear:both;  
      }
@@ -132,6 +136,13 @@ block content
           img(src="#{diary.bigimg}")
   script.
     lithe.use('mods/diarydetail.min.js');
+    $('.Diary-content img').each(function(){
+        if(!$(this).closest('p').length) $(this).wrap('<p>');
+        else{
+          $(this).closest('p').after(this);  
+          $(this).wrap('<p>');
+        }
+     });
   script.
     var infolinks_pid = 1971596;
     var infolinks_wsid = 0;

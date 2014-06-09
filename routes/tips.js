@@ -1,4 +1,5 @@
 var tuerBase = require('../model/base'),
+xss = require('xss'),
 config = require('../lib/config'),
 EventProxy = require('eventproxy').EventProxy;
 
@@ -8,6 +9,9 @@ var index = function(req, res) {
 		proxy = new EventProxy(),
 		render = function(ftips, dtips) {
 			var data = ftips.concat(dtips);
+            for(var i=0;i<data.length;i++){
+                data[i].content = xss(data[i].content,{whiteList:{},stripIgnoreTag:true});
+            }
 			res.header('Content-Type', 'application/json');
 			res.send('{"data":' + JSON.stringify(data) + '}');
 		};

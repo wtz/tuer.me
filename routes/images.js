@@ -27,7 +27,7 @@ exports.upload = function(req, res) {
 		}
 		return _type;
 	} (),
-	url = 'simg/' + date.getYear() + date.getMonth() + '/' + uuid.v1() + '.' + type,
+	url = 'simg/' + date.getYear() + date.getMonth() + '/' + uuid.v1() + type,
 	host = 'http://img.tuer.me/',
 	filepath = rootdir + '/public/' + url;
 	tuerBase.findUser(uid, function(err, user) {
