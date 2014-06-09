@@ -23,6 +23,6 @@ tuer.start({
     imagehost:'img.tuer.me',
     dbname:'node-mongo-tuer',
     dbhost:'127.0.0.1',
-    dbport:27017,
+    dbport:10001,
     mhost:'m.tuer.me'
 });

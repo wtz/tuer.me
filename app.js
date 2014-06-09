@@ -4,8 +4,8 @@
 
 var express = require('express'),
 config = require('./lib/config'),
-rootdir = config.rootdir,
-RedisStore = require('connect-redis')(express);
+rootdir = config.rootdir;
+//RedisStore = require('connect-redis')(express);
 //var myOAP = require('./lib/OAP');
 //var toobusy = require('toobusy');
 var app = express.createServer();
@@ -24,8 +24,8 @@ function Configuration(app, rootdir) {
 	app.use(express.cookieParser());
 	app.use(express.query());
 	app.use(express.session({
-		secret: 'keyboard cat',
-		store: new RedisStore
+		secret: 'tuer secret'
+		//store: new RedisStore
 	}));
 	app.use(express.methodOverride());
 	app.use(express['static'](__dirname + '/public'));
