@@ -176,7 +176,7 @@ block content
       $('#choose').change(function(evt){
           filetype = null;
           FileAPI.filterFiles(FileAPI.getFiles(evt), function (file/**Object*/, info/**Object*/){
-            if(/^image/.test(file.type) && file.size < 1 * FileAPI.MB){
+            if(/^image/.test(file.type) && file.size < 5 * FileAPI.MB){
                 return true;
             }
             return false;
@@ -190,7 +190,7 @@ block content
                   });
                 });
               }else{
-                alert('请选择小于1MB的图片文件上传');
+                alert('请选择小于5MB的图片文件上传');
               }
           });
       });
