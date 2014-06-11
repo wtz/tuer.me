@@ -6,8 +6,8 @@ var express = require('express'),
 config = require('./lib/config'),
 rootdir = config.rootdir;
 //RedisStore = require('connect-redis')(express);
-//var myOAP = require('./lib/OAP');
-//var toobusy = require('toobusy');
+var myOAP = require('./lib/OAP');
+var toobusy = require('toobusy');
 var app = express.createServer();
 var wap = express.createServer();
 
@@ -32,7 +32,6 @@ function Configuration(app, rootdir) {
 	app.use(express.favicon(__dirname + '/public/favicon.ico'), {
 		maxAge: 2592000000
 	});
-	/*
 	app.use(function(req, res, next) {
 		res.header("Access-Control-Allow-Origin", "*");
 		res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -45,7 +44,6 @@ function Configuration(app, rootdir) {
 	});
 	app.use(myOAP.oauth());
 	app.use(myOAP.login());
-	*/
 	app.use(function(req, res, next) {
 		//判断ie版本
 		var sys = {};

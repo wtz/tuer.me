@@ -9,7 +9,8 @@ var tuerBase = require('../model/base'),
 
 var index = function(req,res,next){
     var proxy = new EventProxy(),
-        render = function(feeds,usersCount,privacyCount,diariesCount,diaries,todoCount,hotusers,hotdiarys){
+        //render = function(feeds,usersCount,privacyCount,diariesCount,diaries,todoCount,hotusers,hotdiarys){
+        render = function(feeds,usersCount,privacyCount,diariesCount,diaries,todoCount,hotusers){
 
             req.session.title = "首页 - 总有一些不经意的时光，需要被镌刻";
             req.session.template = "index";
@@ -32,17 +33,17 @@ var index = function(req,res,next){
             hotusers.forEach(function(item){
                 item.avatarUrl = Avatar.getUrl(item.id);
             });
-
+            /*
             hotdiarys.forEach(function(item){
                 item.content = item.content.length > 10 ? item.content.slice(0,10)+'...' : item.content;
             });
-
+            */
             res.render('index',{
                 config:config,
                 session:req.session,
                 feeds:feeds,
                 diaries:diaries,
-                hotdiarys:hotdiarys,
+                //hotdiarys:hotdiarys,
                 hotusers:hotusers,
                 pag:new pag({
                     cur:1,
@@ -57,7 +58,8 @@ var index = function(req,res,next){
             });
         };
 
-    proxy.assign('feeds','usersCount','privacyCount','diariesCount','diaries','todoCount','hotusers','hotdiarys',render);
+    //proxy.assign('feeds','usersCount','privacyCount','diariesCount','diaries','todoCount','hotusers','hotdiarys',render);
+    proxy.assign('feeds','usersCount','privacyCount','diariesCount','diaries','todoCount','hotusers',render);
 
 	tuerBase.findDiarySlice(0, 25, function(err, lists) {
 		if (err) {
@@ -114,7 +116,7 @@ var index = function(req,res,next){
             proxy.trigger('hotusers',users);
         }
     });
-
+    /*
     tuerBase.getHotDiary(10,function(err,diarys){
         if(err){
             res.redirect('500');
@@ -122,6 +124,7 @@ var index = function(req,res,next){
             proxy.trigger('hotdiarys',diarys);
         }
     });
+    */
 };
 
 function oldpics(req,res){
