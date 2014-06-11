@@ -6,6 +6,7 @@ db.createCollection("tips");
 db.createCollection("notebooks");
 db.createCollection("todos");
 db.createCollection("apis");
+db.createCollection("images");
 db.notebooks.insert({name:"默认日记",owner:-1});
 db.users.insert({
     accounts:"admintest@tuer.me",
