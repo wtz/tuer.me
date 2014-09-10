@@ -57,6 +57,5 @@ define(function(require, exports, module) {
 
 	});
 
-    $('a[title]').tooltip({container:'body'});
 });
 

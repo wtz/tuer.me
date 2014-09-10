@@ -10,6 +10,7 @@ db.createCollection("images");
 db.notebooks.insert({name:"默认日记",owner:-1});
 db.users.insert({
     accounts:"admintest@tuer.me",
+    id:0,
     created_at:new Date(),
     pwd:hex_md5("1234qwer"),
     nick:"admin",

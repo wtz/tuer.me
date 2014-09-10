@@ -153,6 +153,10 @@ block content
           $('#uploadpic').modal('hide');
         }
       }
+      $('#uploadpic').on('hide',function(){
+        var input = $('#choose')[0];
+        clear(); 
+      });
       var filetype;
       function clear(input){
         FileAPI.reset(input);
@@ -176,7 +180,7 @@ block content
       $('#choose').change(function(evt){
           filetype = null;
           FileAPI.filterFiles(FileAPI.getFiles(evt), function (file/**Object*/, info/**Object*/){
-            if(/^image/.test(file.type) && file.size < 5 * FileAPI.MB){
+            if(/^image/.test(file.type) && file.size <= 5 * FileAPI.MB){
                 return true;
             }
             return false;

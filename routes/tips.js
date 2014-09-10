@@ -10,7 +10,7 @@ var index = function(req, res) {
 		render = function(ftips, dtips) {
 			var data = ftips.concat(dtips);
             for(var i=0;i<data.length;i++){
-                data[i].content = xss(data[i].content,{whiteList:{},stripIgnoreTag:true});
+                if(data[i].content) data[i].content = xss(data[i].content,{whiteList:{},stripIgnoreTag:true});
             }
 			res.header('Content-Type', 'application/json');
 			res.send('{"data":' + JSON.stringify(data) + '}');
