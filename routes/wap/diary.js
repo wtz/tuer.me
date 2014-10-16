@@ -110,7 +110,7 @@ exports.list = function(req, res) {
 		Diaries.forEach(function(item) {
 			item.img = util.getpics(80, 1, item.filelist);
 			var img = util.getImgs(item.content)[0];
-			item.img = img ? img+'?imageView2/1/w/100' : item.img;
+		    item.img = img ? img+'?w=100&h=100' : item.img;
 			item.content = xss(item.content,{whiteList:{},stripIgnoreTag:true});
 			item.content = item.content.length > 50 ? item.content.slice(0, 50) + '...': item.content;
 		});
