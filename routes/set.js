@@ -3,6 +3,7 @@ config = require('../lib/config'),
 crypto = require('crypto'),
 Avatar = require('../lib/avatar'),
 EventProxy = require('eventproxy').EventProxy;
+var path = require('path');
 var fs = require('fs');
 var uuid = require('node-uuid');
 var Canvas = require('canvas');
@@ -140,10 +141,12 @@ var avatarUpload = function(req, res) {
       return;
     }
 
+    var basePath = path.resolve(__dirname,'../public/avatar/');
+
     tuerBase.findUser(uid,function(err,user){
       var pid = uuid.v1();
       var buf = new Buffer(avatar.replace(/^data:image\/\w+;base64,/, ''), 'base64');
-      fs.writeFileSync(process.cwd() + '/public/avatar/big/' + pid + '.png', buf);
+      fs.writeFileSync(basePath + '/big/' + pid + '.png', buf);
       var img = new Image;
       img.onload = function() {
         var width = 48;
@@ -152,10 +155,10 @@ var avatarUpload = function(req, res) {
         var ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, width, height, 0, 0, width, height);
         canvas.toBuffer(function(err, buf) {
-          fs.writeFileSync(process.cwd() + '/public/avatar/small/' + pid + '.png', buf);
+          fs.writeFileSync(basePath + '/small/' + pid + '.png', buf);
           if(user.avatar != 'default'){
-            fs.unlinkSync(process.cwd() + '/public/avatar/big/'+user.avatar+'.png'); 
-            fs.unlinkSync(process.cwd() + '/public/avatar/small/'+user.avatar+'.png'); 
+            fs.unlinkSync(basePath + '/big/'+user.avatar+'.png'); 
+            fs.unlinkSync(basePath + '/small/'+user.avatar+'.png'); 
           }
           tuerBase.updateById(uid, {
             $set: {
@@ -193,6 +196,9 @@ var avatarSave = function(req, res) {
       return;
     }
 
+    var basePath = path.resolve(__dirname,'../public/avatar/');
+
+
     tuerBase.findUser(uid,function(err,user){
       if(user.avatar == 'default'){
         req.flash('error', '默认头像不能设置');
@@ -212,7 +218,7 @@ var avatarSave = function(req, res) {
         }
         ctx.drawImage(img, coords[2], coords[3], coords[0], coords[1], 0, 0, width, height);
         canvas.toBuffer(function(err, buf) {
-          fs.writeFileSync(process.cwd() + '/public/avatar/small/' + user.avatar + '.png', buf);
+          fs.writeFileSync(basePath + '/small/' + user.avatar + '.png', buf);
           tuerBase.updateById(uid, {
             $set: {
               coords: coords,
@@ -229,7 +235,7 @@ var avatarSave = function(req, res) {
           });
         });
       };
-      fs.readFile(process.cwd() + '/public/avatar/big/'+user.avatar + '.png',function(err,squid){
+      fs.readFile(basePath + '/big/'+user.avatar + '.png',function(err,squid){
         if(err) throw err;
         img.src = squid;
       });
