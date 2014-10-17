@@ -4,7 +4,7 @@ var tuerBase = require('../model/base'),
     pag = require('../lib/pag').pag,
     escape = require('jade').runtime.escape,
     config = require('../lib/config'),
-	xss = require('xss'),
+  xss = require('xss'),
     EventProxy = require('eventproxy').EventProxy;
 
 var index = function(req,res,next){
@@ -15,23 +15,23 @@ var index = function(req,res,next){
             req.session.title = "首页 - 总有一些不经意的时光，需要被镌刻";
             req.session.template = "index";
 
-	    	diaries.forEach(function(item) {
-	    		util.setTime(item);
-	    		item.img = util.getpics(150, 1, item.filelist);
-	    		item.avatarUrl = Avatar.getUrl(item.pageurl);
-				//写一个提取html富文本中第一张图片的函数，然后赋值给item.img
-				var img = util.getImgs(item.content)[0];
-				item.img = img ? img+'?w=150&h=150' : item.img;
-				item.content = xss(item.content,{whiteList:{},stripIgnoreTag:true});
-	    		item.content = item.content.length > 150 ? item.content.slice(0, 150) + '...': item.content;
-	    	});
+        diaries.forEach(function(item) {
+          util.setTime(item);
+          item.img = util.getpics(150, 1, item.filelist);
+          item.avatarUrl = Avatar.getUrl(item.avatar);
+        //写一个提取html富文本中第一张图片的函数，然后赋值给item.img
+        var img = util.getImgs(item.content)[0];
+        item.img = img ? img+'?w=150&h=150' : item.img;
+        item.content = xss(item.content,{whiteList:{},stripIgnoreTag:true});
+          item.content = item.content.length > 150 ? item.content.slice(0, 150) + '...': item.content;
+        });
 
             feeds.forEach(function(item){
-               item.avatarUrl = Avatar.getUrl(item.pageurl || item.id);
+               item.avatarUrl = Avatar.getUrl(item.avatar);
             });
 
             hotusers.forEach(function(item){
-                item.avatarUrl = Avatar.getUrl(item.id);
+                item.avatarUrl = Avatar.getUrl(item.avatar);
             });
             /*
             hotdiarys.forEach(function(item){
@@ -61,13 +61,13 @@ var index = function(req,res,next){
     //proxy.assign('feeds','usersCount','privacyCount','diariesCount','diaries','todoCount','hotusers','hotdiarys',render);
     proxy.assign('feeds','usersCount','privacyCount','diariesCount','diaries','todoCount','hotusers',render);
 
-	tuerBase.findDiarySlice(0, 25, function(err, lists) {
-		if (err) {
-			res.redirect('500');
-		} else {
-			proxy.trigger('diaries', lists);
-		}
-	});
+  tuerBase.findDiarySlice(0, 25, function(err, lists) {
+    if (err) {
+      res.redirect('500');
+    } else {
+      proxy.trigger('diaries', lists);
+    }
+  });
 
     tuerBase.findFeeds({},0,10,function(err,feeds){
         if(err){

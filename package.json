@@ -8,6 +8,7 @@
     "express site"
   ],
   "dependencies": {
+    "request":"*",
     "calendar": "0.1.0",
     "canvas": "1.0.3",
     "cnzz-wap-nodejs": "*",
