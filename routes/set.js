@@ -64,6 +64,10 @@ var update = function(req, res) {
       proxy.trigger('msg', '昵称不能为空啊');
       return;
     }
+    if (nick.trim().length > 10) {
+      proxy.trigger('msg', '昵称不能超过10个字符');
+      return;
+    }
     if (profile.length > 30) {
       proxy.trigger('msg', '签名别多过30个字符啦');
       return;
