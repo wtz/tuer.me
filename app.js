@@ -113,9 +113,7 @@ exports.start = function(conf) {
 		//toobusy.shutdown();
 		process.exit();
 	});
-
 	console.log('app server on ' + config.host);
 	console.log('wap server on ' + config.mhost);
-
 };
 
